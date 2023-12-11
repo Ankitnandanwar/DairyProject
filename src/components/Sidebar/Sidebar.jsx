@@ -1,10 +1,10 @@
 import React from 'react'
 import Box from '@mui/material/Box';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import Divider from '@mui/material/Divider';
+// import Divider from '@mui/material/Divider';
 import { useNavigate } from 'react-router-dom';
 import { Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+// import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const Sidebar = ({ toggle, state, setState }) => {
     const navigate = useNavigate()
@@ -21,17 +21,23 @@ const Sidebar = ({ toggle, state, setState }) => {
 
                 <Menu>
                     <span><h1>Dairy</h1></span>
-                    <SubMenu label="Masters Modules">
-                        <SubMenu label="Main Master">
+                    <SubMenu label="Modules">
+                        <SubMenu label="Product">
+                            <MenuItem onClick={()=>{navigate('/productentry')}}>
+                            Product Entry
+                            </MenuItem>
                             <MenuItem>
-                            Product Master
+                            Product Sale
+                            </MenuItem>
+                            <MenuItem>
+                            Product Report
                             </MenuItem>
                         </SubMenu>
-                        <SubMenu label="Second Master">
+                        {/* <SubMenu label="Second Master">
                             <MenuItem>
                             Dairy Master
                             </MenuItem>
-                        </SubMenu>
+                        </SubMenu> */}
                     </SubMenu>
                 </Menu>
 
