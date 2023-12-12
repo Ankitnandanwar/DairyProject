@@ -8,6 +8,10 @@ import {useNavigate} from 'react-router-dom'
 const Login = () => {
 
   const navigate = useNavigate()
+
+  const handleLogin = () =>{
+    navigate('/dashboardpage')
+  }
   
   return (
     <>
@@ -28,7 +32,7 @@ const Login = () => {
                   <TextField id="standard-basic" type="password" label="Password" variant="standard" />
                   {/* <span style={{ color: "red", fontSize: "10px", marginTop:"7px"}}>password should not be empty</span> */}
                 </div>
-                <button type="submit" class="login-btn">Login</button>
+                <button type="submit" class="login-btn" onClick={()=>handleLogin()}>Login</button>
               </form>
             </div>
           </div>
