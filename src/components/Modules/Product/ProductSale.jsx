@@ -8,7 +8,6 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { FiEdit } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
-import ProductEntry from './ProductEntry';
 import axios from 'axios'
 import Form from 'react-bootstrap/Form';
 
@@ -17,37 +16,36 @@ import Form from 'react-bootstrap/Form';
 const ProductSale = () => {
     const [age, setAge] = React.useState('');
     const [showtable, setshowtable] = useState(false)
-    const [arrayy, SetArrayy] = useState([])
+    const [arrayy, setArrayy] = useState([])
     const [subarray, setSubArray] = useState([])
+    const [selectedProduct, setSelectedProduct] = useState({});
+    const [openingBalance, setOpeningBalance] = useState('');
+    const [rate, setRate] = useState('');
 
     const handleChange = (event) => {
         setAge(event.target.value);
+        const selectedProduct = arrayy.find(product => product.productName === event.target.value);
+        setSelectedProduct(selectedProduct);
     };
 
+    useEffect(() => {
+        axios.get("http://103.38.50.113:8080/DairyApplication/getAllProductEntryData")
+            .then(response => {
+                setArrayy(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, []);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        try {
-            const response = await axios.get("http://103.38.50.113:8080/DairyApplication/getAllProductEntryData", arrayy)
-            const result = response.data
-            response.json(result)
-            console.log(SetArrayy(result))
-
-        } catch (error) {
-
-            console.log(error)
-
+    useEffect(() => {
+        if (selectedProduct) {
+            setOpeningBalance(selectedProduct.openBalance);
+            setRate(selectedProduct.rate);
         }
-    }
-    const handleSave = async (e) => {
-        e.preventDefault()
-        try {
+    }, [selectedProduct]);
 
-        } catch (error) {
-
-        }
-
-    }
+    
 
     useEffect(() => {
         axios.get("http://103.38.50.113:8080/DairyApplication/getProduct", subarray)
@@ -57,7 +55,7 @@ const ProductSale = () => {
 
 
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form>
             <div className='mt-5 container '>
 
                 <div className='pt-5'>
@@ -95,7 +93,7 @@ const ProductSale = () => {
                                 }}
                                 autoComplete="off"
                             >
-                                <TextField label="Opening Balance" variant="standard" />
+                                <TextField label="Opening Balance" variant="standard" value={openingBalance} disabled/>
                             </Box>
                         </div>
                         <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -107,7 +105,7 @@ const ProductSale = () => {
                                 type="number"
                                 autoComplete="off"
                             >
-                                <TextField label="Rate" variant="standard" />
+                                <TextField label="Rate" variant="standard"  value={rate} disabled/>
                             </Box>
                         </div>
                         <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -291,7 +289,7 @@ const ProductSale = () => {
                             </Box>
                         </div>
                         <div className='col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center' style={{ gap: "1rem" }}>
-                            <button className='savebtn' onClick={e => handleSave()}>Save</button>
+                            <button className='savebtn'>Save</button>
                             <button className='tabelbtn' onClick={() => setshowtable(!showtable)}>Show table</button>
                             <button className='savebtn' style={{ backgroundColor: 'green' }}>Export</button>
                         </div>

@@ -11,55 +11,51 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
   const navigate = useNavigate()
-  const [errors, setError] = useState(false)
+  // const [errors, setError] = useState(false)
   const [loginUser, setLoginUser] = useState({
     userName: "",
     password: ""
   })
 
-  const handleloginSubmit = () => {
-    let ct = 0
-    if (loginUser.userName && loginUser.password) {
-      ct++;
-      axios.post('http://103.38.50.113:8080/DairyApplication/Login', loginUser)
-        .then((response) => {
-          const data = response.data;
-          console.log(data)
-          if (data.status === "Success") {
-            let info = toast.success(`${data.status} Login`, {
-              position: "top-right",
-              autoClose: 2000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-            })
-
-            if (info) {
-              setTimeout(() => {
-                navigate('/productentry')
-              }, 3000);
-            }
-          } else {
-            toast.error(`${data.status}`, {
-              position: "top-center",
-              autoClose: 2000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            })
-          }
-        })
-        .catch((error) => {
-          console.log('Error during login', error)
-        })
+  const handleloginSubmit = async () => {
+    try {
+      if (loginUser.userName && loginUser.password) {
+        const response = await axios.post('http://103.38.50.113:8080/DairyApplication/Login', loginUser);
+        const data = response.data;
+        console.log(data);
+  
+        if (data.status === " Success") {
+          toast.success("Login Successfull", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+  
+          setTimeout(() => {
+            navigate('/dashboardpage');
+          }, 3000);
+        } else {
+          toast.error("Login Failed", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      }
+    } catch (error) {
+      console.log('Error during login', error);
     }
-  }
+  };
 
 
 
@@ -67,7 +63,7 @@ const Login = () => {
     <>
       <div className="backgroundImg">
         <ToastContainer
-          position="top-right"
+          position="top-center"
           autoClose={5000}
           hideProgressBar={false}
           newestOnTop={false}
