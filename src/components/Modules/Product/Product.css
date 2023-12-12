@@ -18,7 +18,7 @@
     transition: 0.5s;
     background-color: #f9f9f9;
     box-shadow: 0 5px 10px #e1e5ee;
-    overflow-y: scroll;
+    overflow: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
