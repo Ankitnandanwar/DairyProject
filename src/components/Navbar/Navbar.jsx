@@ -10,9 +10,15 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Sidebar from '../Sidebar/Sidebar';
 import { useNavigate } from 'react-router-dom';
 
+
 const Navbar = () => {
 
     const navigate = useNavigate()
+
+    const logoutUser = async() =>{
+        localStorage.setItem('userName',null)
+        navigate('/')
+    }
 
     function NavAppbar() {
         const [state, setState] = useState({
@@ -47,7 +53,7 @@ const Navbar = () => {
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1, cursor:'pointer', fontWeight:"600" }} onClick={()=>{navigate('/dashboardpage')}}>
                             Dashboard
                         </Typography>
-                        <Button color="inherit">Logout</Button>
+                        <Button color="inherit" onClick={()=>logoutUser()}>Logout</Button>
                     </Toolbar>
                 </AppBar>
                 <Sidebar toggle={toggleDrawer} state={state} setState={setState}/>
