@@ -29,9 +29,6 @@ const Sidebar = ({ toggle, state, setState }) => {
                             <MenuItem onClick={()=>{navigate('/productsales')}}>
                             Product Sale
                             </MenuItem>
-                            <MenuItem onClick={()=>{navigate('/prodsalecopy')}}>
-                            Product Sale Copy
-                            </MenuItem>
                             <MenuItem>
                             Product Report
                             </MenuItem>
