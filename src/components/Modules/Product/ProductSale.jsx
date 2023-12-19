@@ -10,17 +10,15 @@ import Box from '@mui/material/Box';
 // import { MdDeleteOutline } from "react-icons/md";
 import axios from 'axios'
 
-
-
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
     },
-  },
 };
 
 
@@ -34,8 +32,22 @@ const ProductSale = () => {
         rate: ''
     });
     const [creammilk, setCreamMilk] = useState("")
+    const [mix, setMix] = useState("")
+
+    const [saleCash, setSaleCash] = useState("");
+    const [saleOnline, setSaleOnline] = useState("");
 
 
+    // to show calculation
+    const calculateTotals = () => {
+        const cashTotal = productDetails.rate * saleCash;
+        const onlineTotal = productDetails.rate * saleOnline;
+        const totalAmount = cashTotal + onlineTotal;
+        const closingBalance = productDetails.openingBalance - saleCash - saleOnline;
+        return { cashTotal, onlineTotal, totalAmount, closingBalance };
+    }
+
+    const { cashTotal, onlineTotal, totalAmount, closingBalance } = calculateTotals();
 
     // to fetch current date 
     const getCurrentDate = () => {
@@ -86,16 +98,26 @@ const ProductSale = () => {
 
     const handleSave = async () => {
         try {
-            const res = await axios.post("http://103.38.50.113:8080/DairyApplication/saveProductAddSale", {
-                productName: selectedProduct,
-                creammilk,
-                currentDate
+            await axios.post("http://103.38.50.113:8080/DairyApplication/saveProductAddSale", {
+                selectedProduct,
+                currentDate,
+                openingBalance: productDetails.openingBalance,
+                rate: productDetails.rate,
+                creammilk
             })
-            console.log(res.data)
+
+            console.log("data saved successfully", {
+                selectedProduct,
+                currentDate,
+                openingBalance: productDetails.openingBalance,
+                rate: productDetails.rate,
+            })
         } catch (error) {
-            console.log(error)
+            console.error('Error saving data:', error);
         }
     }
+
+
 
 
     return (
@@ -120,8 +142,8 @@ const ProductSale = () => {
                                 <em>None</em>
                             </MenuItem>
                             {
-                                products.map((prod) => (
-                                    <MenuItem  key={prod} value={prod}>{prod}</MenuItem>
+                                products.map((prod, index) => (
+                                    <MenuItem key={`${prod}-${index}`} value={prod}>{prod}</MenuItem>
                                 ))
                             }
                         </Select>
@@ -162,7 +184,7 @@ const ProductSale = () => {
                     </Box>
                 </div>
                 <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
-                    <Box
+                    {/* <Box
                         component="form"
                         sx={{
                             '& > :not(style)': { m: 1, width: '25ch' },
@@ -171,7 +193,8 @@ const ProductSale = () => {
                         autoComplete="off"
                     >
                         <TextField label="Cream Milk" variant="standard" value={creammilk} onChange={(e) => setCreamMilk(e.target.value)} />
-                    </Box>
+                    </Box> */}
+                    <input type="text" value={creammilk} onChange={(e) => setCreamMilk(e.target.value)}/>
                 </div>
                 <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                     <Box
@@ -194,7 +217,7 @@ const ProductSale = () => {
                         type="text"
                         autoComplete="off"
                     >
-                        <TextField label="Mix" variant="standard" />
+                        <TextField label="Mix" variant="standard" value={mix} onChange={(e) => setMix(e.target.value)} />
                     </Box>
                 </div>
                 <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -254,7 +277,7 @@ const ProductSale = () => {
                         type="text"
                         autoComplete="off"
                     >
-                        <TextField label="Sale Cash" variant="standard" />
+                        <TextField label="Sale Cash" variant="standard" value={saleCash} onChange={(e) => setSaleCash(e.target.value)} />
                     </Box>
                 </div>
                 <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -266,7 +289,7 @@ const ProductSale = () => {
                         type="text"
                         autoComplete="off"
                     >
-                        <TextField label="Sale Online" variant="standard" />
+                        <TextField label="Sale Online" variant="standard" value={saleOnline} onChange={(e) => setSaleOnline(e.target.value)} />
                     </Box>
                 </div>
                 <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -278,7 +301,7 @@ const ProductSale = () => {
                         type="text"
                         autoComplete="off"
                     >
-                        <TextField label="Cash Total" variant="standard" aria-readonly />
+                        <TextField label="Cash Total" variant="standard" value={cashTotal} aria-readonly />
                     </Box>
                 </div>
                 <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -290,7 +313,7 @@ const ProductSale = () => {
                         type="text"
                         autoComplete="off"
                     >
-                        <TextField label="Online Total" variant="standard" aria-readonly />
+                        <TextField label="Online Total" variant="standard" value={onlineTotal} aria-readonly />
                     </Box>
                 </div>
                 <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -302,7 +325,7 @@ const ProductSale = () => {
                         type="text"
                         autoComplete="off"
                     >
-                        <TextField label="Total Amount" variant="standard" aria-readonly />
+                        <TextField label="Total Amount" variant="standard" value={totalAmount} aria-readonly />
                     </Box>
                 </div>
                 <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -314,7 +337,7 @@ const ProductSale = () => {
                         type="text"
                         autoComplete="off"
                     >
-                        <TextField label="Closing Balance" variant="standard" aria-readonly />
+                        <TextField label="Closing Balance" variant="standard" value={closingBalance} aria-readonly />
                     </Box>
                 </div>
                 <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
