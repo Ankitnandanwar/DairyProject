@@ -4,17 +4,16 @@ import "./Login.css"
 import loginLogo from "../../assets/logo.png"
 import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-
+import axios from 'axios'
 
 const Login = () => {
   const navigate = useNavigate()
   // const [errors, setError] = useState(false)
   const [loginUser, setLoginUser] = useState({
-    userName: "",
-    password: ""
+    userName: '',
+    password: ''
   })
 
   const handleloginSubmit = async () => {
@@ -23,7 +22,7 @@ const Login = () => {
         const response = await axios.post('http://103.38.50.113:8080/DairyApplication/Login', loginUser);
         const data = response.data;
         console.log(data);
-  
+
         if (data.status === " Success") {
           toast.success("Login Successfull", {
             position: "top-center",
@@ -35,7 +34,7 @@ const Login = () => {
             progress: undefined,
             theme: "light",
           });
-  
+
           setTimeout(() => {
             navigate('/dashboardpage');
           }, 3000);
@@ -84,7 +83,9 @@ const Login = () => {
             <div>
               <div className="loginFields">
                 <div className="input-box">
-                  <TextField id="standard-basic" label="Username" variant="standard" name="userName" value={loginUser.userName} onChange={
+                  <TextField id="standard-basic" label="Username" variant="standard" name="userName" 
+                  value={loginUser.userName} 
+                  onChange={
                     (e) => {
                       // if(e.target.value){
                       //   setError(false)
