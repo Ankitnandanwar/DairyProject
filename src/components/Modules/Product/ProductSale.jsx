@@ -29,11 +29,8 @@ const ProductSale = () => {
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState('');
     const [currentDate, setCurrentDate] = useState("")
-    const [productDetails, setProductDetails] = useState({
-        openingBalance: '',
-        rate: ''
-    });
-    const [creammilk, setCreamMilk] = useState("")
+    const [productDetails, setProductDetails] = useState("");
+    const [creammilk, setCreamMilk] = useState("");
 
 
 
@@ -45,7 +42,6 @@ const ProductSale = () => {
         const day = `${today.getDate()}`.padStart(2, '0');
         return `${year}-${month}-${day}`;
     };
-
 
     const fetchProductDetails = async () => {
         try {
@@ -86,17 +82,20 @@ const ProductSale = () => {
 
     const handleSave = async () => {
         try {
-            const res = await axios.post("http://103.38.50.113:8080/DairyApplication/saveProductAddSale", {
-                productName: selectedProduct,
-                creammilk,
-                currentDate
-            })
-            console.log(res.data)
+            const res = await axios.post("http://103.38.50.113:8080/DairyApplication/saveProductEntry", {
+                productName: selectedProduct, 
+                openBalance: productDetails.openingBalance,
+                rate: productDetails.rate,
+                creammilk: creammilk,
+                currentDate,
+                
+            });
+            console.log(res.data);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     }
-
+    
 
     return (
         <div className='mt-5 container'>
@@ -120,8 +119,8 @@ const ProductSale = () => {
                                 <em>None</em>
                             </MenuItem>
                             {
-                                products.map((prod) => (
-                                    <MenuItem  key={prod} value={prod}>{prod}</MenuItem>
+                                products.map((prod, index) => (
+                                    <MenuItem  key={`${prod}-${index}`} value={prod}>{prod}</MenuItem>
                                 ))
                             }
                         </Select>
@@ -135,7 +134,7 @@ const ProductSale = () => {
                         }}
                         autoComplete="off"
                     >
-                        <TextField label="Opening Balance" variant="standard" value={productDetails.openingBalance} />
+                        <TextField label="Opening Balance" variant="standard" value={productDetails.openingBalance} readOnly/>
                     </Box>
                 </div>
 
@@ -147,7 +146,7 @@ const ProductSale = () => {
                         }}
                         autoComplete="off"
                     >
-                        <TextField label="Rate" variant="standard" value={productDetails.rate} />
+                        <TextField label="Rate" variant="standard" value={productDetails.rate} readOnly/>
                     </Box>
                 </div>
                 <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -194,7 +193,7 @@ const ProductSale = () => {
                         type="text"
                         autoComplete="off"
                     >
-                        <TextField label="Mix" variant="standard" />
+                        <TextField label="Mix" variant="standard"/>
                     </Box>
                 </div>
                 <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -278,7 +277,7 @@ const ProductSale = () => {
                         type="text"
                         autoComplete="off"
                     >
-                        <TextField label="Cash Total" variant="standard" aria-readonly />
+                        <TextField label="Cash Total" variant="standard" aria-readonly/>
                     </Box>
                 </div>
                 <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
