@@ -29,27 +29,9 @@ const ProductSale = () => {
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState('');
 
-    const [productData, setProductData] = useState({
-        openingBalance:"",
-        rate:"",
-        date:"",
-        creammilk:"",
-        addQty:"",
-        mix:"",
-        paymentPending:"",
-        sahiwalGhee:"",
-        waiveeoff:"",
-        convertProd:"",
-        saleCash:"",
-        saleOnline:"",
-        cashTotal:"",
-        onlineTotal:"",
-        totalAmt:"",
-        closingBal:"",
-        pending:"",
-        remark:""
-    })
-
+    // get api fetch data using date
+    // const [currentDate, setCurrentDate] = useState('');
+    const [tableData, setTableData] = useState([]);
 
 
 
@@ -62,6 +44,27 @@ const ProductSale = () => {
         return `${year}-${month}-${day}`;
     };
 
+    const [selectedProductData, setSelectedProductData] = useState({
+        openingBalance: "",
+        rate: ""
+    });
+
+
+    // using product name, opening bal and rate fetch
+    const fetchProductData = async (productId) => {
+        try {
+            const response = await axios.get(`http://103.38.50.113:8080/DairyApplication/getProduct/${productId}`);
+            const productData = response.data;
+
+            // Update the state with the fetched data
+            setSelectedProductData({
+                openingBalance: productData.openBalance,
+                rate: productData.rate
+            });
+        } catch (error) {
+            console.error('Error fetching product data:', error);
+        }
+    };
 
     const fetchProducts = async () => {
         try {
@@ -72,39 +75,46 @@ const ProductSale = () => {
         }
     };
 
+
+    // Show table data 
+    const fetchByCurrentDate = async () => {
+        try {
+          const apiUrl = 'http://103.38.50.113:8080/DairyApplication/findProductDataByCurrentDate';
+          const currentDate = '20/12/2023';
+    
+          // Making the API call using axios
+          const response = await axios.get(apiUrl, {
+            params: {
+              currentDate: currentDate,
+            },
+          });
+    
+          // Logging the response to the console
+          console.log('API Response:', response.status);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+    
+
     useEffect(() => {
         fetchProducts()
+        fetchByCurrentDate()
     }, [])
 
+
     const handleProductChange = (event) => {
-        setSelectedProduct(event.target.value);
-        // Fetch product data when a product is selected
-    };
-
-
-    const handleSave = async () => {
-        try {
-            const reqdata = {
-                productId: selectedProduct,
-            }
-
-            const response = await axios.post(
-                'http://103.38.50.113:8080/DairyApplication/saveProductAddSale',
-                reqdata
-            );
-
-            if (response.status === 200) {
-                alert('Data saved successfully');
-                // You can reset the form or perform other actions after successful save
-            } else {
-                alert('Failed to save data. Please try again.');
-            }
-        } catch (error) {
-            console.error('Error saving data:', error);
-            alert('An error occurred while saving data. Please try again.');
-        }
-
+        const selectedProductId = event.target.value;
+        setSelectedProduct(selectedProductId);
+        fetchProductData(selectedProductId);
     }
+
+
+    
+
+
+
+
 
 
     return (
@@ -144,7 +154,7 @@ const ProductSale = () => {
                         }}
                         autoComplete="off"
                     >
-                        <TextField label="Opening Balance" variant="standard" aria-readonly />
+                        <TextField label="Opening Balance" variant="standard" value={selectedProductData.openingBalance} aria-readonly />
                     </Box>
                 </div>
 
@@ -156,7 +166,7 @@ const ProductSale = () => {
                         }}
                         autoComplete="off"
                     >
-                        <TextField label="Rate" variant="standard" aria-readonly />
+                        <TextField label="Rate" variant="standard" value={selectedProductData.rate} aria-readonly />
                     </Box>
                 </div>
                 <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -351,9 +361,53 @@ const ProductSale = () => {
                     </Box>
                 </div>
                 <div className='col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center' style={{ gap: "1rem" }}>
-                    <button className='savebtn' onClick={() => { handleSave() }}>Save</button>
-                    <button className='tabelbtn'>Show table</button>
+                    <button className='savebtn'>Save</button>
                     <button className='savebtn' style={{ backgroundColor: 'green' }}>Export</button>
+                </div>
+
+                <div className='mt-5'>
+                    <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
+                        <Box
+                            component="form"
+                            sx={{
+                                '& > :not(style)': { m: 1, width: '25ch' },
+                            }}
+                            autoComplete="off"
+                        >
+                            <TextField variant="standard" type='date' />
+                        </Box>
+                    </div>
+                </div>
+
+                <div className='container tableMaster mt-3 mb-3 p-0'>
+                    <table className='table productTableMAster table-stripped'>
+                        <thead className='tableheading'>
+                            <tr>
+                                <th style={{ width: "180px" }}>SrNo</th>
+                                <th style={{ width: "180px" }}>Product</th>
+                                <th style={{ width: "180px" }}>Opening Balance</th>
+                                <th style={{ width: "180px" }}>Rate</th>
+                                <th style={{ width: "180px" }}>Cream Milk</th>
+                                <th style={{ width: "180px" }}>Add Qty</th>
+                                <th style={{ width: "180px" }}>Mix</th>
+                                <th style={{ width: "180px" }}>Payment Pending</th>
+                                <th style={{ width: "180px" }}>Sahiwal Ghee</th>
+                                <th style={{ width: "180px" }}>Waivee Off</th>
+                                <th style={{ width: "180px" }}>Converted Product</th>
+                                <th style={{ width: "180px" }}>Sale Cash</th>
+                                <th style={{ width: "180px" }}>Sale Online</th>
+                                <th style={{ width: "180px" }}>Cash Total</th>
+                                <th style={{ width: "180px" }}>Online Total</th>
+                                <th style={{ width: "180px" }}>Total Amt</th>
+                                <th style={{ width: "180px" }}>Closing Balance</th>
+                                <th style={{ width: "180px" }}>Pending</th>
+                                <th style={{ width: "180px" }}>Remark</th>
+                            </tr>
+                        </thead>
+                        <tbody className='border'>
+                            
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
