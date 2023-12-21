@@ -9,6 +9,9 @@ import Box from '@mui/material/Box';
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
+import { MdDeleteOutline } from "react-icons/md";
+import * as FileSaver from 'file-saver'
+import * as XLSX from "xlsx";
 
 
 
@@ -41,8 +44,15 @@ const ProductSale = () => {
     const [saleOnline, setSaleOnline] = useState("");
     const [pending, setPending] = useState("");
     const [remark, setRemark] = useState("");
-    const [data, setData] = useState([]);
 
+    const [tableData, setTableData] = useState([]);
+
+    const n = new Date();
+    const [Dates, setDate] = useState({
+        d: String(n.getDate()),
+        m: String(n.getMonth()),
+        y: String(n.getFullYear())
+    });
 
     // to fetch current date 
     const getCurrentDate = () => {
@@ -134,25 +144,33 @@ const ProductSale = () => {
 
     }
 
+    const exporttoexcel = async () => {
+        const fileName = "Product Sale";
+        const fileType =
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+        const fileExtension = ".xlsx";
+        const ws = XLSX.utils.json_to_sheet(tableData)
+        const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        const data = new Blob([excelBuffer], { type: fileType });
+        FileSaver.saveAs(data, fileName + fileExtension);
+    }
+
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchDateData = async () => {
             try {
-                const currentDate = setCurrentDate();
-                const tabledata = await axios.get(`http://103.38.50.113:8080/DairyApplication/findProductDataByCurrentDate?currentData=${currentDate}`);
-
-                if (!tabledata.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const result = await tabledata.json();
-                setData(result);
+                const res = await axios.post("http://103.38.50.113:8080/DairyApplication/findProductDataByCurrentDate", {
+                    "currentDate": String(`${Dates?.d}/${Number(Dates?.m) + 1}/${Dates?.y}`)
+                });
+                // console.log(res.data)
+                setTableData(res.data.data);
             } catch (error) {
-                console.error('Error Fetching Data:', error)
+                console.log(error);
             }
         };
 
-        fetchData();
-    }, [])
+        fetchDateData();
+    }, [Dates]);
 
     const CalculateTotals = () => {
         const cashTotal = productDetails.rate * saleCash;
@@ -422,7 +440,7 @@ const ProductSale = () => {
                 </div>
                 <div className='col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center' style={{ gap: "1rem" }}>
                     <button className='savebtn' onClick={() => handleSave()}>Save</button>
-                    <button className='savebtn' style={{ backgroundColor: 'green' }}>Export</button>
+                    <button className='savebtn' style={{ backgroundColor: 'green', width: "150px" }} onClick={() => exporttoexcel()}>Export To Excel</button>
                 </div>
             </div>
 
@@ -452,39 +470,39 @@ const ProductSale = () => {
                             <th style={{ width: "180px" }}>Action</th>
                         </tr>
                     </thead>
-                    <tbody className='border'>
-                        {
-                            data.map((item, indexVal) => {
-                                return (
-                                    <tr key={indexVal}>
-                                        <th scope='row' className='text-center'>{item.id}</th>
-                                        <td>
-                                            <p className='sub'>{item.productName}</p>
-                                        </td>
-                                        <td>{item.openBalance}</td>
-                                        <td>{item.rate}</td>
-                                        <td>{item.creammilk}</td>
-                                        <td>{item.addQty}</td>
-                                        <td>{item.mix}</td>
-                                        <td>{item.paymentPending}</td>
-                                        <td>{item.sahiwalGhee}</td>
-                                        <td>{item.waiveOff}</td>
-                                        <td>{item.convertedProduct}</td>
-                                        <td>{item.saleCash}</td>
-                                        <td>{item.saleOnline}</td>
-                                        <td>{item.cashTotal}</td>
-                                        <td>{item.onlineTotal}</td>
-                                        <td>{item.totalAmt}</td>
-                                        <td>{item.closingBalance}</td>
-                                        <td>{item.pending}</td>
-                                        <td>{item.remark}</td>
-                                        <td>
-                                            {/* <button className='btn' onClick={() => dele(item.id)}><MdDeleteOutline className='delicon' /></button> */}
-                                        </td>
-                                    </tr>
-                                )
-                            })
-                        }
+                    <tbody>
+                        {Array.isArray(tableData) && tableData.length > 0 ? (
+                            tableData.map((item, i) => (
+                                <tr key={i}>
+                                    <th scope='row' className='text-center'>{item.id}</th>
+                                    <td className='text-center'>{item.product}</td>
+                                    <td className='text-center'>{item.openBalance}</td>
+                                    <td className='text-center'>{item.rate}</td>
+                                    <td className='text-center'>{item.creammilk}</td>
+                                    <td className='text-center'>{item.addQty}</td>
+                                    <td className='text-center'>{item.mix}</td>
+                                    <td className='text-center'>{item.paymentPending}</td>
+                                    <td className='text-center'>{item.sahiwalGhee}</td>
+                                    <td className='text-center'>{item.waiveOff}</td>
+                                    <td className='text-center'>{item.convertedProduct}</td>
+                                    <td className='text-center'>{item.saleCash}</td>
+                                    <td className='text-center'>{item.saleOnline}</td>
+                                    <td className='text-center'>{item.cashTotal}</td>
+                                    <td className='text-center'>{item.onlineTotal}</td>
+                                    <td className='text-center'>{item.totalAmt}</td>
+                                    <td className='text-center'>{item.closingBalance}</td>
+                                    <td className='text-center'>{item.pending}</td>
+                                    <td className='text-center'>{item.remark}</td>
+                                    <td className='text-center'>
+                                        <button className='btn'><MdDeleteOutline className='delicon' /></button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="21" className='text-start'>No data available</td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>

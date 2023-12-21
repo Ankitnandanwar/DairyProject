@@ -20,24 +20,30 @@ const Sidebar = ({ toggle, state, setState }) => {
                 onKeyDown={toggle(anchor, true)}>
 
                 <Menu>
-                    <span><h1>Dairy</h1></span>
-                    <SubMenu label="Modules">
-                        <SubMenu label="Product">
-                            <MenuItem onClick={()=>{navigate('/productentry')}}>
+                    <span><h1 className='text-center'>Dairy</h1></span>
+                    <SubMenu label="Master Modules">
+                        <MenuItem onClick={() => { navigate('/productentry') }}>
                             Product Entry
-                            </MenuItem>
-                            <MenuItem onClick={()=>{navigate('/productsales')}}>
+                        </MenuItem>
+                        <MenuItem onClick={() => { navigate('/milksalemaster') }}>
+                            Milk Sale Master
+                        </MenuItem>
+                    </SubMenu>
+                    <SubMenu label="Sales">
+                        <MenuItem onClick={() => { navigate('/productsales') }}>
                             Product Sale
-                            </MenuItem>
-                            <MenuItem>
+                        </MenuItem>
+                        <MenuItem onClick={() => { navigate('/') }}>
+                            Milk Sale
+                        </MenuItem>
+                    </SubMenu>
+                    <SubMenu label="Reports">
+                        <MenuItem onClick={() => { navigate('/productreport') }}>
                             Product Report
-                            </MenuItem>
-                        </SubMenu>
-                        {/* <SubMenu label="Second Master">
-                            <MenuItem>
-                            Dairy Master
-                            </MenuItem>
-                        </SubMenu> */}
+                        </MenuItem>
+                        <MenuItem onClick={() => { navigate('/') }}>
+                            Milk Report
+                        </MenuItem>
                     </SubMenu>
                 </Menu>
 
