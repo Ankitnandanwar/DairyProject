@@ -33,7 +33,7 @@ const Sidebar = ({ toggle, state, setState }) => {
                         <MenuItem onClick={() => { navigate('/productsales') }}>
                             Product Sale
                         </MenuItem>
-                        <MenuItem onClick={() => { navigate('/') }}>
+                        <MenuItem onClick={() => { navigate('/milksale') }}>
                             Milk Sale
                         </MenuItem>
                     </SubMenu>

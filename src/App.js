@@ -6,6 +6,7 @@ import ProductEntryPage from './pages/ProductModulePage/ProductEntryPage'
 import ProductSalesPage from './pages/ProductModulePage/ProductSalesPage'
 import ProductReportPage from './pages/ProductModulePage/ProductReportPage'
 import MilkMasterPage from './pages/MilkMasterModulePage/MilkMasterPage'
+import MilkSalePage from './pages/MilkMasterModulePage/MilkSalePage'
 
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
           <Route path='/productreport' element={<ProductReportPage/>} />
 
           <Route path='/milksalemaster' element={<MilkMasterPage/>} />
+          <Route path='/milksale' element={<MilkSalePage/>} />
 
 
         </Routes>

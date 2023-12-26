@@ -1,0 +1,43 @@
+
+
+.smallCard{
+    width:100%;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.smallCard:hover{
+    background:#0096FF;
+    transition: .8s ease;
+}
+
+.smallCard:hover .cardContent h2 {
+    color: white;
+}
+
+.smallCard:hover .cardContent span{
+    color: white;
+}
+
+.smallCard:hover .icons{
+    color: white;
+}
+
+.cardContent h2{
+    color: #0096FF;
+}
+
+.cardContent span{
+    color: gray;
+    font-size: 15px;
+}
+
+.icons{
+    font-size: 5.5rem;
+    color: #0096FF;
+}
