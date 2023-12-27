@@ -10,8 +10,8 @@ import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
 import { MdDeleteOutline } from "react-icons/md";
-import * as FileSaver from 'file-saver'
-import * as XLSX from "xlsx";
+// import * as FileSaver from 'file-saver'
+// import * as XLSX from "xlsx";
 
 
 
@@ -47,6 +47,7 @@ const ProductSale = () => {
 
     const [tableData, setTableData] = useState([]);
 
+    // to show data with todays date how many entries done
     const n = new Date();
     const [Dates, setDate] = useState({
         d: String(n.getDate()),
@@ -144,17 +145,17 @@ const ProductSale = () => {
 
     }
 
-    const exporttoexcel = async () => {
-        const fileName = "Product Sale";
-        const fileType =
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-        const fileExtension = ".xlsx";
-        const ws = XLSX.utils.json_to_sheet(tableData)
-        const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-        const data = new Blob([excelBuffer], { type: fileType });
-        FileSaver.saveAs(data, fileName + fileExtension);
-    }
+    // const exporttoexcel = async () => {
+    //     const fileName = "Product Sale";
+    //     const fileType =
+    //         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    //     const fileExtension = ".xlsx";
+    //     const ws = XLSX.utils.json_to_sheet(tableData)
+    //     const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+    //     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    //     const data = new Blob([excelBuffer], { type: fileType });
+    //     FileSaver.saveAs(data, fileName + fileExtension);
+    // }
 
     useEffect(() => {
         const fetchDateData = async () => {
@@ -423,7 +424,7 @@ const ProductSale = () => {
                         type="text"
                         autoComplete="off"
                     >
-                        <TextField label="Pending" variant="standard" aria-readonly value={pending} />
+                        <TextField label="Pending" variant="standard" value={pending} onChange={(e)=> setPending(e.target.value)}/>
                     </Box>
                 </div>
                 <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -440,7 +441,7 @@ const ProductSale = () => {
                 </div>
                 <div className='col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center' style={{ gap: "1rem" }}>
                     <button className='savebtn' onClick={() => handleSave()}>Save</button>
-                    <button className='savebtn' style={{ backgroundColor: 'green', width: "150px" }} onClick={() => exporttoexcel()}>Export To Excel</button>
+                    {/* <button className='savebtn' style={{ backgroundColor: 'green', width: "150px" }} onClick={() => exporttoexcel()}>Export To Excel</button> */}
                 </div>
             </div>
 

@@ -20,6 +20,15 @@ const ProductReport = () => {
         tdate: ''
     })
 
+    const [totalOpeningBalance, setTotalOpeningBalance] = useState(0);
+    const [totalClosingBalance, setTotalClosingBalance] = useState(0);
+    const [totalSaleCash, setTotalSaleCash] = useState(0);
+    const [totalSaleOnline, setTotalSaleOnline] = useState(0);
+    const [totalAmont, setTotalAmont] = useState(0);
+
+
+
+
 
     const searchData = () => {
         // alert("hi")
@@ -30,7 +39,20 @@ const ProductReport = () => {
             }
             return false
         })
+
+        const totalOpeningBal = filteredData.reduce((acc, item) => acc + parseFloat(item.openBalance), 0)
+        const totalClosingBal = filteredData.reduce((acc, item) => acc + parseFloat(item.closingBalance), 0)
+        const totalSaleCash = filteredData.reduce((acc, item) => acc + parseFloat(item.saleCash), 0)
+        const totalSaleOnline = filteredData.reduce((acc, item) => acc + parseFloat(item.saleOnline), 0)
+        const totalAmount = filteredData.reduce((acc, item) => acc + parseFloat(item.totalAmt), 0)
+
+
         console.log(filteredData)
+        setTotalOpeningBalance(totalOpeningBal);
+        setTotalClosingBalance(totalClosingBal)
+        setTotalSaleCash(totalSaleCash)
+        setTotalSaleOnline(totalSaleOnline)
+        setTotalAmont(totalAmount)
         setFilteredData(filteredData)
     }
 
@@ -40,8 +62,8 @@ const ProductReport = () => {
                 let data = await axios.get("http://103.38.50.113:8080/DairyApplication/findAllProductDate").then((res) => {
                     setShowData(res.data)
                     setFilteredData(res.data);
-                    console.log(JSON.stringify(res.data))
                 })
+
             } catch (error) {
                 console.log(error, "server issue")
             }
@@ -57,22 +79,31 @@ const ProductReport = () => {
         const fileType =
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
         const fileExtension = ".xlsx";
-        const ws = XLSX.utils.json_to_sheet(showData)
+    
+        // Combine data for the main table and the summary table
+        const exportData = [
+            ...filteredData,
+            {
+                "Total Opening Balance": totalOpeningBalance,
+                "Total Amount": totalAmont,
+                "Total Sale Cash": totalSaleCash,
+                "Total Sale Online": totalSaleOnline,
+                "Total Closing Balance": totalClosingBalance,
+            },
+        ];
+    
+        const ws = XLSX.utils.json_to_sheet(exportData);
         const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
         const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
         const data = new Blob([excelBuffer], { type: fileType });
         FileSaver.saveAs(data, fileName + fileExtension);
-    }
+    };
 
-
+    
     const formatDate = (inputDate) => {
         const [year, month, day] = inputDate.split('-');
         return `${day}/${month}/${year}`;
     };
-
-
-
-
 
 
     return (
@@ -189,12 +220,53 @@ const ProductReport = () => {
                                         <td className='text-center'>
                                             <button className='btn'><MdDeleteOutline className='delicon' /></button>
                                         </td>
-                                    </tr>
+                                    </tr>  
                                 ))
                             }
                         </tbody>
                     </table>
                 </div>
+
+                <div className='container tableMaster mt-5 mb-3 p-0'>
+                    <table className='table productTableMAster table-stripped'>
+                        <thead>
+
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className='p-3'></td>
+                                <td className='p-3'></td>
+                                <td className='p-3' style={{fontWeight:"bold"}}>Total Opening Balance</td>
+                                <td className='p-3'>{totalOpeningBalance}</td>
+                            </tr>
+                            <tr>
+                                <td className='p-3'></td>
+                                <td className='p-3'></td>
+                                <td className='p-3' style={{fontWeight:"bold"}}>Total Amount</td>
+                                <td className='p-3'>{totalAmont}</td>
+                            </tr>
+                            <tr>
+                                <td className='p-3'></td>
+                                <td className='p-3'></td>
+                                <td className='p-3' style={{fontWeight:"bold"}}>Total Sale Cash</td>
+                                <td className='p-3'>{totalSaleCash}</td>
+                            </tr>
+                            <tr>
+                                <td className='p-3'></td>
+                                <td className='p-3'></td>
+                                <td className='p-3' style={{fontWeight:"bold"}}>Total Sale Online</td>
+                                <td className='p-3'>{totalSaleOnline}</td>
+                            </tr>
+                            <tr>
+                                <td className='p-3'></td>
+                                <td className='p-3'></td>
+                                <td className='p-3' style={{fontWeight:"bold"}}>Total Closing Balance</td>
+                                <td className='p-3'>{totalClosingBalance}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
 
             </div>
         </div>
