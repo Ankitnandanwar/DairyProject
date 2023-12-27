@@ -3,19 +3,10 @@ import "../Product/Product.css"
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import TextField from '@mui/material/TextField';
-// import Dialog from '@mui/material/Dialog';
-// import { DialogActions, DialogTitle, Button } from '@mui/material';
 import Box from '@mui/material/Box';
 import { FiEdit } from "react-icons/fi";
-// import { MdDeleteOutline } from "react-icons/md";
-// import Slide from '@mui/material/Slide';
 import axios from 'axios'
-// import { IconButton } from '@mui/material';
-// import CancelIcon from '@mui/icons-material/Cancel';
 
-// const Transition = React.forwardRef(function Transition(props, ref) {
-//     return <Slide direction="up" ref={ref} {...props} />;
-// });
 
 const MilkMaster = () => {
 
@@ -25,10 +16,7 @@ const MilkMaster = () => {
     const [hotelMilkRate, setHotelMilkRate] = useState("")
     const [salingMilkRate, setSalingMilkRate] = useState("")
     const [prodTableData, setProdTableData] = useState([])
-    // const [opendailogdel, setopendailogdel] = useState(false)
     const [editItem, setEditItem] = useState(null);
-    // const [delid, setdelid] = useState()
-    // const [anchorEl, setAnchorEl] = React.useState(null);
     const [showtable, setshowtable] = useState(false)
 
     const saveData = async () => {
@@ -84,71 +72,7 @@ const MilkMaster = () => {
         getProductData()
     }, [])
 
-    // const dele = (id) => {
-    //     setdelid(id)
-    //     setopendailogdel(true)
-    // }
-
-    // const handleClose = () => {
-    //     setAnchorEl(null);
-    //     setopendailogdel(false)
-    // };
-
-    // const handledel = async () => {
-    //     let delobj = {
-    //         "id": delid
-    //     }
-
-    //     try {
-    //         await axios.post("http://103.38.50.113:8080/DairyApplication/deleteMilkRateById", delobj, {
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             }
-    //         })
-    //             .then((resdel) => {
-    //                 console.log(resdel.data);
-    //             })
-    //             .catch((error) => {
-    //                 console.error(error)
-    //             })
-    //         setTimeout(() => {
-    //             window.location.reload()
-    //         }, 1000);
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
-
-    // const dailoge = () => {
-    //     return (
-    //         <>
-    //             <Dialog
-
-    //                 open={opendailogdel}
-    //                 TransitionComponent={Transition}
-    //                 keepMounted
-    //                 onClose={handleClose}
-    //                 aria-describedby="alert-dialog-slide-description"
-    //             >
-    //                 <DialogActions style={{ height: '2.5rem' }}>
-    //                     <IconButton onClick={handleClose}>
-    //                         <CancelIcon style={{ color: 'blue' }} />
-    //                     </IconButton>
-    //                 </DialogActions>
-    //                 <div style={{ background: 'white' }}>
-
-    //                     <DialogTitle>
-    //                         Are you sure you want to delete?
-    //                     </DialogTitle>
-    //                     <DialogActions>
-    //                         <Button onClick={handledel}>Yes</Button>
-    //                         <Button onClick={handleClose}>No</Button>
-    //                     </DialogActions>
-    //                 </div>
-    //             </Dialog>
-    //         </>
-    //     )
-    // }
+    
 
     const editItemHandler = (item) => {
         setDtmMilkRate(item.dtmMilkRate);
@@ -164,7 +88,9 @@ const MilkMaster = () => {
         try {
             let data = await axios.get("http://103.38.50.113:8080/DairyApplication/getAllDataOfMilkRateMaster").then((res) => {
                 setProdTableData(res.data)
-                setLoader(false)
+                setTimeout(() => {
+                    setLoader(false) 
+                }, 4000);
             })
         } catch (error) {
             console.log(error, "server issue")
@@ -176,7 +102,6 @@ const MilkMaster = () => {
             {
                 loader ?
                     <div className='loader-Cont'>
-                        <div className='spinner'></div>
                     </div> :
 
                     <div className='container mt-4'>
@@ -192,7 +117,6 @@ const MilkMaster = () => {
                             theme="light">
                         </ToastContainer>
                         <div className='pt-5'>
-                            {/* {dailoge()} */}
                             <h3 className='text-center mt-3' style={{ textDecoration: 'underline' }}>Milk Sale Master</h3>
                             <div className='row mt-4'>
                                 <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -275,7 +199,6 @@ const MilkMaster = () => {
                                                                     <td>{item.salingMilkRate}</td>
                                                                     <td>
                                                                         <button className='btn' onClick={() => editItemHandler(item)}><FiEdit className='editicon' /></button>
-                                                                        {/* <button className='btn' onClick={() => dele(item.id)}><MdDeleteOutline className='delicon' /></button> */}
                                                                     </td>
                                                                 </tr>
                                                             )

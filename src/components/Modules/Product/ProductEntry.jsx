@@ -21,7 +21,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const ProductEntry = () => {
-    const [loader, setLoader] = useState(false)
+    const [loader, setLoader] = useState(true)
     const [showtable, setshowtable] = useState(false)
 
     const [productName, setProductName] = useState("")
@@ -92,7 +92,9 @@ const ProductEntry = () => {
         try {
             let data = await axios.get("http://103.38.50.113:8080/DairyApplication/getAllProductEntryData").then((res) => {
                 setProdTableData(res.data)
-                setLoader(false)
+                setTimeout(() => {
+                    setLoader(false) 
+                }, 4000);
             })
         } catch (error) {
             console.log(error, "server issue")
@@ -185,7 +187,6 @@ const ProductEntry = () => {
             {
                 loader ?
                     <div className='loader-Cont'>
-                        <div className='spinner'></div>
                     </div> :
 
                     <div className='container mt-4'>
