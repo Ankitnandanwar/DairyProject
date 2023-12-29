@@ -236,43 +236,29 @@ const ProductReport = () => {
                             </div>
 
                             <div className='container tableMaster mt-5 mb-3 p-0'>
-                                <table className='table productTableMAster table-stripped'>
-                                    <thead>
-
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className='p-3'></td>
-                                            <td className='p-3'></td>
-                                            <td className='p-3' style={{ fontWeight: "bold" }}>Total Opening Balance</td>
-                                            <td className='p-3'>{totalOpeningBalance}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className='p-3'></td>
-                                            <td className='p-3'></td>
-                                            <td className='p-3' style={{ fontWeight: "bold" }}>Total Amount</td>
-                                            <td className='p-3'>{totalAmont}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className='p-3'></td>
-                                            <td className='p-3'></td>
-                                            <td className='p-3' style={{ fontWeight: "bold" }}>Total Sale Cash</td>
-                                            <td className='p-3'>{totalSaleCash}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className='p-3'></td>
-                                            <td className='p-3'></td>
-                                            <td className='p-3' style={{ fontWeight: "bold" }}>Total Sale Online</td>
-                                            <td className='p-3'>{totalSaleOnline}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className='p-3'></td>
-                                            <td className='p-3'></td>
-                                            <td className='p-3' style={{ fontWeight: "bold" }}>Total Closing Balance</td>
-                                            <td className='p-3'>{totalClosingBalance}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div><h5 className='p-2' style={{ fontWeight: "600", textAlign: "center" }}>Grand Total</h5></div>
+                                <div className='row m-2'>
+                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
+                                        <div className='totalstitle'>Total Opening Balance</div>
+                                        <div className='totalnos'>{totalOpeningBalance}</div>
+                                    </div>
+                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
+                                        <div className='totalstitle'>Total Amount</div>
+                                        <div className='totalnos'>{totalAmont}</div>
+                                    </div>
+                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
+                                        <div className='totalstitle'>Total Sale Cash</div>
+                                        <div className='totalnos'>{totalSaleCash}</div>
+                                    </div>
+                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
+                                        <div className='totalstitle'>Total Sale Online</div>
+                                        <div className='totalnos'>{totalSaleOnline}</div>
+                                    </div>
+                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
+                                        <div className='totalstitle'>Total Closing Balance</div>
+                                        <div className='totalnos'>{totalClosingBalance}</div>
+                                    </div>
+                                </div>
                             </div>
 
 
