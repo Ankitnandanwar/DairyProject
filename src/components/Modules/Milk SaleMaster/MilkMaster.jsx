@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { FiEdit } from "react-icons/fi";
 import axios from 'axios'
+import { Bars } from 'react-loader-spinner';
 
 
 const MilkMaster = () => {
@@ -51,7 +52,7 @@ const MilkMaster = () => {
                 })
                 setTimeout(() => {
                     window.location.reload()
-                }, 4000)
+                }, 1000)
                 console.log(res)
             }
 
@@ -90,7 +91,7 @@ const MilkMaster = () => {
                 setProdTableData(res.data)
                 setTimeout(() => {
                     setLoader(false) 
-                }, 4000);
+                }, 1000);
             })
         } catch (error) {
             console.log(error, "server issue")
@@ -102,6 +103,15 @@ const MilkMaster = () => {
             {
                 loader ?
                     <div className='loader-Cont'>
+                        <Bars
+                            height="40"
+                            width="80"
+                            color="rgb(5, 165, 214)"
+                            ariaLabel="bars-loading"
+                            wrapperStyle={{}}
+                            wrapperClass=""
+                            visible={true}
+                        />
                     </div> :
 
                     <div className='container mt-4'>

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
+import { useForm } from 'react-hook-form';
 
 const Login = () => {
   const navigate = useNavigate()
@@ -56,8 +57,15 @@ const Login = () => {
     }
   };
 
+const {
+  register,
+  handleSubmit,
+  formState: { errors },
+} = useForm();
 
-
+const onSubmit = (data) => {
+  console.log(data)
+}
   return (
     <>
       <div className="backgroundImg">
@@ -77,13 +85,14 @@ const Login = () => {
         <div className="loginCont">
           <div className="empty"></div>
           <div className="loginIds">
+          <form onSubmit={handleSubmit(onsubmit)}>
             <div>
               <img src={loginLogo} alt="cpmpany-logo" width="130" />
             </div>
-            <div>
               <div className="loginFields">
-                <div className="input-box">
-                  <TextField id="standard-basic" label="Username" variant="standard" name="userName" 
+                <div className="input-box"
+                {...register('username', {required: "Username is Required"})}>
+                  <TextField id="standard-basic" type='text' label="Username" variant="standard" name="userName" 
                   value={loginUser.userName} 
                   onChange={
                     (e) => {
@@ -95,12 +104,15 @@ const Login = () => {
                         userName: e.target.value
                       })
                     }
-                  } />
-                  {/* {errors.userName && <p style={{ color: 'red', fontSize: "10px" }}>{errors.userName}</p>} */}
-                  {/* <span style={{ color: "red", fontSize: "10px", marginTop:"7px"}}>username should not be empty</span> */}
+                  } 
+                  />
+                  {errors.username && (<small className='text-danger'>{errors.username.message}</small>)}
                 </div>
-                <div className="input-box">
-                  <TextField id="standard-basic" type="password" label="Password" name="password" variant="standard" value={loginUser.password} onChange={
+                <div className="input-box"
+                {...register('password', {required: "Password is Required"})}>
+                  <TextField id="standard-basic" type="password" label="Password" variant="standard" name="password"
+                  value={loginUser.password} 
+                  onChange={
                     (e) => {
                       // if(e.target.value){
                       //   setError(false)
@@ -110,16 +122,16 @@ const Login = () => {
                         password: e.target.value
                       })
                     }
-                  } />
-                  {/* {errors.password && <p style={{ color: 'red', fontSize: "10px" }}>{errors.password}</p>} */}
-                  {/* <span style={{ color: "red", fontSize: "10px", marginTop:"7px"}}>password should not be empty</span> */}
+                  }
+                   />
+                  {errors.password && (<small className='text-danger'>{errors.password.message}</small>)}
                 </div>
                 <button type="submit" className="login-btn" onClick={() => handleloginSubmit()}>Login</button>
               </div>
+              </form>
             </div>
           </div>
         </div>
-      </div>
     </>
   )
 }

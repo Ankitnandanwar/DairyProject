@@ -8,6 +8,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import axios from 'axios';
 import * as FileSaver from 'file-saver'
 import * as XLSX from "xlsx";
+import { Bars } from 'react-loader-spinner';
 
 const MilkReport = () => {
     const [loader, setLoader] = useState(false)
@@ -34,7 +35,7 @@ const MilkReport = () => {
                     setFilteredData(res.data.data)
                     setTimeout(() => {
                         setLoader(false)
-                    }, 4000);
+                    }, 1000);
                 })
 
             } catch (error) {
@@ -128,7 +129,17 @@ const MilkReport = () => {
     return (
         <>
             {
-                loader ? <div className='loader-Cont'></div> :
+                loader ? <div className='loader-Cont'>
+                    <Bars
+                            height="40"
+                            width="80"
+                            color="rgb(5, 165, 214)"
+                            ariaLabel="bars-loading"
+                            wrapperStyle={{}}
+                            wrapperClass=""
+                            visible={true}
+                        />
+                </div> :
 
                     <div className='mt-5 container'>
                         <div className='pt-5'>
