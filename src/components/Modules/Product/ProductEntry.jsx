@@ -12,7 +12,7 @@ import Dialog from '@mui/material/Dialog'
 import Slide from '@mui/material/Slide';
 import { IconButton } from '@mui/material';
 import CancelIcon from '@mui/icons-material/Cancel';
-
+import { Bars } from 'react-loader-spinner';
 
 
 
@@ -27,6 +27,8 @@ const ProductEntry = () => {
     const [productName, setProductName] = useState("")
     const [openBalance, setOpenBalance] = useState("")
     const [rate, setRate] = useState("")
+    const [unit, setUnit] = useState("")
+    const [gst, setGst] = useState("")
     const [prodTableData, setProdTableData] = useState([])
 
     const [opendailogdel, setopendailogdel] = useState(false)
@@ -42,7 +44,7 @@ const ProductEntry = () => {
         try {
             if (editItem) {
                 const editres = await axios.put(`http://103.38.50.113:8080/DairyApplication/updateProductEntry/${editItem.id}`, {
-                    productName, openBalance, rate
+                    productName, openBalance, rate, unit, gst
                 })
                 toast.success("Data Updated Successfully", {
                     position: "top-center",
@@ -56,7 +58,7 @@ const ProductEntry = () => {
                 })
             } else {
                 const res = await axios.post("http://103.38.50.113:8080/DairyApplication/saveProductEntry", {
-                    productName, openBalance, rate
+                    productName, openBalance, rate, unit, gst
                 })
                 toast.success("Data Saved Successfully", {
                     position: "top-center",
@@ -77,6 +79,8 @@ const ProductEntry = () => {
             setProductName("");
             setOpenBalance("");
             setRate("");
+            setGst("")
+            setUnit("")
             setEditItem(null);
 
             // Refresh the product data
@@ -93,8 +97,8 @@ const ProductEntry = () => {
             let data = await axios.get("http://103.38.50.113:8080/DairyApplication/getAllProductEntryData").then((res) => {
                 setProdTableData(res.data)
                 setTimeout(() => {
-                    setLoader(false) 
-                }, 4000);
+                    setLoader(false)
+                }, 1000);
             })
         } catch (error) {
             console.log(error, "server issue")
@@ -169,6 +173,7 @@ const ProductEntry = () => {
                         </DialogActions>
                     </div>
                 </Dialog>
+
             </>
         )
     }
@@ -187,6 +192,16 @@ const ProductEntry = () => {
             {
                 loader ?
                     <div className='loader-Cont'>
+                        <Bars
+                            height="40"
+                            width="80"
+                            color="rgb(5, 165, 214)"
+                            ariaLabel="bars-loading"
+                            wrapperStyle={{}}
+                            wrapperClass=""
+                            visible={true}
+                        />
+
                     </div> :
 
                     <div className='container mt-4'>
@@ -240,6 +255,32 @@ const ProductEntry = () => {
                                     </Box>
                                 </div>
 
+                                <div className='col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center'>
+                                    <Box
+                                        component="form"
+                                        sx={{
+                                            '& > :not(style)': { m: 1, width: '25ch' },
+                                        }}
+                                        type="number"
+                                        autoComplete="off"
+                                    >
+                                        <TextField label="Unit" variant="standard" value={unit} onChange={(e) => setUnit(e.target.value)} />
+                                    </Box>
+                                </div>
+
+                                <div className='col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center'>
+                                    <Box
+                                        component="form"
+                                        sx={{
+                                            '& > :not(style)': { m: 1, width: '25ch' },
+                                        }}
+                                        type="number"
+                                        autoComplete="off"
+                                    >
+                                        <TextField label="GSTIN" variant="standard" value={gst} onChange={(e) => setGst(e.target.value)} />
+                                    </Box>
+                                </div>
+
                                 <div className='col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center' style={{ gap: "1rem" }}>
                                     <button className='savebtn' onClick={() => { saveData() }}>Save</button>
                                     <button className='tabelbtn' onClick={() => setshowtable(!showtable)}>Show table</button>
@@ -257,6 +298,8 @@ const ProductEntry = () => {
                                                         <th style={{ width: "180px" }}>Product</th>
                                                         <th>Opening Balance</th>
                                                         <th>Rate</th>
+                                                        <th>Unit</th>
+                                                        <th>GSTIN</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -271,6 +314,8 @@ const ProductEntry = () => {
                                                                     </td>
                                                                     <td>{item.openBalance}</td>
                                                                     <td>{item.rate}</td>
+                                                                    <td>{item.unit}</td>
+                                                                    <td>{item.gst}</td>
                                                                     <td>
                                                                         <button className='btn' onClick={() => editItemHandler(item)}><FiEdit className='editicon' /></button>
                                                                         <button className='btn' onClick={() => dele(item.id)}><MdDeleteOutline className='delicon' /></button>

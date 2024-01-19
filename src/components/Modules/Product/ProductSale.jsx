@@ -10,9 +10,7 @@ import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
 import { MdDeleteOutline } from "react-icons/md";
-
-
-
+import { Bars } from 'react-loader-spinner';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -139,7 +137,7 @@ const ProductSale = () => {
             })
             setTimeout(() => {
                 window.location.reload()
-            }, 3000)
+            }, 1000)
         } catch (error) {
             console.log(error);
         }
@@ -159,7 +157,7 @@ const ProductSale = () => {
                 setTableData(res.data.data);
                 setTimeout(() => {
                     setLoader(false)
-                }, 4000);
+                }, 1000);
             } catch (error) {
                 console.log(error);
             }
@@ -183,7 +181,17 @@ const ProductSale = () => {
     return (
         <>
             {
-                loader ? <div className='loader-Cont'></div> :
+                loader ? <div className='loader-Cont'>
+                    <Bars
+                            height="40"
+                            width="80"
+                            color="rgb(5, 165, 214)"
+                            ariaLabel="bars-loading"
+                            wrapperStyle={{}}
+                            wrapperClass=""
+                            visible={true}
+                        />
+                </div> :
 
                     <div className='mt-5 container'>
                         <ToastContainer position="top-center"

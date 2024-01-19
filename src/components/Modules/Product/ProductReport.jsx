@@ -8,6 +8,7 @@ import axios from 'axios';
 // import { MdDeleteOutline } from "react-icons/md";
 import * as FileSaver from 'file-saver'
 import * as XLSX from "xlsx";
+import { Bars } from 'react-loader-spinner';
 
 
 
@@ -65,7 +66,7 @@ const ProductReport = () => {
                     setFilteredData(res.data);
                     setTimeout(() => {
                         setLoader(false)
-                    }, 4000);
+                    }, 1000);
                 })
 
             } catch (error) {
@@ -113,7 +114,17 @@ const ProductReport = () => {
     return (
         <>
             {
-                loader ? <div className='loader-Cont'></div> :
+                loader ? <div className='loader-Cont'>
+                    <Bars
+                            height="40"
+                            width="80"
+                            color="rgb(5, 165, 214)"
+                            ariaLabel="bars-loading"
+                            wrapperStyle={{}}
+                            wrapperClass=""
+                            visible={true}
+                        />
+                </div> :
 
                     <div className='mt-5 container'>
                         <div className='pt-5'>

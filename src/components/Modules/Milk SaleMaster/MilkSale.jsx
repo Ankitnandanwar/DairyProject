@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import axios from 'axios'
+import { Bars } from 'react-loader-spinner';
 
 const MilkSale = () => {
 
@@ -52,12 +53,12 @@ const MilkSale = () => {
     return `${year}-${month}-${day}`;
   };
 
-  useEffect(() => {
-    const storedOpeningBalance = localStorage.getItem('openingBalance');
-    if (storedOpeningBalance) {
-      setopeningBalance(storedOpeningBalance);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedOpeningBalance = localStorage.getItem('openingBalance');
+  //   if (storedOpeningBalance) {
+  //     setopeningBalance(storedOpeningBalance);
+  //   }
+  // }, []);
 
   const HandleSave = async () => {
     try {
@@ -98,8 +99,8 @@ const MilkSale = () => {
 
       })
       console.log(res.data)
-      setopeningBalance(closingBalance)
-      localStorage.setItem('openingBalance', closingBalance);
+      // setopeningBalance(closingBalance)
+      // localStorage.setItem('openingBalance', closingBalance);
       window.location.reload();
 
 
@@ -124,7 +125,7 @@ const MilkSale = () => {
         });
         setTimeout(() => {
           setLoader(false)
-        }, 4000);
+        }, 1000);
       } catch (error) {
         console.error('Error fetching product details:', error);
       }
@@ -132,6 +133,27 @@ const MilkSale = () => {
 
 
     fetchProductDetails();
+  }, []);
+
+  useEffect(() => {
+    setLoader(true);
+
+    const fetchClosingBalance = async () => {
+      try {
+        const response = await axios.get('http://103.38.50.113:8080/DairyApplication/lastIndexOfYourColumn');
+        const lastClosingBalance = response.data;
+
+        setopeningBalance(lastClosingBalance);
+        setTimeout(() => {
+          setLoader(false);
+        }, 1000);
+      } catch (error) {
+        console.error('Error fetching closing balance:', error);
+        setLoader(false);
+      }
+    };
+
+    fetchClosingBalance();
   }, []);
 
 
@@ -152,7 +174,17 @@ const MilkSale = () => {
   return (
     <>
       {
-        loader ? <div className='loader-Cont'></div> :
+        loader ? <div className='loader-Cont'>
+          <Bars
+            height="40"
+            width="80"
+            color="rgb(5, 165, 214)"
+            ariaLabel="bars-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        </div> :
           <div className='mt-5 container'>
             <div className='pt-5'>
               <h3 className='text-center mt-3' style={{ textDecoration: 'underline' }}>Milk Sale</h3>
@@ -179,7 +211,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Opening Balance" variant="standard" value={openingBalance} onChange={(e) => setopeningBalance(e.target.value)} readOnly />
+                  <TextField label="Opening Balance" type='number' variant="standard" value={openingBalance} onChange={(e) => setopeningBalance(e.target.value)} readOnly />
                 </Box>
               </div>
 
@@ -191,7 +223,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Closing Balance" variant="standard" value={closingBalance} />
+                  <TextField label="Closing Balance" type='number' variant="standard" value={closingBalance} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -202,7 +234,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Milk Received" variant="standard" value={milkReceived} onChange={(e) => setmilkReceived(e.target.value)} />
+                  <TextField label="Milk Received" type='number' variant="standard" value={milkReceived} onChange={(e) => setmilkReceived(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -213,7 +245,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Sahiwal Milk" variant="standard" value={sahiwalMilk} onChange={(e) => setsahiwalMilk(e.target.value)} />
+                  <TextField label="Sahiwal Milk" type='number' variant="standard" value={sahiwalMilk} onChange={(e) => setsahiwalMilk(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -224,7 +256,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Goat Milk Received" variant="standard" value={goatMilkReceived} onChange={(e) => setgoatMilkReceived(e.target.value)} />
+                  <TextField label="Goat Milk Received" type='number' variant="standard" value={goatMilkReceived} onChange={(e) => setgoatMilkReceived(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -235,7 +267,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Goat Milk Mixed" variant="standard" value={goatMilkMixed} onChange={(e) => setgoatMilkMixed(e.target.value)} />
+                  <TextField label="Goat Milk Mixed" type='number' variant="standard" value={goatMilkMixed} onChange={(e) => setgoatMilkMixed(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -246,7 +278,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Total Quantity" variant="standard" value={totalQuantity} />
+                  <TextField label="Total Quantity" type='number' variant="standard" value={totalQuantity} />
                 </Box>
               </div>
 
@@ -258,7 +290,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Production" variant="standard" value={production} onChange={(e) => setproduction(e.target.value)} />
+                  <TextField label="Production" type='number' variant="standard" value={production} onChange={(e) => setproduction(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -269,7 +301,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Girls Hostel" variant="standard" value={girlsHostel} onChange={(e) => setgirlsHostel(e.target.value)} />
+                  <TextField label="Girls Hostel" type='number' variant="standard" value={girlsHostel} onChange={(e) => setgirlsHostel(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -280,7 +312,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="H No. 8" variant="standard" value={hNo8} onChange={(e) => sethNo8(e.target.value)} />
+                  <TextField label="H No. 8" type='number' variant="standard" value={hNo8} onChange={(e) => sethNo8(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -291,7 +323,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Parker H" variant="standard" value={parkerH} onChange={(e) => setparkerH(e.target.value)} />
+                  <TextField label="Parker H" type='number' variant="standard" value={parkerH} onChange={(e) => setparkerH(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -302,7 +334,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="DTM Cash" variant="standard" value={dtmCash} onChange={(e) => setdtmCash(e.target.value)} />
+                  <TextField label="DTM Cash" type='number' variant="standard" value={dtmCash} onChange={(e) => setdtmCash(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -313,7 +345,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="DTM Online" variant="standard" value={dtmOnline} onChange={(e) => setdtmOnline(e.target.value)} />
+                  <TextField label="DTM Online" type='number' variant="standard" value={dtmOnline} onChange={(e) => setdtmOnline(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -324,7 +356,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Total DTM" variant="standard" value={totalDTM} />
+                  <TextField label="Total DTM" type='number' variant="standard" value={totalDTM} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -335,7 +367,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Cash Amount DTM" variant="standard" value={cashAmtDTM} />
+                  <TextField label="Cash Amount DTM" type='number' variant="standard" value={cashAmtDTM} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -346,7 +378,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Online Amount DTM" variant="standard" value={onlineAmtDTM} />
+                  <TextField label="Online Amount DTM" type='number' variant="standard" value={onlineAmtDTM} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -357,7 +389,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Standard Milk Cash" variant="standard" value={standardMilkCash} onChange={(e) => setstandardMilkCash(e.target.value)} />
+                  <TextField label="Standard Milk Cash" type='number' variant="standard" value={standardMilkCash} onChange={(e) => setstandardMilkCash(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -368,7 +400,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Standard Milk Online" variant="standard" value={standardMilkOnline} onChange={(e) => setstandardMilkOnline(e.target.value)} />
+                  <TextField label="Standard Milk Online" type='number' variant="standard" value={standardMilkOnline} onChange={(e) => setstandardMilkOnline(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -379,7 +411,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="H No. 13" variant="standard" value={hNo13} onChange={(e) => sethNo13(e.target.value)} />
+                  <TextField label="H No. 13" type='number' variant="standard" value={hNo13} onChange={(e) => sethNo13(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -390,7 +422,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Grewal Hotel" variant="standard" value={grewalHotel} onChange={(e) => setgrewalHotel(e.target.value)} />
+                  <TextField label="Grewal Hotel" type='number' variant="standard" value={grewalHotel} onChange={(e) => setgrewalHotel(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -401,7 +433,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Cash Sale" variant="standard" value={cashSale} onChange={(e) => setcashSale(e.target.value)} />
+                  <TextField label="Cash Sale" type='number' variant="standard" value={cashSale} onChange={(e) => setcashSale(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -412,7 +444,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Online Sale" variant="standard" value={onlineSale} onChange={(e) => setonlineSale(e.target.value)} />
+                  <TextField label="Online Sale" type='number' variant="standard" value={onlineSale} onChange={(e) => setonlineSale(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -423,7 +455,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Total Standard Milk" variant="standard" value={totalStandardMilk} />
+                  <TextField label="Total Standard Milk" type='number' variant="standard" value={totalStandardMilk} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -434,7 +466,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Cash Amount STD" variant="standard" value={cashAmtSTD} />
+                  <TextField label="Cash Amount STD" type='number' variant="standard" value={cashAmtSTD} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -445,7 +477,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Online Amount STD" variant="standard" value={onlineAmtSTD} />
+                  <TextField label="Online Amount STD" type='number' variant="standard" value={onlineAmtSTD} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -456,7 +488,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Cash Sale Amount" variant="standard" value={cashSaleAmt} onChange={(e) => setCashSaleAmt(e.target.value)} />
+                  <TextField label="Cash Sale Amount" type='number' variant="standard" value={cashSaleAmt} onChange={(e) => setCashSaleAmt(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -467,7 +499,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Online Sale Amount" variant="standard" value={onlineSaleAmt} onChange={(e) => setonlineSaleAmt(e.target.value)} />
+                  <TextField label="Online Sale Amount" type='number' variant="standard" value={onlineSaleAmt} onChange={(e) => setonlineSaleAmt(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -478,7 +510,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Cash Amount" variant="standard" value={cashAmt} onChange={(e) => setcashAmt(e.target.value)} />
+                  <TextField label="Cash Amount" type='number' variant="standard" value={cashAmt} onChange={(e) => setcashAmt(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -489,7 +521,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Cream" variant="standard" value={cream} onChange={(e) => setcream(e.target.value)} />
+                  <TextField label="Cream" type='number' variant="standard" value={cream} onChange={(e) => setcream(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -500,7 +532,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Sahiwal Cream" variant="standard" value={sahiwalCream} onChange={(e) => setsahiwalCream(e.target.value)} />
+                  <TextField label="Sahiwal Cream" type='number' variant="standard" value={sahiwalCream} onChange={(e) => setsahiwalCream(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -511,7 +543,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Research" variant="standard" value={research} onChange={(e) => setresearch(e.target.value)} />
+                  <TextField label="Research" type='number' variant="standard" value={research} onChange={(e) => setresearch(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -522,7 +554,7 @@ const MilkSale = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="H Loss" variant="standard" value={hLoss} onChange={(e) => sethLoss(e.target.value)} />
+                  <TextField label="H Loss" type='number' variant="standard" value={hLoss} onChange={(e) => sethLoss(e.target.value)} />
                 </Box>
               </div>
               <div className='col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center' style={{ gap: "1rem" }}>
@@ -530,7 +562,7 @@ const MilkSale = () => {
               </div>
             </div>
           </div>
-        }
+      }
     </>
   )
 }
