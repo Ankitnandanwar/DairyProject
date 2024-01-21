@@ -218,7 +218,7 @@ const Table = () => {
             visible={true}
           />
         </div> :
-          <div className='mt-5 container'>
+          <div className='mt-5 mb-4 container'>
             <div className='pt-5'>
               <h3 className='text-center mt-3' style={{ textDecoration: 'underline' }}>DMW Report</h3>
             </div>
@@ -265,7 +265,7 @@ const Table = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField type='number' label="Rate" variant="standard" value={productDetails.rate} aria-readonly />
+                  <TextField type='text' label="Rate" variant="standard" value={productDetails.rate} aria-readonly />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
