@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 const MilkSale = () => {
     const [products, setProducts] = useState([]);
     const [loader, setLoader] = useState(true)
-
+    const [hide, sethide] = React.useState(false)
     const [dates, setdates] = useState({
         fdate: '',
         tdate: ''
@@ -53,8 +53,34 @@ const MilkSale = () => {
         }
     };
 
-    const searchData = () =>{
-        getTotalsData()
+    const searchData = () => {
+        console.log(dates, 'dates shdjsdjs')
+        if (dates.fdate !== '' && dates.tdate !== '') {
+            try {
+                let dateObj = {
+                    startDate: dates.fdate,
+                    endDate: dates.tdate
+                }
+                console.log(dateObj, 'sdshdhsd')
+                axios.post('http://103.38.50.113:8080/DairyApplication/calculateTotals', dateObj).then((data) => {
+                    if (data.data?.length > 0) {
+                        setProducts(data?.data)
+                        sethide(true)
+                    } else {
+                        console.log('no data found')
+                    }
+
+                }).catch((e) => {
+                    console.log('error=>', e)
+                })
+
+            } catch (e) {
+                console.log(e)
+            }
+        } else {
+            getProductData()
+        }
+        // getTotalsData()
     }
 
     useEffect(() => {
@@ -80,6 +106,7 @@ const MilkSale = () => {
 
                     </div> :
                     <div className='pt-5'>
+
                         <h3 className='mt-5 text-center' style={{ textDecoration: 'underline' }}>DMW REPORT</h3>
 
                         <div className='row mt-4 mb-4'>
@@ -124,7 +151,7 @@ const MilkSale = () => {
                             </div>
 
                             <div className='col-12 col-lg-12 col-xl-12 col-md-12 d-flex justify-content-center align-items-center mt-3' style={{ gap: "1rem" }}>
-                                <button className='btn btn-primary' onClick={()=>searchData()}>Search</button>
+                                <button disabled={dates.fdate === '' && dates.tdate === ''} className='btn btn-primary' onClick={() => searchData()}>Search</button>
                             </div>
                         </div>
 
@@ -137,9 +164,15 @@ const MilkSale = () => {
                                         <th style={{ width: "200px" }} rowspan="2">Name of Products</th>
                                         <th style={{ width: "100px" }} rowspan="2">GST (%)</th>
                                         <th style={{ width: "100px" }} rowspan="2">Rate</th>
-                                        <th style={{ width: "100px" }} rowspan="2">GST Amt</th>
-                                        <th style={{ width: "100px" }} rowspan="2">CGST</th>
-                                        <th style={{ width: "100px" }} rowspan="2">SGST</th>
+                                        {
+                                            hide ? null :
+                                            <>
+                                                <th style={{ width: "100px" }} rowspan="2">GST Amt</th>
+                                                <th style={{ width: "100px" }} rowspan="2">CGST</th>
+                                                <th style={{ width: "100px" }} rowspan="2">SGST</th>
+                                            </>
+                                        }
+
                                         <th style={{ width: "150px" }} rowspan="2">Product Rate</th>
                                         <th style={{ width: "400px", border: '2px solid white' }} colSpan={4}>Plant Sale (EDP)</th>
                                         <th style={{ width: "400px", border: '1px solid white' }} colSpan={4}>Milk Parlour</th>
@@ -201,9 +234,11 @@ const MilkSale = () => {
                                                     <td>{item.product}</td>
                                                     <td>{item.gst}</td>
                                                     <td>{item.rate}</td>
-                                                    <td>{item.gstAmount}</td>
-                                                    <td>{item.cgst}</td>
-                                                    <td>{item.sgst}</td>
+                                                   {
+                                                    hide?
+                                                    null:
+                                                    <><td>{item.gstAmount}</td><td>{item.cgst}</td><td>{item.sgst}</td></>
+                                                   } 
                                                     <td>{item.productRate}</td>
                                                     <td>{item.plantCash}</td>
                                                     <td>{item.plantCashAmount}</td>
