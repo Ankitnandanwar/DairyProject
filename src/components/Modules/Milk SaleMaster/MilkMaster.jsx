@@ -200,7 +200,7 @@ const MilkMaster = () => {
                                                         prodTableData.map((item, i) => {
                                                             return (
                                                                 <tr key={i}>
-                                                                    <th scope='row' className='text-center'>{item.id}</th>
+                                                                    <th scope='row' className='text-center'>{i+1}</th>
                                                                     <td>
                                                                         <p className='sub1'>{item.dtmMilkRate}</p>
                                                                     </td>

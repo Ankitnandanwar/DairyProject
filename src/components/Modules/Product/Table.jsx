@@ -220,7 +220,7 @@ const Table = () => {
         </div> :
           <div className='mt-5 mb-4 container'>
             <div className='pt-5'>
-              <h3 className='text-center mt-3' style={{ textDecoration: 'underline' }}>DMW Report</h3>
+              <h3 className='text-center mt-3' style={{ textDecoration: 'underline' }}>DMW ENTRY</h3>
             </div>
             <div className='row mt-4'>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>

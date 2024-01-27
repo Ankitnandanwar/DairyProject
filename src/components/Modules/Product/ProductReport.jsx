@@ -216,7 +216,7 @@ const ProductReport = () => {
                                         {
                                             filteredData.map((item, i) => (
                                                 <tr key={i}>
-                                                    <th scope='row' className='text-center'>{item.id}</th>
+                                                    <th scope='row' className='text-center'>{i+1}</th>
                                                     <td className='text-center'>{item.date}</td>
                                                     <td className='text-center'>{item.product}</td>
                                                     <td className='text-center'>{item.openBalance}</td>

@@ -482,7 +482,7 @@ const ProductSale = () => {
                                     {Array.isArray(tableData) && tableData.length > 0 ? (
                                         tableData.map((item, i) => (
                                             <tr key={i}>
-                                                <th scope='row' className='text-center'>{item.id}</th>
+                                                <th scope='row' className='text-center'>{i+1}</th>
                                                 <td className='text-center'>{item.product}</td>
                                                 <td className='text-center'>{item.openBalance}</td>
                                                 <td className='text-center'>{item.rate}</td>

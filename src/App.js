@@ -10,7 +10,8 @@ import MilkSalePage from './pages/MilkMasterModulePage/MilkSalePage'
 import MilkReportPage from './pages/MilkMasterModulePage/MilkReportPage'
 import Table from './pages/MilkMasterModulePage/Table'
 import TableReport from './pages/MilkMasterModulePage/TableReportPage'
-
+import ItemEntry from './pages/ItemModulePage/ItemEntryPage'
+import ItemInventry from './pages/ItemModulePage/ItemInventryPage'
 
 const App = () => {
   return (
@@ -28,6 +29,9 @@ const App = () => {
           <Route path='/milkreport' element={<MilkReportPage/>} />
           <Route path="/table" element={<Table/>} />
           <Route path='/tablereport' element={<TableReport/>}/>
+
+          <Route path='/itementry' element={<ItemEntry/>}/>
+          <Route path='/iteminventry' element={<ItemInventry/>}/>
         </Routes>
       </BrowserRouter>
     </div>
