@@ -167,12 +167,12 @@ const MilkSale = () => {
                                         {
                                             hide ? null :
                                             <>
-                                                <th style={{ width: "100px" }} rowspan="2">GST Amt</th>
-                                                <th style={{ width: "100px" }} rowspan="2">CGST</th>
-                                                <th style={{ width: "100px" }} rowspan="2">SGST</th>
+                                                
                                             </>
                                         }
-
+                                        <th style={{ width: "100px" }} rowspan="2">GST Amt</th>
+                                                <th style={{ width: "100px" }} rowspan="2">CGST</th>
+                                                <th style={{ width: "100px" }} rowspan="2">SGST</th>
                                         <th style={{ width: "150px" }} rowspan="2">Product Rate</th>
                                         <th style={{ width: "400px", border: '2px solid white' }} colSpan={4}>Plant Sale (EDP)</th>
                                         <th style={{ width: "400px", border: '1px solid white' }} colSpan={4}>Milk Parlour</th>
@@ -229,16 +229,19 @@ const MilkSale = () => {
                                         products.map((item, i) => {
                                             return (
                                                 <tr>
-                                                    <td>{item.id}</td>
+                                                    <td style={{fontWeight: 600}}>{i+1}</td>
                                                     <td>{item.date}</td>
                                                     <td>{item.product}</td>
                                                     <td>{item.gst}</td>
                                                     <td>{item.rate}</td>
-                                                   {
+                                                    <td>{item.gstAmount}</td>
+                                                    <td>{item.cgst}</td>
+                                                    <td>{item.sgst}</td>
+                                                   {/* {
                                                     hide?
                                                     null:
                                                     <><td>{item.gstAmount}</td><td>{item.cgst}</td><td>{item.sgst}</td></>
-                                                   } 
+                                                   }  */}
                                                     <td>{item.productRate}</td>
                                                     <td>{item.plantCash}</td>
                                                     <td>{item.plantCashAmount}</td>

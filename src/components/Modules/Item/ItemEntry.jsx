@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import "./Product.css"
+import "../Product/Product.css"
 import Box from '@mui/material/Box';
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,11 +24,9 @@ const ProductEntry = () => {
     const [loader, setLoader] = useState(true)
     const [showtable, setshowtable] = useState(false)
 
-    const [productName, setProductName] = useState("")
-    const [openBalance, setOpenBalance] = useState("")
-    const [rate, setRate] = useState("")
+    const [item, setItem] = useState("")
+    const [presentStock, setPresentStock] = useState("")
     const [unit, setUnit] = useState("")
-    const [gst, setGst] = useState("")
     const [prodTableData, setProdTableData] = useState([])
 
     const [opendailogdel, setopendailogdel] = useState(false)
@@ -43,8 +41,8 @@ const ProductEntry = () => {
     const saveData = async () => {
         try {
             if (editItem) {
-                const editres = await axios.put(`http://103.38.50.113:8080/DairyApplication/updateProductEntry/${editItem.id}`, {
-                    productName, openBalance, rate, unit, gst
+                const editres = await axios.put(`http://103.38.50.113:8080/DairyApplication/upadteItemMaster/${editItem.id}`, {
+                    item, presentStock, unit
                 })
                 toast.success("Data Updated Successfully", {
                     position: "top-center",
@@ -57,8 +55,8 @@ const ProductEntry = () => {
                     theme: "light",
                 })
             } else {
-                const res = await axios.post("http://103.38.50.113:8080/DairyApplication/saveProductEntry", {
-                    productName, openBalance, rate, unit, gst
+                const res = await axios.post("http://103.38.50.113:8080/DairyApplication/saveItemMaster", {
+                    item, presentStock, unit
                 })
                 toast.success("Data Saved Successfully", {
                     position: "top-center",
@@ -76,10 +74,8 @@ const ProductEntry = () => {
                 console.log(res)
             }
 
-            setProductName("");
-            setOpenBalance("");
-            setRate("");
-            setGst("")
+            setItem("");
+            setPresentStock("");
             setUnit("")
             setEditItem(null);
 
@@ -94,7 +90,7 @@ const ProductEntry = () => {
     const getProductData = async () => {
         setLoader(true)
         try {
-            let data = await axios.get("http://103.38.50.113:8080/DairyApplication/getAllProductEntryData").then((res) => {
+            let data = await axios.get("http://103.38.50.113:8080/DairyApplication/getItemMaster").then((res) => {
                 setProdTableData(res.data)
                 setTimeout(() => {
                     setLoader(false)
@@ -127,7 +123,7 @@ const ProductEntry = () => {
         }
 
         try {
-            await axios.post("http://103.38.50.113:8080/DairyApplication/deleteProductEntry", delobj, {
+            await axios.post("http://103.38.50.113:8080/DairyApplication/deleteItemMaster", delobj, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -180,11 +176,9 @@ const ProductEntry = () => {
 
     // Edit data
     const editItemHandler = (item) => {
-        setProductName(item.productName);
-        setOpenBalance(item.openBalance);
-        setRate(item.rate);
+        setItem(item.item);
+        setPresentStock(item.presentStock);
         setUnit(item.unit);
-        setGst(item.gst);
         setEditItem(item);
     };
 
@@ -220,7 +214,7 @@ const ProductEntry = () => {
                         </ToastContainer>
                         <div className='pt-5'>
                             {dailoge()}
-                            <h3 className='text-center mt-3' style={{ textDecoration: 'underline' }}>Product Entry</h3>
+                            <h3 className='text-center mt-3' style={{ textDecoration: 'underline' }}>Item Entry</h3>
                             <div className='row mt-4'>
                                 <div className='col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center'>
                                     <Box
@@ -230,7 +224,7 @@ const ProductEntry = () => {
                                         }}
                                         autoComplete="off"
                                     >
-                                        <TextField label="Product" variant="standard" value={productName} onChange={(e) => setProductName(e.target.value)} />
+                                        <TextField label="Item" variant="standard" value={item} onChange={(e) => setItem(e.target.value)} />
                                     </Box>
                                 </div>
                                 <div className='col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center'>
@@ -241,22 +235,9 @@ const ProductEntry = () => {
                                         }}
                                         autoComplete="off"
                                     >
-                                        <TextField label="Opening Balance" variant="standard" value={openBalance} onChange={(e) => setOpenBalance(e.target.value)} />
+                                        <TextField label="Present Stock" variant="standard" value={presentStock} onChange={(e) => setPresentStock(e.target.value)} />
                                     </Box>
                                 </div>
-                                <div className='col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center'>
-                                    <Box
-                                        component="form"
-                                        sx={{
-                                            '& > :not(style)': { m: 1, width: '25ch' },
-                                        }}
-                                        type="number"
-                                        autoComplete="off"
-                                    >
-                                        <TextField label="Rate" variant="standard" value={rate} onChange={(e) => setRate(e.target.value)} />
-                                    </Box>
-                                </div>
-
                                 <div className='col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center'>
                                     <Box
                                         component="form"
@@ -269,20 +250,6 @@ const ProductEntry = () => {
                                         <TextField label="Unit" variant="standard" value={unit} onChange={(e) => setUnit(e.target.value)} />
                                     </Box>
                                 </div>
-
-                                <div className='col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center'>
-                                    <Box
-                                        component="form"
-                                        sx={{
-                                            '& > :not(style)': { m: 1, width: '25ch' },
-                                        }}
-                                        type="number"
-                                        autoComplete="off"
-                                    >
-                                        <TextField label="GSTIN" variant="standard" value={gst} onChange={(e) => setGst(e.target.value)} />
-                                    </Box>
-                                </div>
-
                                 <div className='col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center' style={{ gap: "1rem" }}>
                                     <button className='savebtn' onClick={() => { saveData() }}>Save</button>
                                     <button className='tabelbtn' onClick={() => setshowtable(!showtable)}>Show table</button>
@@ -297,11 +264,9 @@ const ProductEntry = () => {
                                                 <thead className='tableheading'>
                                                     <tr>
                                                         <th>SrNo</th>
-                                                        <th style={{ width: "180px" }}>Product</th>
-                                                        <th>Opening Balance</th>
-                                                        <th>Rate</th>
+                                                        <th style={{ width: "180px" }}>Item</th>
+                                                        <th>Present Stock</th>
                                                         <th>Unit</th>
-                                                        <th>GSTIN</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -310,14 +275,12 @@ const ProductEntry = () => {
                                                         prodTableData.map((item, i) => {
                                                             return (
                                                                 <tr key={i}>
-                                                                    <th scope='row' className='text-center'>{i+1}</th>
+                                                                    <th scope='row' className='text-center'>{i + 1}</th>
                                                                     <td>
-                                                                        <p className='sub'>{item.productName}</p>
+                                                                        <p className='sub'>{item.item}</p>
                                                                     </td>
-                                                                    <td>{item.openBalance}</td>
-                                                                    <td>{item.rate}</td>
+                                                                    <td>{item.presentStock}</td>
                                                                     <td>{item.unit}</td>
-                                                                    <td>{item.gst}</td>
                                                                     <td>
                                                                         <button className='btn' onClick={() => editItemHandler(item)}><FiEdit className='editicon' /></button>
                                                                         <button className='btn' onClick={() => dele(item.id)}><MdDeleteOutline className='delicon' /></button>

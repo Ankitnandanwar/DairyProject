@@ -245,7 +245,7 @@ const MilkReport = () => {
                                         {
                                             filteredData.map((item, i) => (
                                                 <tr key={i}>
-                                                    <th scope='row' className='text-center'>{item.id}</th>
+                                                    <th scope='row' className='text-center'>{i+1}</th>
                                                     <td className='text-center'>{item.date}</td>
                                                     <td className='text-center'>{item.openingBalance}</td>
                                                     <td className='text-center'>{item.closingBalance}</td>

@@ -21,34 +21,42 @@ const Sidebar = ({ toggle, state, setState }) => {
 
                 <Menu>
                     <span><h1 className='text-center'>Dairy</h1></span>
-                    <SubMenu label="Master Modules">
+                    <SubMenu label="Products">
                         <MenuItem onClick={() => { navigate('/productentry') }}>
                             Product Entry
                         </MenuItem>
-                        <MenuItem onClick={() => { navigate('/milksalemaster') }}>
-                            Milk Sale Master
-                        </MenuItem>
-                    </SubMenu>
-                    <SubMenu label="Sales">
                         <MenuItem onClick={() => { navigate('/productsales') }}>
                             Product Sale
+                        </MenuItem>
+                        <MenuItem onClick={() => { navigate('/productreport') }}>
+                            Product Report
+                        </MenuItem>
+                    </SubMenu>
+                    <SubMenu label="Milk">
+                        <MenuItem onClick={() => { navigate('/milksalemaster') }}>
+                            Milk Sale Master
                         </MenuItem>
                         <MenuItem onClick={() => { navigate('/milksale') }}>
                             Milk Sale
                         </MenuItem>
-                    </SubMenu>
-                    <SubMenu label="Reports">
-                        <MenuItem onClick={() => { navigate('/productreport') }}>
-                            Product Report
-                        </MenuItem>
                         <MenuItem onClick={() => { navigate('/milkreport') }}>
                             Milk Report
                         </MenuItem>
+                    </SubMenu>
+                    <SubMenu label="Reports">  
                         <MenuItem onClick={() => { navigate('/table')}}>
-                            Table
+                            DMW Entry
                         </MenuItem>
                         <MenuItem onClick={() => { navigate('/tablereport')}}>
-                            Table Report
+                            DMW Report
+                        </MenuItem>
+                    </SubMenu>
+                    <SubMenu label="Inventry Items">
+                    <MenuItem onClick={() => { navigate('/itementry') }}>
+                            Item Entry
+                        </MenuItem>
+                        <MenuItem onClick={() => { navigate('/iteminventry')}}>
+                            Item Inventry
                         </MenuItem>
                     </SubMenu>
                 </Menu>
