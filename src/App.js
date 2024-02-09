@@ -8,10 +8,15 @@ import ProductReportPage from './pages/ProductModulePage/ProductReportPage'
 import MilkMasterPage from './pages/MilkMasterModulePage/MilkMasterPage'
 import MilkSalePage from './pages/MilkMasterModulePage/MilkSalePage'
 import MilkReportPage from './pages/MilkMasterModulePage/MilkReportPage'
-import Table from './pages/MilkMasterModulePage/Table'
-import TableReport from './pages/MilkMasterModulePage/TableReportPage'
+import DMWEntry from './pages/MilkMasterModulePage/DMWEntryPage'
+import DMWReport from './pages/MilkMasterModulePage/DMWReportPage'
 import ItemEntry from './pages/ItemModulePage/ItemEntryPage'
 import ItemInventry from './pages/ItemModulePage/ItemInventryPage'
+import ShareDetails from './pages/SharePage/ShareDetailsPage'
+import ShareRate from './pages/SharePage/ShareRatePage'
+import ShareCream from './pages/SharePage/ShareCreamPage'
+import ShareGhee from './pages/SharePage/ShareGheePage'
+
 
 const App = () => {
   return (
@@ -27,11 +32,16 @@ const App = () => {
           <Route path='/milksalemaster' element={<MilkMasterPage/>} />
           <Route path='/milksale' element={<MilkSalePage/>} />
           <Route path='/milkreport' element={<MilkReportPage/>} />
-          <Route path="/table" element={<Table/>} />
-          <Route path='/tablereport' element={<TableReport/>}/>
+          <Route path="/dmwentry" element={<DMWEntry/>} />
+          <Route path='/dmwreport' element={<DMWReport/>}/>
 
           <Route path='/itementry' element={<ItemEntry/>}/>
           <Route path='/iteminventry' element={<ItemInventry/>}/>
+
+          <Route path='/sharedetails' element={<ShareDetails/>}/>
+          <Route path='/sharerate' element={<ShareRate/>}/>
+          <Route path='/sharecream' element={<ShareCream/>}/>
+          <Route path='/shareghee' element={<ShareGhee/>}/>
         </Routes>
       </BrowserRouter>
     </div>

@@ -77,7 +77,67 @@ td {
     color: white;
 }
 
+.info-box {
+    margin-top: 10px;
+    /* background-color: aquamarine; */
+    /* border: 1px solid black; */
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 10px;
+    padding: 10px;
+}
 
+.textfield {
+    position: relative;
+    border-bottom: 1px solid #adabad;
+    margin: 10px 0;
+    width: 270px;
+}
+
+.inputfield {
+    width: 270px;
+    padding: 2px 5px;
+    height: 40px;
+    font-size: 14px;
+    border: none;
+    background: none;
+    outline: none;
+}
+
+.inputlabels {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    color: #827c7c;
+    transform: translateY(-50%);
+    font-size: 17px;
+    pointer-events: none;
+    transition: .4s;
+}
+
+.textfield span::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: #2186ae;
+    transition: .4s;
+}
+
+.inputfield:focus~.inputlabels,
+.inputfield:valid~.inputlabels {
+    top: -5px;
+    color: #238db7;
+    font-size: 12px;
+
+}
+
+.inputfield:focus~span::before,
+.inputfield:valid~span::before {
+    width: 100%;
+}
 /* Button css */
 .savebtn {
     border: none;

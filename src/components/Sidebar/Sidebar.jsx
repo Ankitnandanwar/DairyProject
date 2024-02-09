@@ -43,20 +43,34 @@ const Sidebar = ({ toggle, state, setState }) => {
                             Milk Report
                         </MenuItem>
                     </SubMenu>
-                    <SubMenu label="Reports">  
-                        <MenuItem onClick={() => { navigate('/table')}}>
+                    <SubMenu label="Reports">
+                        <MenuItem onClick={() => { navigate('/dmwentry') }}>
                             DMW Entry
                         </MenuItem>
-                        <MenuItem onClick={() => { navigate('/tablereport')}}>
+                        <MenuItem onClick={() => { navigate('/dmwreport') }}>
                             DMW Report
                         </MenuItem>
                     </SubMenu>
                     <SubMenu label="Inventry Items">
-                    <MenuItem onClick={() => { navigate('/itementry') }}>
+                        <MenuItem onClick={() => { navigate('/itementry') }}>
                             Item Entry
                         </MenuItem>
-                        <MenuItem onClick={() => { navigate('/iteminventry')}}>
+                        <MenuItem onClick={() => { navigate('/iteminventry') }}>
                             Item Inventry
+                        </MenuItem>
+                    </SubMenu>
+                    <SubMenu label="Share">
+                        <MenuItem onClick={() => {navigate('/sharedetails')}}>
+                            Share Details
+                        </MenuItem>
+                        <MenuItem onClick={() => {navigate('/sharerate')}}>
+                            Share Rate
+                        </MenuItem>
+                        <MenuItem onClick={() => {navigate('/sharecream')}}>
+                            Share Cream
+                        </MenuItem>
+                        <MenuItem onClick={() => {navigate('/shareghee')}}>
+                            Share Ghee
                         </MenuItem>
                     </SubMenu>
                 </Menu>
