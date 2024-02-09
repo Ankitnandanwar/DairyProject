@@ -28,9 +28,6 @@ const ProductReport = () => {
     const [totalAmont, setTotalAmont] = useState(0);
 
 
-
-
-
     const searchData = () => {
         // alert("hi")
 

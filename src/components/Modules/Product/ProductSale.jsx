@@ -141,10 +141,7 @@ const ProductSale = () => {
         } catch (error) {
             console.log(error);
         }
-
     }
-
-
 
     useEffect(() => {
         const fetchDateData = async () => {
@@ -183,14 +180,14 @@ const ProductSale = () => {
             {
                 loader ? <div className='loader-Cont'>
                     <Bars
-                            height="40"
-                            width="80"
-                            color="rgb(5, 165, 214)"
-                            ariaLabel="bars-loading"
-                            wrapperStyle={{}}
-                            wrapperClass=""
-                            visible={true}
-                        />
+                        height="40"
+                        width="80"
+                        color="rgb(5, 165, 214)"
+                        ariaLabel="bars-loading"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                        visible={true}
+                    />
                 </div> :
 
                     <div className='mt-5 container'>
@@ -233,27 +230,19 @@ const ProductSale = () => {
                                 </FormControl>
                             </div>
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
-                                <Box
-                                    component="form"
-                                    sx={{
-                                        '& > :not(style)': { m: 1, width: '25ch' },
-                                    }}
-                                    autoComplete="off"
-                                >
-                                    <TextField label="Opening Balance" variant="standard" value={productDetails.openingBalance} aria-readonly />
-                                </Box>
+                                <div class="textfield">
+                                    <input class="inputfield" type="text" required value={productDetails.openingBalance}/>
+                                        <span></span>
+                                        <label class="inputlabels">Opening Balance</label>
+                                </div>
                             </div>
 
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
-                                <Box
-                                    component="form"
-                                    sx={{
-                                        '& > :not(style)': { m: 1, width: '25ch' },
-                                    }}
-                                    autoComplete="off"
-                                >
-                                    <TextField label="Rate" variant="standard" value={productDetails.rate} aria-readonly />
-                                </Box>
+                            <div class="textfield">
+                                    <input class="inputfield" type="text" required value={productDetails.rate}/>
+                                        <span></span>
+                                        <label class="inputlabels">Rate</label>
+                                </div>
                             </div>
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                                 <Box
@@ -482,7 +471,7 @@ const ProductSale = () => {
                                     {Array.isArray(tableData) && tableData.length > 0 ? (
                                         tableData.map((item, i) => (
                                             <tr key={i}>
-                                                <th scope='row' className='text-center'>{i+1}</th>
+                                                <th scope='row' className='text-center'>{i + 1}</th>
                                                 <td className='text-center'>{item.product}</td>
                                                 <td className='text-center'>{item.openBalance}</td>
                                                 <td className='text-center'>{item.rate}</td>

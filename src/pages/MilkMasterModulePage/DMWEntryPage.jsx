@@ -1,13 +1,13 @@
 import React from 'react'
 import Navbar from '../../components/Navbar/Navbar'
-import Table from '../../components/Modules/Product/Table'
+import DMWEntry from '../../components/Modules/Product/DMWEntry'
 
 
 const MilkSalePage = () => {
   return (
     <div>
         <Navbar/>
-        <Table/>
+        <DMWEntry/>
     </div>
   )
 }

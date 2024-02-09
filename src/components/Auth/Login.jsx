@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import "./Login.css"
-// import loginLogo from "../../assets/companylogo.png"
 import loginLogo from "../../assets/logo.png"
 import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom'
@@ -11,7 +10,6 @@ import { useForm } from 'react-hook-form';
 
 const Login = () => {
   const navigate = useNavigate()
-  // const [errors, setError] = useState(false)
   const [loginUser, setLoginUser] = useState({
     userName: '',
     password: ''
@@ -38,7 +36,7 @@ const Login = () => {
 
           setTimeout(() => {
             navigate('/dashboardpage');
-          }, 3000);
+          }, 1000);
         } else {
           toast.error("Login Failed", {
             position: "top-center",
@@ -57,15 +55,13 @@ const Login = () => {
     }
   };
 
-const {
-  register,
-  handleSubmit,
-  formState: { errors },
-} = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-const onSubmit = (data) => {
-  console.log(data)
-}
+  
   return (
     <>
       <div className="backgroundImg">
@@ -85,53 +81,47 @@ const onSubmit = (data) => {
         <div className="loginCont">
           <div className="empty"></div>
           <div className="loginIds">
-          <form onSubmit={handleSubmit(onsubmit)}>
-            <div>
-              <img src={loginLogo} alt="cpmpany-logo" width="130" />
-            </div>
+            <form onSubmit={handleSubmit(onsubmit)}>
+              <div>
+                <img src={loginLogo} alt="company-logo" width="130" />
+              </div>
               <div className="loginFields">
                 <div className="input-box"
-                {...register('username', {required: "Username is Required"})}>
-                  <TextField id="standard-basic" type='text' label="Username" variant="standard" name="userName" 
-                  value={loginUser.userName} 
-                  onChange={
-                    (e) => {
-                      // if(e.target.value){
-                      //   setError(false)
-                      // }
-                      setLoginUser({
-                        ...loginUser,
-                        userName: e.target.value
-                      })
+                  {...register('userName', { required: "Username is Required" })}>
+                  <TextField id="standard-basic" type='text' label="Username" variant="standard" name="userName"
+                    value={loginUser.userName}
+                    onChange={
+                      (e) => {
+                        setLoginUser({
+                          ...loginUser,
+                          userName: e.target.value
+                        })
+                      }
                     }
-                  } 
                   />
-                  {errors.username && (<small className='text-danger'>{errors.username.message}</small>)}
+                  {errors.userName && (<small className='text-danger'>{errors.userName.message}</small>)}
                 </div>
                 <div className="input-box"
-                {...register('password', {required: "Password is Required"})}>
+                  {...register('password', { required: "Password is Required" })}>
                   <TextField id="standard-basic" type="password" label="Password" variant="standard" name="password"
-                  value={loginUser.password} 
-                  onChange={
-                    (e) => {
-                      // if(e.target.value){
-                      //   setError(false)
-                      // }
-                      setLoginUser({
-                        ...loginUser,
-                        password: e.target.value
-                      })
+                    value={loginUser.password}
+                    onChange={
+                      (e) => {
+                        setLoginUser({
+                          ...loginUser,
+                          password: e.target.value
+                        })
+                      }
                     }
-                  }
-                   />
+                  />
                   {errors.password && (<small className='text-danger'>{errors.password.message}</small>)}
                 </div>
                 <button type="submit" className="login-btn" onClick={() => handleloginSubmit()}>Login</button>
               </div>
-              </form>
-            </div>
+            </form>
           </div>
         </div>
+      </div>
     </>
   )
 }

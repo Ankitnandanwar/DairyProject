@@ -27,8 +27,6 @@ const Table = () => {
   const [selectedProduct, setSelectedProduct] = useState("");
   const [productDetails, setProductDetails] = useState("");
 
-  const [setProductRate] = useState("")
-  const [setGstAmount] = useState("")
   const [setCgst] = useState("")
   const [setSgst] = useState("")
   const [plantCash, setPlantCash] = useState("")
@@ -47,10 +45,8 @@ const Table = () => {
   const [c10Online, setC10Online] = useState("")
   const [c40Cash, setC40Cash] = useState("")
   const [c40Online, setC40Online] = useState("")
-  const [setTotalCashSale] = useState("")
-  const [setTotalOnlineSale] = useState("")
-  const [setTotalSale] = useState("")
   
+
   const [products, setProducts] = useState([]);
 
   const getCurrentDate = () => {
@@ -166,7 +162,7 @@ const Table = () => {
   }
 
   const Calculations = () => {
-    const gstAmount = productDetails.rate * productDetails.gst /100;
+    const gstAmount = productDetails.rate * productDetails.gst / 100;
     const productRate = productDetails.rate - gstAmount;
     const cgst = gstAmount / 2;
     const sgst = gstAmount / 2;
@@ -258,26 +254,18 @@ const Table = () => {
                 </FormControl>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
-                <Box
-                  component="form"
-                  sx={{
-                    '& > :not(style)': { m: 1, width: '25ch' },
-                  }}
-                  autoComplete="off"
-                >
-                  <TextField type='text' label="Rate" variant="standard" value={productDetails.rate} aria-readonly />
-                </Box>
+                <div class="textfield">
+                  <input class="inputfield" type="text" required value={productDetails.rate} />
+                  <span></span>
+                  <label class="inputlabels">Rate</label>
+                </div>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
-                <Box
-                  component="form"
-                  sx={{
-                    '& > :not(style)': { m: 1, width: '25ch' },
-                  }}
-                  autoComplete="off"
-                >
-                  <TextField type='number' label="GST (%)" variant="standard" value={productDetails.gst} aria-readonly />
-                </Box>
+                <div class="textfield">
+                  <input class="inputfield" type="text" required value={productDetails.gst} />
+                  <span></span>
+                  <label class="inputlabels">GST</label>
+                </div>
               </div>
 
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -288,7 +276,7 @@ const Table = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="GST Amt" type='number' variant="standard" value={gstAmount} onChange={(e) => setGstAmount(e.target.value)} />
+                  <TextField label="GST Amt" type='number' variant="standard" value={gstAmount} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -321,7 +309,7 @@ const Table = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Product Rate" type='number' variant="standard" value={productRate} onChange={(e) => setProductRate(e.target.value)} />
+                  <TextField label="Product Rate" type='number' variant="standard" value={productRate}/>
                 </Box>
               </div>
               <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>Plant Sale (EDP)</h1>
@@ -366,7 +354,7 @@ const Table = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Amt." type='number' variant="standard" value={plantOnlineAmount}/>
+                  <TextField label="Amt." type='number' variant="standard" value={plantOnlineAmount} />
                 </Box>
               </div>
               <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>Milk Parlour</h1>
@@ -692,7 +680,7 @@ const Table = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Total Cash Sale" type='number' variant="standard" value={totalCashSale}  />
+                  <TextField label="Total Cash Sale" type='number' variant="standard" value={totalCashSale} />
                 </Box>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>

@@ -201,7 +201,7 @@ const ProductSale = () => {
                             </div>
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                                 <FormControl variant="standard" sx={{ m: 1, width: '25ch' }}>
-                                    <InputLabel id="demo-simple-select-standard-label" className='selectP'>Products</InputLabel>
+                                    <InputLabel id="demo-simple-select-standard-label" className='selectP'>Name of Item</InputLabel>
                                     <Select
                                         labelId="demo-simple-select-standard-label"
                                         id="demo-simple-select-standard"
@@ -223,14 +223,22 @@ const ProductSale = () => {
                                 </FormControl>
                             </div>
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
+                                <div class="textfield">
+                                    <input class="inputfield" type="text" required value={productDetails.presentStock} />
+                                    <span></span>
+                                    <label class="inputlabels">Present Stock</label>
+                                </div>
+                            </div>
+                            <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                                 <Box
                                     component="form"
                                     sx={{
                                         '& > :not(style)': { m: 1, width: '25ch' },
                                     }}
+                                    type="text"
                                     autoComplete="off"
                                 >
-                                    <TextField label="Present Stock " variant="standard" value={productDetails.presentStock} aria-readonly />
+                                    <TextField label="Add Quantity to Stock " variant="standard" value={addQtyStock} onChange={(e) => setAddQtyStock(e.target.value)} />
                                 </Box>
                             </div>
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -242,7 +250,7 @@ const ProductSale = () => {
                                     type="text"
                                     autoComplete="off"
                                 >
-                                    <TextField label="Add Quantity Stock " variant="standard" value={addQtyStock} onChange={(e) => setAddQtyStock(e.target.value)} />
+                                    <TextField label="Quantity Received From" variant="standard" value={qtyReceived} onChange={(e) => setQtyReceived(e.target.value)} />
                                 </Box>
                             </div>
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -254,7 +262,7 @@ const ProductSale = () => {
                                     type="text"
                                     autoComplete="off"
                                 >
-                                    <TextField label="Quantity Received" variant="standard" value={qtyReceived} onChange={(e) => setQtyReceived(e.target.value)} />
+                                    <TextField label="Total Value Of The Quantity" variant="standard" value={totalQty} />
                                 </Box>
                             </div>
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -266,19 +274,7 @@ const ProductSale = () => {
                                     type="text"
                                     autoComplete="off"
                                 >
-                                    <TextField label="Total Quantity" variant="standard" value={totalQty} />
-                                </Box>
-                            </div>
-                            <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
-                                <Box
-                                    component="form"
-                                    sx={{
-                                        '& > :not(style)': { m: 1, width: '25ch' },
-                                    }}
-                                    type="text"
-                                    autoComplete="off"
-                                >
-                                    <TextField label="Person Name" variant="standard" value={personName} onChange={(e) => setPersonName(e.target.value)} />
+                                    <TextField label="Name Of The Person Who Issued Quantity" variant="standard" value={personName} onChange={(e) => setPersonName(e.target.value)} />
                                 </Box>
                             </div>
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -302,7 +298,7 @@ const ProductSale = () => {
                                     type="text"
                                     autoComplete="off"
                                 >
-                                    <TextField label="Purpose" variant="standard" value={purpose} onChange={(e) => setPurpose(e.target.value)} />
+                                    <TextField label="Quantity Used For Purpose" variant="standard" value={purpose} onChange={(e) => setPurpose(e.target.value)} />
                                 </Box>
                             </div>
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -314,7 +310,7 @@ const ProductSale = () => {
                                     type="text"
                                     autoComplete="off"
                                 >
-                                    <TextField label="Total Daily Used Quantity" variant="standard" value={totalDailyUsedQty} onChange={(e) => setTotalDailyUsedQty(e.target.value)} />
+                                    <TextField label="Total Daily Quantity Used" variant="standard" value={totalDailyUsedQty} onChange={(e) => setTotalDailyUsedQty(e.target.value)} />
                                 </Box>
                             </div>
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -353,15 +349,15 @@ const ProductSale = () => {
                                     <tr>
                                         <th style={{ width: "100px" }}>SrNo</th>
                                         <th style={{ width: "100px" }}>Date</th>
-                                        <th style={{ width: "250px" }}>Item</th>
+                                        <th style={{ width: "250px" }}>Name of Item</th>
                                         <th style={{ width: "150px" }}>Present Stock</th>
-                                        <th style={{ width: "150px" }}>Add Quantity Stock</th>
-                                        <th style={{ width: "150px" }}>Quantity Received</th>
-                                        <th style={{ width: "150px" }}>Total Quantity</th>
-                                        <th style={{ width: "150px" }}>Person Name</th>
+                                        <th style={{ width: "150px" }}>Add Quantity to Stock</th>
+                                        <th style={{ width: "150px" }}>Quantity Received From</th>
+                                        <th style={{ width: "150px" }}>Total Value of the Quantity</th>
+                                        <th style={{ width: "150px" }}>Name of the Person Who Issued Quantity</th>
                                         <th style={{ width: "150px" }}>Quantity Issued</th>
-                                        <th style={{ width: "150px" }}>Purpose</th>
-                                        <th style={{ width: "150px" }}>Total Daily Used Quantity</th>
+                                        <th style={{ width: "150px" }}>Quantity Used for Purpose</th>
+                                        <th style={{ width: "150px" }}>Total Daily Quantity Used</th>
                                         <th style={{ width: "150px" }}>Closing Stock</th>
                                         <th style={{ width: "150px" }}>Remarks</th>
                                     </tr>
