@@ -31,9 +31,6 @@ const Sidebar = ({ toggle, state, setState }) => {
                         <MenuItem onClick={() => { navigate('/productreport') }}>
                             Product Report
                         </MenuItem>
-                        <MenuItem onClick={() => { navigate('/productcopy') }}>
-                            Product Copy
-                        </MenuItem>
                     </SubMenu>
                     <SubMenu label="Milk">
                         <MenuItem onClick={() => { navigate('/milksalemaster') }}>

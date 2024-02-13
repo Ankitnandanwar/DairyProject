@@ -16,7 +16,6 @@ import ShareDetails from './pages/SharePage/ShareDetailsPage'
 import ShareRate from './pages/SharePage/ShareRatePage'
 import ShareCream from './pages/SharePage/ShareCreamPage'
 import ShareGhee from './pages/SharePage/ShareGheePage'
-import ProductReportcopy from './pages/ProductModulePage/ProductCopy'
 
 
 const App = () => {
@@ -29,7 +28,6 @@ const App = () => {
           <Route path='/productentry' element={<ProductEntryPage/>} />
           <Route path='/productsales' element={<ProductSalesPage/>} />
           <Route path='/productreport' element={<ProductReportPage/>} />
-          <Route path='/productcopy' element={<ProductReportcopy/>} />
 
           <Route path='/milksalemaster' element={<MilkMasterPage/>} />
           <Route path='/milksale' element={<MilkSalePage/>} />
