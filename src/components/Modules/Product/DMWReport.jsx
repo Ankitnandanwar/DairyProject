@@ -18,7 +18,7 @@ const MilkSale = () => {
         const [year, month, day] = inputDate.split('-');
         return `${day}/${month}/${year}`;
     };
-
+                        
     const getProductData = async () => {
         setLoader(true)
         try {
@@ -43,7 +43,7 @@ const MilkSale = () => {
                     endDate: dates.tdate,
                 }
             );
-            // setProducts(response.data);
+
             console.log(response.data)
             setTimeout(() => {
                 setLoader(false);

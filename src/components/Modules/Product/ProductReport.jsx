@@ -28,6 +28,9 @@ const ProductReport = () => {
     const [totalAmont, setTotalAmont] = useState(0);
 
 
+
+
+
     const searchData = () => {
         // alert("hi")
 
@@ -186,7 +189,7 @@ const ProductReport = () => {
                                 <table className='table productTableMAster table-stripped'>
                                     <thead className='tableheading'>
                                         <tr>
-                                            <th style={{ width: "100px" }}>SrNo</th>
+                                            {/* <th style={{ width: "100px" }}>SrNo</th> */}
                                             <th style={{ width: "250px" }}>Date</th>
                                             <th style={{ width: "250px" }}>Product</th>
                                             <th style={{ width: "150px" }}>Opening Balance</th>
@@ -213,7 +216,7 @@ const ProductReport = () => {
                                         {
                                             filteredData.map((item, i) => (
                                                 <tr key={i}>
-                                                    <th scope='row' className='text-center'>{i+1}</th>
+                                                    {/* <th scope='row' className='text-center'>{i+1}</th> */}
                                                     <td className='text-center'>{item.date}</td>
                                                     <td className='text-center'>{item.product}</td>
                                                     <td className='text-center'>{item.openBalance}</td>
