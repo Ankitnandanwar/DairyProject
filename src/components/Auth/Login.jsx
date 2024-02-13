@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
-import { useForm } from 'react-hook-form';
 
 const Login = () => {
   const navigate = useNavigate()
@@ -54,13 +53,6 @@ const Login = () => {
       console.log('Error during login', error);
     }
   };
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
   
   return (
     <>
@@ -81,13 +73,11 @@ const Login = () => {
         <div className="loginCont">
           <div className="empty"></div>
           <div className="loginIds">
-            <form onSubmit={handleSubmit(onsubmit)}>
               <div>
                 <img src={loginLogo} alt="company-logo" width="130" />
               </div>
               <div className="loginFields">
-                <div className="input-box"
-                  {...register('userName', { required: "Username is Required" })}>
+                <div className="input-box">
                   <TextField id="standard-basic" type='text' label="Username" variant="standard" name="userName"
                     value={loginUser.userName}
                     onChange={
@@ -99,10 +89,8 @@ const Login = () => {
                       }
                     }
                   />
-                  {errors.userName && (<small className='text-danger'>{errors.userName.message}</small>)}
                 </div>
-                <div className="input-box"
-                  {...register('password', { required: "Password is Required" })}>
+                <div className="input-box">
                   <TextField id="standard-basic" type="password" label="Password" variant="standard" name="password"
                     value={loginUser.password}
                     onChange={
@@ -114,11 +102,9 @@ const Login = () => {
                       }
                     }
                   />
-                  {errors.password && (<small className='text-danger'>{errors.password.message}</small>)}
                 </div>
                 <button type="submit" className="login-btn" onClick={() => handleloginSubmit()}>Login</button>
               </div>
-            </form>
           </div>
         </div>
       </div>
