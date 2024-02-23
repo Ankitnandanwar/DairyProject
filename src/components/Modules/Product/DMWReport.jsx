@@ -164,12 +164,12 @@ const MilkSale = () => {
                                         <th style={{ width: "200px" }} rowspan="2">Name of Products</th>
                                         <th style={{ width: "100px" }} rowspan="2">GST (%)</th>
                                         <th style={{ width: "100px" }} rowspan="2">Rate</th>
-                                        {
+                                        {/* {
                                             hide ? null :
                                             <>
                                                 
                                             </>
-                                        }
+                                        } */}
                                         <th style={{ width: "100px" }} rowspan="2">GST Amt</th>
                                                 <th style={{ width: "100px" }} rowspan="2">CGST</th>
                                                 <th style={{ width: "100px" }} rowspan="2">SGST</th>
