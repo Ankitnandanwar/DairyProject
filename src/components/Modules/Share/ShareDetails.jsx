@@ -24,13 +24,6 @@ const ShareDetails = () => {
 
     const [prodTableData, setProdTableData] = useState([])
 
-    // const n = new Date();
-    // const [Dates, setDate] = useState({
-    //     d: String(n.getDate()),
-    //     m: String(n.getMonth()),
-    //     y: String(n.getFullYear())
-    // });
-
     // to fetch current date 
     const getCurrentDate = () => {
         const today = new Date();
@@ -39,8 +32,6 @@ const ShareDetails = () => {
         const day = `${today.getDate()}`.padStart(2, '0');
         return `${year}-${month}-${day}`;
     };
-
-
 
     const handleSave = async () => {
         try {
@@ -75,7 +66,7 @@ const ShareDetails = () => {
     const getProductData = async () => {
         setLoader(true)
         try {
-            let data = await axios.get("http://103.38.50.113:8080/DairyApplication/getAllsharedetails").then((res) => {
+            await axios.get("http://103.38.50.113:8080/DairyApplication/getAllsharedetails").then((res) => {
                 setProdTableData(res.data)
                 setTimeout(() => {
                     setLoader(false)
@@ -207,7 +198,6 @@ const ShareDetails = () => {
                         </div>
                         <div className='col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center' style={{ gap: "1rem" }}>
                             <button className='savebtn' onClick={() => handleSave()}>Save</button>
-                            {/* <button className='savebtn' style={{ backgroundColor: 'green', width: "150px" }} onClick={() => exporttoexcel()}>Export To Excel</button> */}
                         </div>
                     </div>
 

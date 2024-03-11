@@ -14,12 +14,17 @@ const Login = () => {
     password: ''
   })
 
+  const validations = () => {
+    
+  }
+
   const handleloginSubmit = async () => {
     try {
       if (loginUser.userName && loginUser.password) {
         const response = await axios.post('http://103.38.50.113:8080/DairyApplication/Login', loginUser);
         const data = response.data;
         console.log(data);
+
 
         if (data.status === " Success") {
           toast.success("Login Successfull", {

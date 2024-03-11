@@ -8,7 +8,6 @@ import TextField from '@mui/material/TextField';
 const MilkSale = () => {
     const [products, setProducts] = useState([]);
     const [loader, setLoader] = useState(true)
-    const [hide, sethide] = React.useState(false)
     const [dates, setdates] = useState({
         fdate: '',
         tdate: ''
@@ -22,7 +21,7 @@ const MilkSale = () => {
     const getProductData = async () => {
         setLoader(true)
         try {
-            let data = await axios.get("http://103.38.50.113:8080/DairyApplication/getAllDailyData").then((res) => {
+             await axios.get("http://103.38.50.113:8080/DairyApplication/getAllDailyData").then((res) => {
                 setProducts(res.data)
                 setTimeout(() => {
                     setLoader(false)
@@ -65,7 +64,6 @@ const MilkSale = () => {
                 axios.post('http://103.38.50.113:8080/DairyApplication/calculateTotals', dateObj).then((data) => {
                     if (data.data?.length > 0) {
                         setProducts(data?.data)
-                        sethide(true)
                     } else {
                         console.log('no data found')
                     }
@@ -164,12 +162,6 @@ const MilkSale = () => {
                                         <th style={{ width: "200px" }} rowspan="2">Name of Products</th>
                                         <th style={{ width: "100px" }} rowspan="2">GST (%)</th>
                                         <th style={{ width: "100px" }} rowspan="2">Rate</th>
-                                        {
-                                            hide ? null :
-                                            <>
-                                                
-                                            </>
-                                        }
                                         <th style={{ width: "100px" }} rowspan="2">GST Amt</th>
                                                 <th style={{ width: "100px" }} rowspan="2">CGST</th>
                                                 <th style={{ width: "100px" }} rowspan="2">SGST</th>
@@ -237,11 +229,6 @@ const MilkSale = () => {
                                                     <td>{item.gstAmount}</td>
                                                     <td>{item.cgst}</td>
                                                     <td>{item.sgst}</td>
-                                                   {/* {
-                                                    hide?
-                                                    null:
-                                                    <><td>{item.gstAmount}</td><td>{item.cgst}</td><td>{item.sgst}</td></>
-                                                   }  */}
                                                     <td>{item.productRate}</td>
                                                     <td>{item.plantCash}</td>
                                                     <td>{item.plantCashAmount}</td>

@@ -14,67 +14,64 @@ import { Bars } from 'react-loader-spinner';
 
 const ProductReport = () => {
     const [loader, setLoader] = useState(false)
-    const [showData, setShowData] = useState([])
-    const [filteredData, setFilteredData] = useState([]);
+    const [products, setProducts] = useState([])
     const [dates, setdates] = useState({
         fdate: '',
         tdate: ''
     })
 
-    const [totalOpeningBalance, setTotalOpeningBalance] = useState(0);
-    const [totalClosingBalance, setTotalClosingBalance] = useState(0);
-    const [totalSaleCash, setTotalSaleCash] = useState(0);
-    const [totalSaleOnline, setTotalSaleOnline] = useState(0);
-    const [totalAmont, setTotalAmont] = useState(0);
+    const [totalOpeningBal, setTotalOpeningBal] = useState([])
 
 
 
+    const getProductData = async () => {
+        setLoader(true)
+        try {
+            await axios.get("http://103.38.50.113:8080/DairyApplication/findAllProductDate").then((res) => {
+                setProducts(res.data);
+                setTimeout(() => {
+                    setLoader(false)
+                }, 1000);
+            })
+        } catch (error) {
+            console.log(error, "server issue")
+        }
+    }
 
 
     const searchData = () => {
-        // alert("hi")
-
-        const filteredData = showData.filter((da) => {
-            if (da.date >= dates.fdate && da.date <= dates.tdate) {
-                return true
-            }
-            return false
-        })
-
-        const totalOpeningBal = filteredData.reduce((acc, item) => acc + parseFloat(item.openBalance), 0)
-        const totalClosingBal = filteredData.reduce((acc, item) => acc + parseFloat(item.closingBalance), 0)
-        const totalSaleCash = filteredData.reduce((acc, item) => acc + parseFloat(item.saleCash), 0)
-        const totalSaleOnline = filteredData.reduce((acc, item) => acc + parseFloat(item.saleOnline), 0)
-        const totalAmount = filteredData.reduce((acc, item) => acc + parseFloat(item.totalAmt), 0)
-
-
-        console.log(filteredData)
-        setTotalOpeningBalance(totalOpeningBal);
-        setTotalClosingBalance(totalClosingBal)
-        setTotalSaleCash(totalSaleCash)
-        setTotalSaleOnline(totalSaleOnline)
-        setTotalAmont(totalAmount)
-        setFilteredData(filteredData)
-    }
-
-    useEffect(() => {
-        const fetchReportData = async () => {
-            setLoader(true)
+        console.log(dates, 'currdate')
+        if (dates.fdate !== '' && dates.tdate !== '') {
             try {
-                let data = await axios.get("http://103.38.50.113:8080/DairyApplication/findAllProductDate").then((res) => {
-                    setShowData(res.data)
-                    setFilteredData(res.data);
-                    setTimeout(() => {
-                        setLoader(false)
-                    }, 1000);
+                let dateObj = {
+                    fDate: dates.fdate,
+                    tDate: dates.tdate
+                }
+                console.log(dateObj, 'change date')
+                axios.post('http://103.38.50.113:8080/DairyApplication/findProductDataByDateBetween', dateObj).then((data) => {
+                    if (data.data.data.length > 0) {
+                        setProducts(data.data.data)
+                        console.log(data.data.totals)
+                        setTotalOpeningBal(data.data.totals)
+                    } else {
+                        console.log('no data found')
+                    }
+
+                }).catch((e) => {
+                    console.log('error=>', e)
                 })
 
-            } catch (error) {
-                console.log(error, "server issue")
+            } catch (e) {
+                console.log(e)
             }
+        } else {
+            getProductData()
         }
+    }
 
-        fetchReportData()
+
+    useEffect(() => {
+        getProductData()
     }, [])
 
 
@@ -87,27 +84,23 @@ const ProductReport = () => {
 
         // Combine data for the main table and the summary table
         const exportData = [
-            ...filteredData,
             {
-                "Total Opening Balance": totalOpeningBalance,
-                "Total Amount": totalAmont,
-                "Total Sale Cash": totalSaleCash,
-                "Total Sale Online": totalSaleOnline,
-                "Total Closing Balance": totalClosingBalance,
+                "Total Opening Balance": totalOpeningBal.totalOpenBalance,
+                "Total Amount": totalOpeningBal.totalAmount,
+                "Total Sale Cash": totalOpeningBal.saleCash,
+                "Total Sale Online": totalOpeningBal.saleOnline,
+                "Total Closing Balance": totalOpeningBal.totalClosingBalance,
             },
         ];
 
-        const ws = XLSX.utils.json_to_sheet(exportData);
-        const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+        const ws = XLSX.utils.json_to_sheet(products);
+        const totalsws = XLSX.utils.json_to_sheet(exportData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Table Data");
+        XLSX.utils.book_append_sheet(wb, totalsws, "Totals");
         const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
         const data = new Blob([excelBuffer], { type: fileType });
         FileSaver.saveAs(data, fileName + fileExtension);
-    };
-
-
-    const formatDate = (inputDate) => {
-        const [year, month, day] = inputDate.split('-');
-        return `${day}/${month}/${year}`;
     };
 
 
@@ -116,14 +109,14 @@ const ProductReport = () => {
             {
                 loader ? <div className='loader-Cont'>
                     <Bars
-                            height="40"
-                            width="80"
-                            color="rgb(5, 165, 214)"
-                            ariaLabel="bars-loading"
-                            wrapperStyle={{}}
-                            wrapperClass=""
-                            visible={true}
-                        />
+                        height="40"
+                        width="80"
+                        color="rgb(5, 165, 214)"
+                        ariaLabel="bars-loading"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                        visible={true}
+                    />
                 </div> :
 
                     <div className='mt-5 container'>
@@ -142,11 +135,9 @@ const ProductReport = () => {
                                     autoComplete="off"
                                 >
                                     <TextField variant="standard" type='date' onChange={(e) => {
-                                        const selectedDate = e.target.value;
-                                        const formattedDate = formatDate(selectedDate);
                                         setdates({
                                             ...dates,
-                                            fdate: formattedDate
+                                            fdate: e.target.value
                                         })
                                     }} />
                                 </Box>
@@ -161,11 +152,9 @@ const ProductReport = () => {
                                     autoComplete="off"
                                 >
                                     <TextField variant="standard" type='date' onChange={(e) => {
-                                        const selectedDate = e.target.value;
-                                        const formattedDate = formatDate(selectedDate);
                                         setdates({
                                             ...dates,
-                                            tdate: formattedDate
+                                            tdate: e.target.value
                                         })
                                     }} />
                                 </Box>
@@ -181,8 +170,8 @@ const ProductReport = () => {
                                 <FormControlLabel control={<Checkbox />} label="Weekly" />
                             </div>
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center mt-3' style={{ gap: "1rem" }}>
-                                <button className='btn btn-primary' onClick={() => { searchData() }}>Search</button>
-                                <button className='btn btn-success' onClick={() => exportToExcel()}>Export</button>
+                                <button disabled={dates.fdate === '' && dates.tdate === ''} className='btn btn-primary' onClick={() => searchData()}>Search</button>
+                                <button className='btn btn-success' onClick={()=>exportToExcel()}>Export</button>
                             </div>
 
                             <div className='container tableMaster mt-5 mb-3 p-0'>
@@ -214,65 +203,66 @@ const ProductReport = () => {
                                     </thead>
                                     <tbody>
                                         {
-                                            filteredData.map((item, i) => (
-                                                <tr key={i}>
-                                                    {/* <th scope='row' className='text-center'>{i+1}</th> */}
-                                                    <td className='text-center'>{item.date}</td>
-                                                    <td className='text-center'>{item.product}</td>
-                                                    <td className='text-center'>{item.openBalance}</td>
-                                                    <td className='text-center'>{item.rate}</td>
-                                                    <td className='text-center'>{item.creammilk}</td>
-                                                    <td className='text-center'>{item.addQty}</td>
-                                                    <td className='text-center'>{item.mix}</td>
-                                                    <td className='text-center'>{item.paymentPending}</td>
-                                                    <td className='text-center'>{item.sahiwalGhee}</td>
-                                                    <td className='text-center'>{item.waiveOff}</td>
-                                                    <td className='text-center'>{item.convertedProduct}</td>
-                                                    <td className='text-center'>{item.saleCash}</td>
-                                                    <td className='text-center'>{item.saleOnline}</td>
-                                                    <td className='text-center'>{item.cashTotal}</td>
-                                                    <td className='text-center'>{item.onlineTotal}</td>
-                                                    <td className='text-center'>{item.totalAmt}</td>
-                                                    <td className='text-center'>{item.closingBalance}</td>
-                                                    <td className='text-center'>{item.pending}</td>
-                                                    <td className='text-center'>{item.remark}</td>
-                                                    {/* <td className='text-center'>
+                                            products.map((item, i) => {
+                                                return (
+                                                    <tr key={i}>
+                                                        {/* <th scope='row' className='text-center'>{i+1}</th> */}
+                                                        <td className='text-center'>{item.date}</td>
+                                                        <td className='text-center'>{item.product}</td>
+                                                        <td className='text-center'>{item.openBalance}</td>
+                                                        <td className='text-center'>{item.rate}</td>
+                                                        <td className='text-center'>{item.creammilk}</td>
+                                                        <td className='text-center'>{item.addQty}</td>
+                                                        <td className='text-center'>{item.mix}</td>
+                                                        <td className='text-center'>{item.paymentPending}</td>
+                                                        <td className='text-center'>{item.sahiwalGhee}</td>
+                                                        <td className='text-center'>{item.waiveOff}</td>
+                                                        <td className='text-center'>{item.convertedProduct}</td>
+                                                        <td className='text-center'>{item.saleCash}</td>
+                                                        <td className='text-center'>{item.saleOnline}</td>
+                                                        <td className='text-center'>{item.cashTotal}</td>
+                                                        <td className='text-center'>{item.onlineTotal}</td>
+                                                        <td className='text-center'>{item.totalAmt}</td>
+                                                        <td className='text-center'>{item.closingBalance}</td>
+                                                        <td className='text-center'>{item.pending}</td>
+                                                        <td className='text-center'>{item.remark}</td>
+                                                        {/* <td className='text-center'>
                                             <button className='btn'><MdDeleteOutline className='delicon' /></button>
                                         </td> */}
-                                                </tr>
-                                            ))
+                                                    </tr>
+                                                )
+
+                                            }
+                                            )
                                         }
                                     </tbody>
                                 </table>
                             </div>
-
                             <div className='container tableMaster mt-5 mb-3 p-0'>
                                 <div><h5 className='p-2' style={{ fontWeight: "600", textAlign: "center" }}>Grand Total</h5></div>
                                 <div className='row m-2'>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Opening Balance</div>
-                                        <div className='totalnos'>{totalOpeningBalance}</div>
+                                        <div className='totalnos'>{totalOpeningBal.totalOpenBalance}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Amount</div>
-                                        <div className='totalnos'>{totalAmont}</div>
+                                        <div className='totalnos'>{totalOpeningBal.totalAmount}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Sale Cash</div>
-                                        <div className='totalnos'>{totalSaleCash}</div>
+                                        <div className='totalnos'>{totalOpeningBal.saleCash}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Sale Online</div>
-                                        <div className='totalnos'>{totalSaleOnline}</div>
+                                        <div className='totalnos'>{totalOpeningBal.saleOnline}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Closing Balance</div>
-                                        <div className='totalnos'>{totalClosingBalance}</div>
+                                        <div className='totalnos'>{totalOpeningBal.totalClosingBalance}</div>
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
             }

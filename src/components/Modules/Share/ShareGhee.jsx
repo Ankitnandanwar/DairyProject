@@ -5,13 +5,8 @@ import Box from '@mui/material/Box';
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import TextField from '@mui/material/TextField';
-import Slide from '@mui/material/Slide';
 import { Bars } from 'react-loader-spinner';
 
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
 
 const ProductEntry = () => {
     const [loader, setLoader] = useState(true)
@@ -61,7 +56,7 @@ const ProductEntry = () => {
     const getProductData = async () => {
         setLoader(true)
         try {
-            let data = await axios.get("http://103.38.50.113:8080/DairyApplication/getAllSahiwalGheeDetails").then((res) => {
+            await axios.get("http://103.38.50.113:8080/DairyApplication/getAllSahiwalGheeDetails").then((res) => {
                 setProdTableData(res.data)
                 setTimeout(() => {
                     setLoader(false)
@@ -221,9 +216,9 @@ const ProductEntry = () => {
                                                         prodTableData.map((item, i) => {
                                                             return (
                                                                 <tr key={i}>
-                                                                    <td scope='row' className='text-center'>{i + 1}</td>
+                                                                    <td className='text-center'>{i + 1}</td>
                                                                     <td>
-                                                                        <p className='sub'>{item.date}</p>
+                                                                        <p>{item.date}</p>
                                                                     </td>
                                                                     <td>{item.quantity}</td>
                                                                     <td>{item.basicRate}</td>

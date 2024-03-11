@@ -41,14 +41,6 @@ const ProductSale = () => {
 
     const [prodTableData, setProdTableData] = useState([])
 
-    // to show data with todays date how many entries done
-    const n = new Date();
-    const [Dates, setDate] = useState({
-        d: String(n.getDate()),
-        m: String(n.getMonth()),
-        y: String(n.getFullYear())
-    });
-
     // to fetch current date 
     const getCurrentDate = () => {
         const today = new Date();
@@ -132,7 +124,7 @@ const ProductSale = () => {
     const getProductData = async () => {
         setLoader(true)
         try {
-            let data = await axios.get("http://103.38.50.113:8080/DairyApplication/getAllInventoryData").then((res) => {
+             await axios.get("http://103.38.50.113:8080/DairyApplication/getAllInventoryData").then((res) => {
                 setProdTableData(res.data)
                 setTimeout(() => {
                     setLoader(false)

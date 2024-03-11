@@ -43,7 +43,7 @@ const ProductEntry = () => {
     const saveData = async () => {
         try {
             if (editItem) {
-                const editres = await axios.put(`http://103.38.50.113:8080/DairyApplication/updateProductEntry/${editItem.id}`, {
+                 await axios.put(`http://103.38.50.113:8080/DairyApplication/updateProductEntry/${editItem.id}`, {
                     productName, openBalance, rate, unit, gst
                 })
                 toast.success("Data Updated Successfully", {
@@ -94,7 +94,7 @@ const ProductEntry = () => {
     const getProductData = async () => {
         setLoader(true)
         try {
-            let data = await axios.get("http://103.38.50.113:8080/DairyApplication/getAllProductEntryData").then((res) => {
+             await axios.get("http://103.38.50.113:8080/DairyApplication/getAllProductEntryData").then((res) => {
                 setProdTableData(res.data)
                 setTimeout(() => {
                     setLoader(false)
