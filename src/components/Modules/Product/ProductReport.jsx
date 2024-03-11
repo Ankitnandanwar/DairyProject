@@ -27,7 +27,7 @@ const ProductReport = () => {
     const getProductData = async () => {
         setLoader(true)
         try {
-            let data = await axios.get("http://103.38.50.113:8080/DairyApplication/findAllProductDate").then((res) => {
+            await axios.get("http://103.38.50.113:8080/DairyApplication/findAllProductDate").then((res) => {
                 setProducts(res.data);
                 setTimeout(() => {
                     setLoader(false)

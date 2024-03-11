@@ -3,8 +3,6 @@ import "../Product/Product.css"
 import "./Milk.css"
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import axios from 'axios';
 import * as FileSaver from 'file-saver'
 import * as XLSX from "xlsx";
@@ -24,7 +22,7 @@ const MilkReport = () => {
     const getProductData = async () => {
         setLoader(true)
         try {
-            let data = await axios.get("http://103.38.50.113:8080/DairyApplication/getAllMilkSale").then((res) => {
+            await axios.get("http://103.38.50.113:8080/DairyApplication/getAllMilkSale").then((res) => {
                 setProducts(res.data);
                 setTimeout(() => {
                     setLoader(false)

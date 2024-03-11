@@ -23,7 +23,7 @@ const MilkMaster = () => {
     const saveData = async () => {
         try {
             if (editItem) {
-                const editres = await axios.put(`http://103.38.50.113:8080/DairyApplication/updateMilkRate/${editItem.id}`, {
+                await axios.put(`http://103.38.50.113:8080/DairyApplication/updateMilkRate/${editItem.id}`, {
                     dtmMilkRate, standardMilkRate, hotelMilkRate, salingMilkRate
                 })
                 toast.success("Data Updated Successfully", {
@@ -87,7 +87,7 @@ const MilkMaster = () => {
     const getProductData = async () => {
         setLoader(true)
         try {
-            let data = await axios.get("http://103.38.50.113:8080/DairyApplication/getAllDataOfMilkRateMaster").then((res) => {
+            await axios.get("http://103.38.50.113:8080/DairyApplication/getAllDataOfMilkRateMaster").then((res) => {
                 setProdTableData(res.data)
                 setTimeout(() => {
                     setLoader(false) 

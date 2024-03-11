@@ -47,7 +47,7 @@ const ProductSale = () => {
 
     // to show data with todays date how many entries done
     const n = new Date();
-    const [Dates, setDate] = useState({
+    const [Dates] = useState({
         d: String(n.getDate()),
         m: String(n.getMonth()),
         y: String(n.getFullYear())

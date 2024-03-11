@@ -17,19 +17,19 @@ const ShareDetails = () => {
     const [editItem, setEditItem] = useState(null);
 
 
-    const n = new Date();
-    const [Dates, setDate] = useState({
-        d: String(n.getDate()),
-        m: String(n.getMonth()),
-        y: String(n.getFullYear())
-    });
+    // const n = new Date();
+    // const [Dates, setDate] = useState({
+    //     d: String(n.getDate()),
+    //     m: String(n.getMonth()),
+    //     y: String(n.getFullYear())
+    // });
 
 
 
     const handleSave = async () => {
         try {
             if (editItem) {
-                const editres = await axios.put(`http://103.38.50.113:8080/DairyApplication/upadtesharerate/${editItem.id}`, {
+                 await axios.put(`http://103.38.50.113:8080/DairyApplication/upadtesharerate/${editItem.id}`, {
                     codstRev5perlit, tolpaytoDlf55lit
                 })
                 toast.success("Data Updated Successfully", {
@@ -81,18 +81,18 @@ const ShareDetails = () => {
     };
 
     const getProductData = async () => {
-        setLoader(true)
+        setLoader(true);
         try {
-            let data = await axios.get("http://103.38.50.113:8080/DairyApplication/getAllShareRate").then((res) => {
-                setProdTableData(res.data)
+            await axios.get("http://103.38.50.113:8080/DairyApplication/getAllShareRate").then((res) => {
+                setProdTableData(res.data);
                 setTimeout(() => {
-                    setLoader(false)
+                    setLoader(false);
                 }, 1000);
-            })
+            });
         } catch (error) {
-            console.log(error, "server issue")
+            console.log(error, "server issue");
         }
-    }
+    };
 
     useEffect(() => {
         getProductData()

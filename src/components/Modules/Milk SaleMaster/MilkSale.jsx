@@ -8,7 +8,6 @@ const MilkSale = () => {
 
   const [currentDate, setCurrentDate] = useState("")
   const [openingBalance, setopeningBalance] = useState('')
-  const [closingBalances, setClosingBalance] = useState('');
   const [milkReceived, setmilkReceived] = useState('')
   const [sahiwalMilk, setsahiwalMilk] = useState('')
   const [goatMilkReceived, setgoatMilkReceived] = useState('')
