@@ -15,7 +15,7 @@
     background:#0096FF;
     transition: .8s ease;
 }
-
+       
 .smallCard:hover .cardContent h2 {
     color: white;
 }

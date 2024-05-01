@@ -1,6 +1,5 @@
 import { GiMilkCarton } from "react-icons/gi";
 import { LiaLuggageCartSolid } from "react-icons/lia";
-import { FcSalesPerformance } from "react-icons/fc";
 import { FaChartBar } from "react-icons/fa";
 import "./Dashboard.css"
 

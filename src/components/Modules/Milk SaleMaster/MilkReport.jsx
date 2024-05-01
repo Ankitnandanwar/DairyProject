@@ -3,8 +3,6 @@ import "../Product/Product.css"
 import "./Milk.css"
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import axios from 'axios';
 import * as FileSaver from 'file-saver'
 import * as XLSX from "xlsx";
@@ -12,60 +10,61 @@ import { Bars } from 'react-loader-spinner';
 
 const MilkReport = () => {
     const [loader, setLoader] = useState(false)
-    const [showData, setShowData] = useState([])
-    const [filteredData, setFilteredData] = useState([]);
+    const [products, setProducts] = useState([])
     const [dates, setdates] = useState({
         fdate: '',
         tdate: ''
     })
 
 
-    const formatDate = (inputDate) => {
-        const [year, month, day] = inputDate.split('-');
-        return `${day}/${month}/${year}`;
-    };
+    const [totals, setTotals] = useState([])
 
-
-    useEffect(() => {
-        const fetchReportData = async () => {
-            setLoader(true)
-            try {
-                let data = await axios.get("http://103.38.50.113:8080/DairyApplication/findSaleByDate").then((res) => {
-                    setShowData(res.data.data)
-                    setFilteredData(res.data.data)
-                    setTimeout(() => {
-                        setLoader(false)
-                    }, 1000);
-                })
-
-            } catch (error) {
-                console.log(error, "server issue")
-            }
+    const getProductData = async () => {
+        setLoader(true)
+        try {
+            await axios.get("http://103.38.50.113:8080/DairyApplication/getAllMilkSale").then((res) => {
+                setProducts(res.data);
+                setTimeout(() => {
+                    setLoader(false)
+                }, 1000);
+            })
+        } catch (error) {
+            console.log(error, "server issue")
         }
-
-        fetchReportData()
-    }, [])
-
-
-    const searchMilkData = () => {
-        const filteredData = showData.filter((da) => {
-            if (da.date >= dates.fdate && da.date <= dates.tdate) {
-                return true
-            }
-            return false
-        })
-        console.log(filteredData)
-        setFilteredData(filteredData)
     }
 
+    useEffect(() => {
+        getProductData()
+    }, [])
 
-    // Calculation of Totals of Milk Report
-    const calculateTotal = (field) => {
-        return filteredData.reduce((total, item) => {
-            const fieldValue = Number(item[field]) || 0;
-            return total + fieldValue;
-        }, 0);
-    };
+    const searchData = () => {
+        console.log(dates, "jhzgcsyugc")
+        if (dates.fdate !== '' && dates.tdate !== '') {
+            try {
+                let dateObj = {
+                    fDate: dates.fdate,
+                    tDtae: dates.tdate
+                }
+                console.log(dateObj)
+                axios.post('http://103.38.50.113:8080/DairyApplication/findSaleByDate', dateObj).then((data) => {
+                    if (data.data.data.length > 0) {
+                        setProducts(data.data.data)
+                        console.log(data.data.data)
+                        setTotals(data.data.totalS)
+                    } else {
+                        console.log("data not found")
+                    }
+                }).catch((e) => {
+                    console.log('error=>', e)
+                })
+            } catch (e) {
+
+                console.log("err")
+            }
+        } else {
+            getProductData()
+        }
+    }
 
 
     const exportToExcel = async () => {
@@ -74,42 +73,47 @@ const MilkReport = () => {
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
         const fileExtension = ".xlsx";
 
+        const exportData = [
+            {
+                "Total Production" : totals.totalproduction,
+                "Total DTM Online" :totals.totaldtmOnline,
+                "Total Milk Received" :totals.totalmilkReceived,
+                "Total HNo13" :totals.totalhNo13, 
+                "Total Sahiwal Milk" :totals.totalsahiwalMilk,
+                "Total HLoss" :totals.totalhLoss,
+                "Total Goat Milk Received" :totals.totalgoatMilkReceived,
+                "Total Girls Hostel" :totals.totalgirlsHostel,
+                "Total Research" :totals.totalresearch,
+                "Total CashSale Amt" :totals.totalcashSaleAmt,
+                "Total Goat Milk Mixed" :totals.totalgoatMilkMixed,
+                "Total Quantity" :totals.totalQuantity,
+                "Total Standard Milk Cash" :totals.totalstandardMilkCash,
+                "Total Cream" :totals.totalcream,
+                "Total ParkerH" :totals.totalparkerH,
+                "Total Standard Milk Online" :totals.totalstandardMilkOnline,
+                "Total Grewal Hotel" :totals.totalgrewalHotel,
+                "Total Cash Amt" :totals.totalcashAmt,
+                "Total Online Sale" :totals.totalonlineSale,
+                "Total Online Amt DTM" :totals.totalonlineAmtDTM,
+                "Total Cash Amt DTM" :totals.totalcashAmtDTM,
+                "Total Total DTM" :totals.totaltotalDTM,
+                "Total Dtm Cash" :totals.totaldtmCash,
+                "Total Online Sale Amt" :totals.totalonlineSaleAmt,
+                "Total HNo8" :totals.totalhNo8,
+                "Total Cash Sale" :totals.totalcashSale,
+                "Total Online Amt STD" :totals.totalonlineAmtSTD,
+                "Total Cash Amt STD" :totals.totalcashAmtSTD,
+                "Total Sahiwal Cream" :totals.totalsahiwalCream,
+                "Total Standard Milk" :totals.totaltotalStandardMilk,
+
+            }
+        ]
+
         // Convert table data to worksheet
-        const tableWs = XLSX.utils.json_to_sheet(filteredData);
+        const tableWs = XLSX.utils.json_to_sheet(products);
 
         // Convert totals data to worksheet
-        const totalsWs = XLSX.utils.json_to_sheet([
-            { totals: "Total Production", value: calculateTotal("production") },
-            { totals: "Total DTM Online", value: calculateTotal("dtmOnline") },
-            { totals: "Total Milk Received", value: calculateTotal("milkReceived") },
-            { totals: "Total HNo 13", value: calculateTotal("hNo8") },
-            { totals: "Total Sahiwal Milk", value: calculateTotal("hNo8") },
-            { totals: "Total HNo 13", value: calculateTotal("sahiwalMilk") },
-            { totals: "Total H Loss", value: calculateTotal("hLoss") },
-            { totals: "Total Goat Milk Received", value: calculateTotal("goatMilkReceived") },
-            { totals: "Total Girls Hostel", value: calculateTotal("girlsHostel") },
-            { totals: "Total Research", value: calculateTotal("research") },
-            { totals: "Total Cash Sale Amt", value: calculateTotal("cashSaleAmt") },
-            { totals: "Total Goat Milk Mixed", value: calculateTotal("goatMilkMixed") },
-            { totals: "Total Quantity", value: calculateTotal("totalQuantity") },
-            { totals: "Total Standard Milk Cash", value: calculateTotal("totalStandardMilk") },
-            { totals: "Total Cream", value: calculateTotal("cream") },
-            { totals: "Total ParkerH", value: calculateTotal("parkerH") },
-            { totals: "Total Standard Milk Online", value: calculateTotal("standardMilkOnline") },
-            { totals: "Total Grewal Hotel", value: calculateTotal("grewalHotel") },
-            { totals: "Total Cash Amt", value: calculateTotal("cashAmt") },
-            { totals: "Total Online Sale", value: calculateTotal("onlineSale") },
-            { totals: "Total Online Amt DTM", value: calculateTotal("onlineAmtDTM") },
-            { totals: "Total Cash Amt DTM", value: calculateTotal("cashAmtDTM") },
-            { totals: "Total DTM", value: calculateTotal("totalDTM") },
-            { totals: "Total Online Sale Amt", value: calculateTotal("onlineSaleAmt") },
-            { totals: "Total HNo 8", value: calculateTotal("hNo8") },
-            { totals: "Total Cash Sale", value: calculateTotal("cashSale") },
-            { totals: "Total Online Amt STD", value: calculateTotal("onlineAmtSTD") },
-            { totals: "Total Cash Amt STD", value: calculateTotal("cashAmtSTD") },
-            { totals: "Total Sahiwal Cream", value: calculateTotal("sahiwalCream") },
-            { totals: "Total Standard Milk", value: calculateTotal("totalStandardMilk") },
-        ]);
+        const totalsWs = XLSX.utils.json_to_sheet(exportData);
 
         // Create a new workbook
         const wb = XLSX.utils.book_new();
@@ -131,14 +135,14 @@ const MilkReport = () => {
             {
                 loader ? <div className='loader-Cont'>
                     <Bars
-                            height="40"
-                            width="80"
-                            color="rgb(5, 165, 214)"
-                            ariaLabel="bars-loading"
-                            wrapperStyle={{}}
-                            wrapperClass=""
-                            visible={true}
-                        />
+                        height="40"
+                        width="80"
+                        color="rgb(5, 165, 214)"
+                        ariaLabel="bars-loading"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                        visible={true}
+                    />
                 </div> :
 
                     <div className='mt-5 container'>
@@ -157,11 +161,9 @@ const MilkReport = () => {
                                     autoComplete="off"
                                 >
                                     <TextField variant="standard" type='date' onChange={(e) => {
-                                        const selectedDate = e.target.value;
-                                        const formattedDate = formatDate(selectedDate);
                                         setdates({
                                             ...dates,
-                                            fdate: formattedDate
+                                            fdate: e.target.value
                                         })
                                     }} />
                                 </Box>
@@ -177,17 +179,15 @@ const MilkReport = () => {
                                     autoComplete="off"
                                 >
                                     <TextField variant="standard" type='date' onChange={(e) => {
-                                        const selectedDate = e.target.value;
-                                        const formattedDate = formatDate(selectedDate);
                                         setdates({
                                             ...dates,
-                                            tdate: formattedDate
+                                            tdate: e.target.value
                                         })
                                     }} />
                                 </Box>
                             </div>
 
-                            <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center mt-3'>
+                            {/* <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center mt-3'>
                                 <FormControlLabel control={<Checkbox />} label="Daily" />
                             </div>
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center mt-3'>
@@ -195,9 +195,9 @@ const MilkReport = () => {
                             </div>
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center mt-3'>
                                 <FormControlLabel control={<Checkbox />} label="Weekly" />
-                            </div>
+                            </div> */}
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center mt-3' style={{ gap: "1rem" }}>
-                                <button className='btn btn-primary' onClick={() => { searchMilkData() }}>Search</button>
+                                <button disabled={dates.fdate === '' && dates.tdate === ''} className='btn btn-primary' onClick={() => searchData()}>Search</button>
                                 <button className='btn btn-success' onClick={() => exportToExcel()}>Export</button>
                             </div>
 
@@ -243,44 +243,47 @@ const MilkReport = () => {
                                     </thead>
                                     <tbody>
                                         {
-                                            filteredData.map((item, i) => (
-                                                <tr key={i}>
-                                                    <th scope='row' className='text-center'>{i+1}</th>
-                                                    <td className='text-center'>{item.date}</td>
-                                                    <td className='text-center'>{item.openingBalance}</td>
-                                                    <td className='text-center'>{item.closingBalance}</td>
-                                                    <td className='text-center'>{item.milkReceived}</td>
-                                                    <td className='text-center'>{item.sahiwalMilk}</td>
-                                                    <td className='text-center'>{item.goatMilkReceived}</td>
-                                                    <td className='text-center'>{item.goatMilkMixed}</td>
-                                                    <td className='text-center'>{item.totalQuantity}</td>
-                                                    <td className='text-center'>{item.production}</td>
-                                                    <td className='text-center'>{item.girlsHostel}</td>
-                                                    <td className='text-center'>{item.hNo8}</td>
-                                                    <td className='text-center'>{item.parkerH}</td>
-                                                    <td className='text-center'>{item.dtmCash}</td>
-                                                    <td className='text-center'>{item.dtmOnline}</td>
-                                                    <td className='text-center'>{item.totalDTM}</td>
-                                                    <td className='text-center'>{item.cashAmtDTM}</td>
-                                                    <td className='text-center'>{item.onlineAmtDTM}</td>
-                                                    <td className='text-center'>{item.standardMilkCash}</td>
-                                                    <td className='text-center'>{item.standardMilkOnline}</td>
-                                                    <td className='text-center'>{item.hNo13}</td>
-                                                    <td className='text-center'>{item.grewalHotel}</td>
-                                                    <td className='text-center'>{item.cashSale}</td>
-                                                    <td className='text-center'>{item.onlineSale}</td>
-                                                    <td className='text-center'>{item.totalStandardMilk}</td>
-                                                    <td className='text-center'>{item.cashAmtSTD}</td>
-                                                    <td className='text-center'>{item.onlineAmtSTD}</td>
-                                                    <td className='text-center'>{item.cashSaleAmt}</td>
-                                                    <td className='text-center'>{item.onlineSaleAmt}</td>
-                                                    <td className='text-center'>{item.cashAmt}</td>
-                                                    <td className='text-center'>{item.cream}</td>
-                                                    <td className='text-center'>{item.sahiwalCream}</td>
-                                                    <td className='text-center'>{item.research}</td>
-                                                    <td className='text-center'>{item.hLoss}</td>
-                                                </tr>
-                                            ))
+                                            products.map((item, i) => {
+                                                return (
+                                                    <tr key={i}>
+                                                        <th scope='row' className='text-center'>{i + 1}</th>
+                                                        <td className='text-center'>{item.date}</td>
+                                                        <td className='text-center'>{item.openingBalance}</td>
+                                                        <td className='text-center'>{item.closingBalance}</td>
+                                                        <td className='text-center'>{item.milkReceived}</td>
+                                                        <td className='text-center'>{item.sahiwalMilk}</td>
+                                                        <td className='text-center'>{item.goatMilkReceived}</td>
+                                                        <td className='text-center'>{item.goatMilkMixed}</td>
+                                                        <td className='text-center'>{item.totalQuantity}</td>
+                                                        <td className='text-center'>{item.production}</td>
+                                                        <td className='text-center'>{item.girlsHostel}</td>
+                                                        <td className='text-center'>{item.hNo8}</td>
+                                                        <td className='text-center'>{item.parkerH}</td>
+                                                        <td className='text-center'>{item.dtmCash}</td>
+                                                        <td className=
+                                                        'text-center'>{item.dtmOnline}</td>
+                                                        <td className='text-center'>{item.totalDTM}</td>
+                                                        <td className='text-center'>{item.cashAmtDTM}</td>
+                                                        <td className='text-center'>{item.onlineAmtDTM}</td>
+                                                        <td className='text-center'>{item.standardMilkCash}</td>
+                                                        <td className='text-center'>{item.standardMilkOnline}</td>
+                                                        <td className='text-center'>{item.hNo13}</td>
+                                                        <td className='text-center'>{item.grewalHotel}</td>
+                                                        <td className='text-center'>{item.cashSale}</td>
+                                                        <td className='text-center'>{item.onlineSale}</td>
+                                                        <td className='text-center'>{item.totalStandardMilk}</td>
+                                                        <td className='text-center'>{item.cashAmtSTD}</td>
+                                                        <td className='text-center'>{item.onlineAmtSTD}</td>
+                                                        <td className='text-center'>{item.cashSaleAmt}</td>
+                                                        <td className='text-center'>{item.onlineSaleAmt}</td>
+                                                        <td className='text-center'>{item.cashAmt}</td>
+                                                        <td className='text-center'>{item.cream}</td>
+                                                        <td className='text-center'>{item.sahiwalCream}</td>
+                                                        <td className='text-center'>{item.research}</td>
+                                                        <td className='text-center'>{item.hLoss}</td>
+                                                    </tr>
+                                                )
+                                            })
                                         }
                                     </tbody>
                                 </table>
@@ -289,121 +292,121 @@ const MilkReport = () => {
                             <div className='container tableMaster mt-5 mb-3 p-0' style={{ height: "55vh" }}>
                                 <div><h5 className='p-2' style={{ fontWeight: "600", textAlign: "center" }}>Grand Total</h5></div>
                                 <div className='row m-2'>
-                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
+                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Production</div>
-                                        <div className='totalnos'>{calculateTotal("production")}</div>
+                                        <div className='totalnos'>{totals.totalproduction}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total DTM Online</div>
-                                        <div className="totalnos">{calculateTotal("dtmOnline")}</div>
+                                        <div className="totalnos">{totals.totaldtmOnline}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Milk Received</div>
-                                        <div className="totalnos">{calculateTotal("milkReceived")}</div>
+                                        <div className="totalnos">{totals.totalmilkReceived}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total HNo 13</div>
-                                        <div className="totalnos">{calculateTotal("hNo13")}</div>
+                                        <div className="totalnos">{totals.totalhNo13}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Sahiwal Milk</div>
-                                        <div className="totalnos">{calculateTotal("sahiwalMilk")}</div>
+                                        <div className="totalnos">{totals.totalsahiwalMilk}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total H Loss</div>
-                                        <div className="totalnos">{calculateTotal("hLoss")}</div>
+                                        <div className="totalnos">{totals.totalhLoss}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Goat Milk Received</div>
-                                        <div className="totalnos">{calculateTotal("goatMilkReceived")}</div>
+                                        <div className="totalnos">{totals.totalgoatMilkReceived}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Girls Hostel</div>
-                                        <div className="totalnos">{calculateTotal("girlsHostel")}</div>
+                                        <div className="totalnos">{totals.totalgirlsHostel}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Research</div>
-                                        <div className="totalnos">{calculateTotal("research")}</div>
+                                        <div className="totalnos">{totals.totalresearch}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Cash Sale Amt</div>
-                                        <div className="totalnos">{calculateTotal("cashSaleAmt")}</div>
+                                        <div className="totalnos">{totals.totalcashSaleAmt}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Goat Milk Mixed</div>
-                                        <div className="totalnos">{calculateTotal("goatMilkMixed")}</div>
+                                        <div className="totalnos">{totals.totalgoatMilkMixed}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Quantity</div>
-                                        <div className="totalnos">{calculateTotal("totalQuantity")}</div>
+                                        <div className="totalnos">{totals.totalQuantity}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Standard Milk Cash</div>
-                                        <div className="totalnos">{calculateTotal("totalStandardMilk")}</div>
+                                        <div className="totalnos">{totals.totalstandardMilkCash}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Cream</div>
-                                        <div className="totalnos">{calculateTotal("cream")}</div>
+                                        <div className="totalnos">{totals.totalcream}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total ParkerH</div>
-                                        <div className="totalnos">{calculateTotal("parkerH")}</div>
+                                        <div className="totalnos">{totals.totalparkerH}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Standard Milk Online</div>
-                                        <div className="totalnos">{calculateTotal("standardMilkOnline")}</div>
+                                        <div className="totalnos">{totals.totalstandardMilkOnline}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Grewal Hotel</div>
-                                        <div className="totalnos">{calculateTotal("grewalHotel")}</div>
+                                        <div className="totalnos">{totals.totalgrewalHotel}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Cash Amt</div>
-                                        <div className="totalnos">{calculateTotal("cashAmt")}</div>
+                                        <div className="totalnos">{totals.totalcashAmt}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Online Sale</div>
-                                        <div className="totalnos">{calculateTotal("onlineSale")}</div>
+                                        <div className="totalnos">{totals.totalonlineSale}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Online Amt DTM</div>
-                                        <div className="totalnos">{calculateTotal("onlineAmtDTM")}</div>
+                                        <div className="totalnos">{totals.totalonlineAmtDTM}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Cash Amt DTM</div>
-                                        <div className="totalnos">{calculateTotal("cashAmtDTM")}</div>
+                                        <div className="totalnos">{totals.totalcashAmtDTM}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total DTM</div>
-                                        <div className="totalnos">{calculateTotal("totalDTM")}</div>
+                                        <div className="totalnos">{totals.totaltotalDTM}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Online Sale Amt</div>
-                                        <div className="totalnos">{calculateTotal("onlineSaleAmt")}</div>
+                                        <div className="totalnos">{totals.totalonlineSaleAmt}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total HNo 8</div>
-                                        <div className="totalnos">{calculateTotal("hNo8")}</div>
+                                        <div className="totalnos">{totals.totalhNo8}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Cash Sale</div>
-                                        <div className="totalnos">{calculateTotal("cashSale")}</div>
+                                        <div className="totalnos">{totals.totalcashSale}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Online Amt STD</div>
-                                        <div className="totalnos">{calculateTotal("onlineAmtSTD")}</div>
+                                        <div className="totalnos">{totals.totalonlineAmtSTD}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Cash Amt STD</div>
-                                        <div className="totalnos">{calculateTotal("cashAmtSTD")}</div>
+                                        <div className="totalnos">{totals.totalcashAmtSTD}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Sahiwal Cream</div>
-                                        <div className="totalnos">{calculateTotal("sahiwalCream")}</div>
+                                        <div className="totalnos">{totals.totalsahiwalCream}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Standard Milk</div>
-                                        <div className="totalnos">{calculateTotal("totalStandardMilk")}</div>
+                                        <div className="totalnos">{totals.totaltotalStandardMilk}</div>
                                     </div>
 
                                 </div>

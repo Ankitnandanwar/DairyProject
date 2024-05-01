@@ -41,7 +41,7 @@ const ProductEntry = () => {
     const saveData = async () => {
         try {
             if (editItem) {
-                const editres = await axios.put(`http://103.38.50.113:8080/DairyApplication/upadteItemMaster/${editItem.id}`, {
+                await axios.put(`http://103.38.50.113:8080/DairyApplication/upadteItemMaster/${editItem.id}`, {
                     item, presentStock, unit
                 })
                 toast.success("Data Updated Successfully", {
@@ -90,7 +90,7 @@ const ProductEntry = () => {
     const getProductData = async () => {
         setLoader(true)
         try {
-            let data = await axios.get("http://103.38.50.113:8080/DairyApplication/getItemMaster").then((res) => {
+            await axios.get("http://103.38.50.113:8080/DairyApplication/getItemMaster").then((res) => {
                 setProdTableData(res.data)
                 setTimeout(() => {
                     setLoader(false)
