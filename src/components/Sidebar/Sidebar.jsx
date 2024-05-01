@@ -59,21 +59,21 @@ const Sidebar = ({ toggle, state, setState }) => {
                             Item Inventry
                         </MenuItem>
                     </SubMenu>
-                    <SubMenu label="Share">
-                        <MenuItem onClick={() => {navigate('/sharedetails')}}>
+                    {/* <SubMenu label="Share">
+                        <MenuItem onClick={() => { navigate('/sharedetails') }}>
                             Share Details
                         </MenuItem>
-                        <MenuItem onClick={() => {navigate('/sharerate')}}>
+                        <MenuItem onClick={() => { navigate('/sharerate') }}>
                             Share Rate
                         </MenuItem>
-                        <MenuItem onClick={() => {navigate('/sharecream')}}>
+                        <MenuItem onClick={() => { navigate('/sharecream') }}>
                             Share Cream
                         </MenuItem>
-                        <MenuItem onClick={() => {navigate('/shareghee')}}>
+                        <MenuItem onClick={() => { navigate('/shareghee') }}>
                             Share Ghee
                         </MenuItem>
-                    </SubMenu>
-                </Menu>
+                    </SubMenu>             */}
+                    </Menu>
 
             </Box>
         )

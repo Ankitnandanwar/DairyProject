@@ -11,22 +11,19 @@ const Login = () => {
   const navigate = useNavigate()
   const [loginUser, setLoginUser] = useState({
     userName: '',
-    password: ''
+    password: '',
+    role: ''
   })
-
-  const validations = () => {
-    
-  }
 
   const handleloginSubmit = async () => {
     try {
-      if (loginUser.userName && loginUser.password) {
-        const response = await axios.post('http://103.38.50.113:8080/DairyApplication/Login', loginUser);
+      if (loginUser.userName && loginUser.password && loginUser.role === 'Admin') {
+        const response = await axios.post('http://103.38.50.113:8080/DairyApplication/loginValidate', loginUser);
         const data = response.data;
         console.log(data);
 
 
-        if (data.status === " Success") {
+        if (data.status === "Success") {
           toast.success("Login Successfull", {
             position: "top-center",
             autoClose: 2000,
@@ -103,6 +100,19 @@ const Login = () => {
                         setLoginUser({
                           ...loginUser,
                           password: e.target.value
+                        })
+                      }
+                    }
+                  />
+                </div>
+                <div className="input-box">
+                  <TextField id="standard-basic" type="text" label="Role" variant="standard" name="role"
+                    value={loginUser.role}
+                    onChange={
+                      (e) => {
+                        setLoginUser({
+                          ...loginUser,
+                          role: e.target.value
                         })
                       }
                     }
