@@ -21,6 +21,15 @@ const Sidebar = ({ toggle, state, setState }) => {
 
                 <Menu>
                     <span><h1 className='text-center'>Dairy</h1></span>
+                    <SubMenu label="User Creation">
+                        <MenuItem onClick={() => { navigate('/createuser') }}>
+                            Create User
+                        </MenuItem>
+                        <MenuItem onClick={() => { navigate('/assignuserrole') }}>
+                            Assign User Role
+                        </MenuItem>
+                        
+                    </SubMenu>
                     <SubMenu label="Products">
                         <MenuItem onClick={() => { navigate('/productentry') }}>
                             Product Entry

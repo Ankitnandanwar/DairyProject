@@ -16,6 +16,8 @@ import ShareDetails from './pages/SharePage/ShareDetailsPage'
 import ShareRate from './pages/SharePage/ShareRatePage'
 import ShareCream from './pages/SharePage/ShareCreamPage'
 import ShareGhee from './pages/SharePage/ShareGheePage'
+import CreationUserPage from './pages/CreationUserPage/CreationUserPage'
+import AssignUserRolePage from './pages/CreationUserPage/AssignUserRolePage'
 
 
 const App = () => {
@@ -25,6 +27,11 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Login/>} />
+
+          <Route path='/createuser' element={<CreationUserPage/>} />
+          <Route path='/assignuserrole' element={<AssignUserRolePage/>} />
+
+
           <Route path='/dashboardpage' element={<DashboardPage/>} />
           <Route path='/productentry' element={<ProductEntryPage/>} />
           <Route path='/productsales' element={<ProductSalesPage/>} />
