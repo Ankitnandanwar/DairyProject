@@ -18,6 +18,7 @@ import ShareCream from './pages/SharePage/ShareCreamPage'
 import ShareGhee from './pages/SharePage/ShareGheePage'
 import CreationUserPage from './pages/CreationUserPage/CreationUserPage'
 import AssignUserRolePage from './pages/CreationUserPage/AssignUserRolePage'
+import HostelPage from './pages/HostelMasterPage/HostelPage'
 
 
 const App = () => {
@@ -50,6 +51,9 @@ const App = () => {
           <Route path='/sharerate' element={<ShareRate/>}/>
           <Route path='/sharecream' element={<ShareCream/>}/>
           <Route path='/shareghee' element={<ShareGhee/>}/>
+
+          <Route path='/hostel' element={<HostelPage/>}/>
+
         </Routes>
       </BrowserRouter>
     </div>

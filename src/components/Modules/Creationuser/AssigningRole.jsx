@@ -73,27 +73,7 @@ const AssigningRole = () => {
 
 
   const handleSave = async () => {
-    try {
-      const data = {
-        userName: assingRole.uniqueDropName,
-        service: selectedModules.join(','), // Join selected modules with a comma
-        createdBy: "1",
-        id: 1 // Assuming createdBy is hardcoded for now
-      };
-  
-      // Send data to backend API
-      const response = await axios.post('YOUR_BACKEND_API_URL_HERE', data);
-      
-      // Check if data was saved successfully
-      if (response.status === 200) {
-        toast.success('Data saved successfully');
-      } else {
-        toast.error('Failed to save data');
-      }
-    } catch (error) {
-      console.error('Error saving data:', error);
-      toast.error('Error saving data');
-    }
+    
   };
 
   return (

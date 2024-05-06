@@ -68,6 +68,9 @@ const Sidebar = ({ toggle, state, setState }) => {
                             Item Inventry
                         </MenuItem>
                     </SubMenu>
+                    <MenuItem onClick={() => { navigate('/hostel') }}>
+                            Hostel Master
+                    </MenuItem>
                     {/* <SubMenu label="Share">
                         <MenuItem onClick={() => { navigate('/sharedetails') }}>
                             Share Details
