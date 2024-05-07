@@ -131,9 +131,9 @@ const Hostel = () => {
                 .catch((error) => {
                     console.error(error)
                 })
-            // setTimeout(() => {
-            //     window.location.reload()
-            // }, 1000);
+            setTimeout(() => {
+                window.location.reload()
+            }, 1000);
         } catch (error) {
             console.log(error)
         }

@@ -31,7 +31,7 @@ const AssigningRole = () => {
     uniqueDropName: "",
   })
   const [uniqueUsername, setUniqueUsername] = useState([])
-  const [moduleCheckbox, setModuleCheckbox] = useState([])
+  const [moduleList, setModuleList] = useState([]);
   const [selectedModules, setSelectedModules] = useState([]);
 
 
@@ -50,7 +50,8 @@ const AssigningRole = () => {
     const fetchModuleName = async () => {
       try {
         const response = await axios.get('http://103.38.50.113:8080/DairyApplication/getAllModuleList');
-        setModuleCheckbox(response.data);
+        setModuleList(response.data);
+        console.log(response.data)
       } catch (error) {
         console.error('Error fetching products:', error);
       }
@@ -59,21 +60,34 @@ const AssigningRole = () => {
     fetchModuleName();
   }, [])
 
-  const handleCheckboxChange = (event) => {
-    const { value, checked } = event.target;
-    if (checked) {
-      setSelectedModules((prevSelected) => [...prevSelected, value]);
+  const handleCheckboxChange = (moduleId) => {
+    const selectedIndex = selectedModules.indexOf(moduleId);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+        newSelected = [...selectedModules, moduleId];
     } else {
-      setSelectedModules((prevSelected) =>
-        prevSelected.filter((module) => module !== value)
-      );
+        newSelected = selectedModules.filter(id => id !== moduleId);
     }
-  };
+
+    setSelectedModules(newSelected);
+};
 
 
 
   const handleSave = async () => {
-    
+    try {
+      const data = {
+        userName: assingRole.uniqueDropName,
+        service: selectedModules.join(', ')
+      }
+
+      await axios.post('http://103.38.50.113:8080/DairyApplication/userToServiceMap', data).then(res=>{
+        console.log(res)
+      })
+    } catch (error) {
+      console.log("error saving data", error)
+    }
   };
 
   return (
@@ -110,11 +124,13 @@ const AssigningRole = () => {
         <div className='col-12 col-lg-6 col-xl-6 col-md-6 d-flex justify-content-center align-items-center'>
           <FormGroup style={{ display: "flex", flexDirection: 'row', justifyContent: "center", alignItems: "center" }}>
             {
-              moduleCheckbox.map((item, index) => (
-                <FormControlLabel key={`${item}-${index}`} required control={<Checkbox onChange={handleCheckboxChange} />} label={item.name} />
+              moduleList.map(mod=>(
+                <FormControlLabel key={mod.id} required control={<Checkbox 
+                  checked={selectedModules.includes(mod.name)}
+                  onChange={() => handleCheckboxChange(mod.name)}
+                  />} label={mod.name}/>
               ))
             }
-
           </FormGroup>
         </div>
 
@@ -122,27 +138,6 @@ const AssigningRole = () => {
           <button className='savebtn' onClick={() => handleSave()}>Save</button>
         </div>
       </div>
-
-      <div className='container tableMaster mt-5 mb-3 p-0'>
-        <table className='table productTableMAster table-stripped'>
-          <thead className='tableheading'>
-            <tr>
-              <th style={{ width: "100px" }}>SrNo</th>
-              <th style={{ width: "150px" }}>UserName</th>
-              <th style={{ width: "150px" }}>Modules Assign</th>
-            </tr>
-          </thead>
-          <tbody className='border'>
-            
-          </tbody>
-        </table>
-      </div>
-
-
-
-
-
-
     </div>
   )
 }
