@@ -19,6 +19,7 @@ import ShareGhee from './pages/SharePage/ShareGheePage'
 import CreationUserPage from './pages/CreationUserPage/CreationUserPage'
 import AssignUserRolePage from './pages/CreationUserPage/AssignUserRolePage'
 import HostelPage from './pages/HostelMasterPage/HostelPage'
+import MilkCollection from './pages/MilkMasterModulePage/MilkcollectionPage'
 
 
 const App = () => {
@@ -53,6 +54,7 @@ const App = () => {
           <Route path='/shareghee' element={<ShareGhee/>}/>
 
           <Route path='/hostel' element={<HostelPage/>}/>
+          <Route path="milkcollection" element={<MilkCollection/>}/>
 
         </Routes>
       </BrowserRouter>
