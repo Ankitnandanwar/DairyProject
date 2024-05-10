@@ -54,7 +54,6 @@ const Login = () => {
         const data = response.data;
         console.log(data);
 
-
         if (data.status === "Success") {
           localStorage.setItem('userData', JSON.stringify(data.data));
           toast.success("Login Successfull", {
@@ -153,20 +152,8 @@ const Login = () => {
                 />
               </div>
               <div className="input-box">
-                {/* <TextField id="standard-basic" type="text" label="Role" variant="standard" name="role"
-                  value={loginUser.role}
-                  onChange={
-                    (e) => {
-                      setLoginUser({
-                        ...loginUser,
-                        role: e.target.value
-                      })
-                    }
-                  }
-                /> */}
-
                 <FormControl variant="standard" sx={{ m: 1, width: '19ch' }}>
-                  <InputLabel id="demo-simple-select-standard-label" className='selectP'>Unique Username</InputLabel>
+                  <InputLabel id="demo-simple-select-standard-label" className='selectP'>Role</InputLabel>
                   <Select
                     labelId="demo-simple-select-standard-label"
                     id="demo-simple-select-standard"
@@ -179,14 +166,12 @@ const Login = () => {
                     })}
                   >
 
-                    <MenuItem value="Admin">
-                      <em>Admin</em>
+                    <MenuItem value="admin">
+                      <em>admin</em>
                     </MenuItem>
-                    <MenuItem value="user1">
-                      <em>User1</em>
+                    <MenuItem value="user">
+                      <em>user</em>
                     </MenuItem>
-                    
-                    
                   </Select>
                 </FormControl>
 

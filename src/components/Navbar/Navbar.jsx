@@ -16,7 +16,7 @@ const Navbar = () => {
     const navigate = useNavigate()
 
     const logoutUser = async() =>{
-        localStorage.setItem('userName',null)
+        localStorage.clear()
         navigate('/')
     }
 

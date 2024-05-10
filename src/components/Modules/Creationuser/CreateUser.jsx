@@ -8,9 +8,6 @@ import { Bars } from 'react-loader-spinner';
 
 
 
-
-
-
 const CreateUser = () => {
 
   const [loader, setLoader] = useState(true)
