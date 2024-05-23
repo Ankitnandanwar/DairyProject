@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import "./Product.css"
+import "../Product/Product.css"
 import Box from '@mui/material/Box';
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
@@ -20,15 +20,17 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const ProductEntry = () => {
+const DtmMilkCollection = () => {
     const [loader, setLoader] = useState(true)
     const [showtable, setshowtable] = useState(false)
 
-    const [productName, setProductName] = useState("")
-    const [openBalance, setOpenBalance] = useState("")
-    const [rate, setRate] = useState("")
-    const [unit, setUnit] = useState("")
-    const [gst, setGst] = useState("")
+    const [date, setCurrentDate] = useState("")
+    const [cowmilk, setCowmilk] = useState("")
+    const [sahiwalMilk, setSahiwalMilk] = useState("")
+    const [buffaloMilk, setBuffaloMilk] = useState("")
+    const [openingBalance, setOpeningBalance] = useState("")
+    const [dtmMilk, setDtmMilk] = useState("")
+    const [cream, setCream] = useState("")
     const [prodTableData, setProdTableData] = useState([])
 
     const [opendailogdel, setopendailogdel] = useState(false)
@@ -38,13 +40,28 @@ const ProductEntry = () => {
 
     const [editItem, setEditItem] = useState(null);
 
+    const n = new Date();
+    const [Dates] = useState({
+        d: String(n.getDate()),
+        m: String(n.getMonth()),
+        y: String(n.getFullYear())
+    });
+
+    // to fetch current date 
+    const getCurrentDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = `${today.getMonth() + 1}`.padStart(2, '0');
+        const day = `${today.getDate()}`.padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
 
     // Save data
     const saveData = async () => {
         try {
             if (editItem) {
-                 await axios.put(`http://103.38.50.113:8080/DairyApplication/updateProductEntry/${editItem.id}`, {
-                    productName, openBalance, rate, unit, gst
+                await axios.put(`http://103.38.50.113:8080/DairyApplication/updateDTmMilkCollection/${editItem.id}`, {
+                    cowmilk, sahiwalMilk, buffaloMilk, openingBalance, closingBalance, totalMilk, dtmMilk, cream, date
                 })
                 toast.success("Data Updated Successfully", {
                     position: "top-center",
@@ -57,9 +74,9 @@ const ProductEntry = () => {
                     theme: "light",
                 })
             } else {
-                const res = await axios.post("http://103.38.50.113:8080/DairyApplication/saveProductEntry", {
-                    productName, openBalance, rate, unit, gst
-                }) 
+                const res = await axios.post("http://103.38.50.113:8080/DairyApplication/saveDtmMilkCollection", {
+                    cowmilk, sahiwalMilk, buffaloMilk, openingBalance, closingBalance, totalMilk, dtmMilk, cream, date
+                })
                 toast.success("Data Saved Successfully", {
                     position: "top-center",
                     autoClose: 4000,
@@ -76,11 +93,13 @@ const ProductEntry = () => {
                 console.log(res)
             }
 
-            setProductName("");
-            setOpenBalance("");
-            setRate("");
-            setGst("")
-            setUnit("")
+            setDtmMilk("");
+            setCream("");
+            setCurrentDate("");
+            setCowmilk("");
+            setSahiwalMilk("");
+            setOpeningBalance("");
+            setBuffaloMilk("")
             setEditItem(null);
 
             // Refresh the product data
@@ -94,8 +113,9 @@ const ProductEntry = () => {
     const getProductData = async () => {
         setLoader(true)
         try {
-             await axios.get("http://103.38.50.113:8080/DairyApplication/getAllProductEntryData").then((res) => {
+            await axios.get("http://103.38.50.113:8080/DairyApplication/findDtmMilkCollection").then((res) => {
                 setProdTableData(res.data)
+                setCurrentDate(getCurrentDate())
                 setTimeout(() => {
                     setLoader(false)
                 }, 1000);
@@ -106,7 +126,7 @@ const ProductEntry = () => {
     }
 
     useEffect(() => {
-        getProductData()
+        getProductData();
     }, [])
 
 
@@ -127,7 +147,7 @@ const ProductEntry = () => {
         }
 
         try {
-            await axios.post("http://103.38.50.113:8080/DairyApplication/deleteProductEntry", delobj, {
+            await axios.post("http://103.38.50.113:8080/DairyApplication/deleteDtmMilkCollections", delobj, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -145,6 +165,27 @@ const ProductEntry = () => {
             console.log(error)
         }
     }
+
+    useEffect(() => {
+        setLoader(true);
+
+        const fetchClosingBalance = async () => {
+            try {
+                const response = await axios.get('http://103.38.50.113:8080/DairyApplication/dtmClosingBalance');
+                const lastClosingBalance = response.data;
+
+                setOpeningBalance(lastClosingBalance);
+                setTimeout(() => {
+                    setLoader(false);
+                }, 1000);
+            } catch (error) {
+                console.error('Error fetching closing balance:', error);
+                setLoader(false);
+            }
+        };
+
+        fetchClosingBalance();
+    }, []);
 
     const dailoge = () => {
         return (
@@ -180,13 +221,23 @@ const ProductEntry = () => {
 
     // Edit data
     const editItemHandler = (item) => {
-        setProductName(item.productName);
-        setOpenBalance(item.openBalance);
-        setRate(item.rate);
-        setUnit(item.unit);
-        setGst(item.gst);
+        setCowmilk(item.cowmilk);
+        setOpeningBalance(item.openBalance);
+        setSahiwalMilk(item.sahiwalMilk);
+        setBuffaloMilk(item.buffaloMilk);
+        setDtmMilk(item.dtmMilk);
+        setCream(item.cream)
+        setCurrentDate(item.date)
         setEditItem(item);
     };
+
+    const CalculateTotals = () => {
+        const totalMilk = parseInt(cowmilk) + parseInt(buffaloMilk) + parseInt(sahiwalMilk);
+        const closingBalance = parseInt(openingBalance) + parseInt(dtmMilk);
+        return { closingBalance, totalMilk };
+    };
+
+    const { closingBalance, totalMilk } = CalculateTotals();
 
 
     return (
@@ -220,9 +271,10 @@ const ProductEntry = () => {
                         </ToastContainer>
                         <div className='pt-5'>
                             {dailoge()}
-                            <h3 className='text-center mt-3' style={{ textDecoration: 'underline' }}>Product Entry</h3>
+                            <h3 className='text-center mt-3' style={{ textDecoration: 'underline' }}>DTM Milk Collection</h3>
                             <div className='row mt-4'>
-                                <div className='col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center'>
+
+                                <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                                     <Box
                                         component="form"
                                         sx={{
@@ -230,10 +282,19 @@ const ProductEntry = () => {
                                         }}
                                         autoComplete="off"
                                     >
-                                        <TextField label="Product" variant="standard" value={productName} onChange={(e) => setProductName(e.target.value)} />
+                                        <TextField variant="standard" type='date' value={date} onChange={(e) => setCurrentDate(e.target.value)} />
                                     </Box>
                                 </div>
-                                <div className='col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center'>
+      
+                                <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
+                                    <div class="textfield">
+                                        <input class="inputfield" type="text" required value={openingBalance} onChange={(e) => setOpeningBalance(e.target.value)} />
+                                        <span></span>
+                                        <label class="inputlabels">Opening Balance</label>
+                                    </div>
+                                </div>
+
+                                <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                                     <Box
                                         component="form"
                                         sx={{
@@ -241,10 +302,21 @@ const ProductEntry = () => {
                                         }}
                                         autoComplete="off"
                                     >
-                                        <TextField label="Opening Balance" variant="standard" value={openBalance} onChange={(e) => setOpenBalance(e.target.value)} />
+                                        <TextField label="Cow Milk" variant="standard" value={cowmilk} onChange={(e) => setCowmilk(e.target.value)} />
                                     </Box>
                                 </div>
-                                <div className='col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center'>
+                                <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
+                                    <Box
+                                        component="form"
+                                        sx={{
+                                            '& > :not(style)': { m: 1, width: '25ch' },
+                                        }}
+                                        autoComplete="off"
+                                    >
+                                        <TextField label="Sahiwal Milk" variant="standard" value={sahiwalMilk} onChange={(e) => setSahiwalMilk(e.target.value)} />
+                                    </Box>
+                                </div>
+                                <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                                     <Box
                                         component="form"
                                         sx={{
@@ -253,11 +325,11 @@ const ProductEntry = () => {
                                         type="number"
                                         autoComplete="off"
                                     >
-                                        <TextField label="Rate" variant="standard" value={rate} onChange={(e) => setRate(e.target.value)} />
+                                        <TextField label="Buffalo Milk" variant="standard" value={buffaloMilk} onChange={(e) => setBuffaloMilk(e.target.value)} />
                                     </Box>
                                 </div>
 
-                                <div className='col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center'>
+                                <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                                     <Box
                                         component="form"
                                         sx={{
@@ -266,11 +338,11 @@ const ProductEntry = () => {
                                         type="number"
                                         autoComplete="off"
                                     >
-                                        <TextField label="Unit" variant="standard" value={unit} onChange={(e) => setUnit(e.target.value)} />
+                                        <TextField label="Total Milk" variant="standard" value={totalMilk} />
                                     </Box>
                                 </div>
 
-                                <div className='col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center'>
+                                <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                                     <Box
                                         component="form"
                                         sx={{
@@ -279,7 +351,33 @@ const ProductEntry = () => {
                                         type="number"
                                         autoComplete="off"
                                     >
-                                        <TextField label="GSTIN" variant="standard" value={gst} onChange={(e) => setGst(e.target.value)} />
+                                        <TextField label="DTM Milk" variant="standard" value={dtmMilk} onChange={(e) => setDtmMilk(e.target.value)} />
+                                    </Box>
+                                </div>
+
+                                <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
+                                    <Box
+                                        component="form"
+                                        sx={{
+                                            '& > :not(style)': { m: 1, width: '25ch' },
+                                        }}
+                                        type="number"
+                                        autoComplete="off"
+                                    >
+                                        <TextField label="Cream" variant="standard" value={cream} onChange={(e) => setCream(e.target.value)} />
+                                    </Box>
+                                </div>
+
+                                <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
+                                    <Box
+                                        component="form"
+                                        sx={{
+                                            '& > :not(style)': { m: 1, width: '25ch' },
+                                        }}
+                                        type="number"
+                                        autoComplete="off"
+                                    >
+                                        <TextField label="Closing Balance" variant="standard" value={closingBalance} />
                                     </Box>
                                 </div>
 
@@ -297,11 +395,14 @@ const ProductEntry = () => {
                                                 <thead className='tableheading'>
                                                     <tr>
                                                         <th>SrNo</th>
-                                                        <th style={{ width: "180px" }}>Product</th>
                                                         <th>Opening Balance</th>
-                                                        <th>Rate</th>
-                                                        <th>Unit</th>
-                                                        <th>GSTIN</th>
+                                                        <th>Cow Milk</th>
+                                                        <th>Sahiwal Milk</th>
+                                                        <th>Buffalo Milk</th>
+                                                        <th>Total Milk</th>
+                                                        <th>DTM Milk</th>
+                                                        <th>Cream</th>
+                                                        <th>Closing Balance</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -310,14 +411,17 @@ const ProductEntry = () => {
                                                         prodTableData.map((item, i) => {
                                                             return (
                                                                 <tr key={i}>
-                                                                    <th scope='row' className='text-center'>{i+1}</th>
+                                                                    <th scope='row' className='text-center'>{i + 1}</th>
                                                                     <td>
-                                                                        <p className='sub'>{item.productName}</p>
+                                                                        {item.openingBalance}
                                                                     </td>
-                                                                    <td>{item.openBalance}</td>
-                                                                    <td>{item.rate}</td>
-                                                                    <td>{item.unit}</td>
-                                                                    <td>{item.gst}</td>
+                                                                    <td>{item.cowmilk}</td>
+                                                                    <td>{item.sahiwalMilk}</td>
+                                                                    <td>{item.buffaloMilk}</td>
+                                                                    <td>{item.totalMilk}</td>
+                                                                    <td>{item.dtmMilk}</td>
+                                                                    <td>{item.cream}</td>
+                                                                    <td>{item.closingBalance}</td>
                                                                     <td>
                                                                         <button className='btn' onClick={() => editItemHandler(item)}><FiEdit className='editicon' /></button>
                                                                         <button className='btn' onClick={() => dele(item.id)}><MdDeleteOutline className='delicon' /></button>
@@ -339,4 +443,4 @@ const ProductEntry = () => {
     )
 }
 
-export default ProductEntry
+export default DtmMilkCollection
