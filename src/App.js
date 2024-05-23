@@ -20,7 +20,9 @@ import CreationUserPage from './pages/CreationUserPage/CreationUserPage'
 import AssignUserRolePage from './pages/CreationUserPage/AssignUserRolePage'
 import HostelPage from './pages/HostelMasterPage/HostelPage'
 import MilkCollection from './pages/MilkMasterModulePage/MilkcollectionPage'
-
+import Hostel from './pages/HostelMasterPage/HostelPage'
+import DtmMilkCollection from './pages/DTMMilkPage/DtmMilkCollectionPage'
+import DtmMilkSale from './pages/DTMMilkPage/DtmMIlkSalePage'
 
 const App = () => {
 
@@ -44,6 +46,9 @@ const App = () => {
           <Route path='/milkreport' element={<MilkReportPage/>} />
           <Route path="/dmwentry" element={<DMWEntry/>} />
           <Route path='/dmwreport' element={<DMWReport/>}/>
+          <Route path='/Hostel' element={<Hostel/>}/>
+          <Route path='/dtmmilksale' element={<DtmMilkSale/>}/>
+          <Route path='/dtmmilkcollection' element={<DtmMilkCollection/>}/>
 
           <Route path='/itementry' element={<ItemEntry/>}/>
           <Route path='/iteminventry' element={<ItemInventry/>}/>

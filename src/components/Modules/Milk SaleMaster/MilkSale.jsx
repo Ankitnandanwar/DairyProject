@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import axios from 'axios'
+import TextField from '@mui/material/TextField';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Bars } from 'react-loader-spinner';
 
 const MilkSale = () => {
@@ -132,6 +132,27 @@ const MilkSale = () => {
 
 
     fetchProductDetails();
+  }, []);
+
+  useEffect(() => {
+    setLoader(true);
+
+    const fetchClosingBalance = async () => {
+      try {
+        const response = await axios.get('http://103.38.50.113:8080/DairyApplication/lastIndexOfYourColumn');
+        const lastClosingBalance = response.data;
+
+        setopeningBalance(lastClosingBalance);
+        setTimeout(() => {
+          setLoader(false);
+        }, 1000);
+      } catch (error) {
+        console.error('Error fetching closing balance:', error);
+        setLoader(false);
+      }
+    };
+
+    fetchClosingBalance();
   }, []);
 
   useEffect(() => {

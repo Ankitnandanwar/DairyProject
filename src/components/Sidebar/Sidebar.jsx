@@ -64,6 +64,15 @@ const Sidebar = ({ toggle, state, setState }) => {
                             <MenuItem onClick={() => { navigate('/milkcollection') }}>
                                 Milk Collection
                             </MenuItem>
+                            <MenuItem onClick={() => { navigate('/Hostel') }}>
+                                Hostel
+                            </MenuItem>
+                            <MenuItem onClick={() => { navigate('/dtmmilksale') }}>
+                                 DTM Milk Sale
+                            </MenuItem>
+                            <MenuItem onClick={() => { navigate('/dtmmilkcollection') }}>
+                                DTM Milk Collection
+                            </MenuItem>
                         </SubMenu>
                     )}
 
