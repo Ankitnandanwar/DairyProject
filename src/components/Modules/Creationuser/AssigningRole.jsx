@@ -69,6 +69,33 @@ const AssigningRole = () => {
     fetchModuleName();
   }, [])
 
+
+  const handleUserChange = async (e) => {
+    const userName = e.target.value;
+    setAssingRole({
+      ...assingRole,
+      uniqueDropName: userName
+    });
+
+    if (userName) {
+      try {
+        const response = await axios.get(`http://103.38.50.113:8080/DairyApplication/getAllUserToServiceMap`);
+        const user = response.data.find(user => user.userName === userName);
+        if (user) {
+          setSelectedModules(user.service.split(','));
+        } else {
+          setSelectedModules([]);
+        }
+      } catch (error) {
+        console.error('Error fetching user modules:', error);
+      }
+    } else {
+      setSelectedModules([]);
+    }
+  };
+
+
+
   const handleCheckboxChange = (moduleId) => {
     const selectedIndex = selectedModules.indexOf(moduleId);
     let newSelected = [];
@@ -142,7 +169,7 @@ const AssigningRole = () => {
             <div className='pt-5'>
               <h3 className='text-center mt-4' style={{ textDecoration: 'underline' }}>Assign User Role</h3>
               <div className='row pt-5'>
-                <div className='col-12 col-lg-6 col-xl-6 col-md-6 d-flex justify-content-center align-items-center flex-row'>
+                <div className='col-12 col-lg-3 col-xl-3 col-md-6 d-flex justify-content-center align-items-center flex-row'>
                   <FormControl variant="standard" sx={{ m: 1, width: '19ch' }}>
                     <InputLabel id="demo-simple-select-standard-label" className='selectP'>Unique Username</InputLabel>
                     <Select
@@ -151,10 +178,7 @@ const AssigningRole = () => {
                       label="Role"
                       MenuProps={MenuProps}
                       value={assingRole.uniqueDropName}
-                      onChange={(e) => setAssingRole({
-                        ...assingRole,
-                        uniqueDropName: e.target.value
-                      })}
+                      onChange={handleUserChange}
                     >
 
                       <MenuItem value="Admin">
@@ -169,7 +193,7 @@ const AssigningRole = () => {
                   </FormControl>
                 </div>
 
-                <div className='col-12 col-lg-6 col-xl-6 col-md-6 d-flex justify-content-center align-items-center'>
+                <div className='col-12 col-lg-9 col-xl-9 col-md-6 d-flex justify-content-center align-items-center'>
                   <FormGroup style={{ display: "flex", flexDirection: 'row', justifyContent: "center", alignItems: "center" }}>
                     {
                       moduleList.map(mod => (
