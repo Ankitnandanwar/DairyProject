@@ -21,6 +21,8 @@ import AssignUserRolePage from './pages/CreationUserPage/AssignUserRolePage'
 import HostelPage from './pages/HostelMasterPage/HostelPage'
 import MilkCollection from './pages/MilkMasterModulePage/MilkcollectionPage'
 
+import DtmSave from "./components/Modules/Product/DtmSave"
+
 
 const App = () => {
 
@@ -55,6 +57,10 @@ const App = () => {
 
           <Route path='/hostel' element={<HostelPage/>}/>
           <Route path="milkcollection" element={<MilkCollection/>}/>
+
+
+          <Route path="dtmsave" element={<DtmSave/>}/>
+
 
         </Routes>
       </BrowserRouter>
