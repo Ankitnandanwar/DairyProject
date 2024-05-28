@@ -491,6 +491,17 @@ const editItemHandler = (item) => {
                 MILK SALE
               </h3>
             </div>
+            <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
+                <Box
+                  component="form"
+                  sx={{
+                    "& > :not(style)": { m: 1, width: "25ch" },
+                  }}
+                  autoComplete="off"
+                >
+                  <TextField variant="standard" type="date" value={currDate} />
+                </Box>
+              </div>
             <div className="row mt-4">
               <h1
                 style={{
@@ -780,17 +791,6 @@ const editItemHandler = (item) => {
               >
                 Standard Milk Sale
               </h1>
-              <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
-                <Box
-                  component="form"
-                  sx={{
-                    "& > :not(style)": { m: 1, width: "25ch" },
-                  }}
-                  autoComplete="off"
-                >
-                  <TextField variant="standard" type="date" value={currDate} />
-                </Box>
-              </div>
               <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
                 <Box
                   component="form"
@@ -1141,9 +1141,9 @@ const editItemHandler = (item) => {
                     <tr>
                       <th style={{ width: "180px" }}>SrNo</th>
                       <th style={{ width: "180px" }}>Date</th>
-                      <th style={{ width: "180px" }}>Opening Balance</th>
-                      <th style={{ width: "180px" }}>Closing Balance</th>
-                      <th style={{ width: "180px" }}>Product</th>
+                      <th style={{ width: "180px" }}>DTM Opening Balance</th>
+                      <th style={{ width: "180px" }}>DTM Closing Balance</th>
+                      <th style={{ width: "180px" }}>DTM Product</th>
                       <th style={{ width: "180px" }}>
                         Table Data (Hostel Name and Quantity)
                       </th>
@@ -1151,9 +1151,9 @@ const editItemHandler = (item) => {
                       <th style={{ width: "180px" }}>DTM Sale Online</th>
                       <th style={{ width: "180px" }}>DTM Amount Cash</th>
                       <th style={{ width: "180px" }}>DTM Amount Online</th>
-                      <th style={{ width: "180px" }}>Final Total</th>
-                      <th style={{ width: "180px" }}>Total Quantity</th>
-                      <th style={{ width: "180px" }}>Rate</th>
+                      <th style={{ width: "180px" }}>DTM Final Total</th>
+                      <th style={{ width: "180px" }}>DTM Total Quantity</th>
+                      <th style={{ width: "180px" }}>DTM Rate</th>
                       <th style={{ width: "180px" }}>STD Opening Balance</th>
                       <th style={{ width: "180px" }}>STD Closing Balance</th>
                       <th style={{ width: "180px" }}>STD Product</th>
