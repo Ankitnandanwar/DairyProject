@@ -64,6 +64,15 @@ const Sidebar = ({ toggle, state, setState }) => {
                             <MenuItem onClick={() => { navigate('/milkcollection') }}>
                                 Milk Collection
                             </MenuItem>
+                            <MenuItem onClick={() => { navigate('/Hostel') }}>
+                                Hostel
+                            </MenuItem>
+                            <MenuItem onClick={() => { navigate('/dtmmilksale') }}>
+                                 DTM Milk Sale
+                            </MenuItem>
+                            <MenuItem onClick={() => { navigate('/dtmmilkcollection') }}>
+                                DTM Milk Collection
+                            </MenuItem>
                         </SubMenu>
                     )}
 
@@ -89,72 +98,7 @@ const Sidebar = ({ toggle, state, setState }) => {
                         </SubMenu>
                     )}
 
-                    {/* <SubMenu label="User Creation">
-                        <MenuItem onClick={() => { navigate('/createuser') }}>
-                            Create User
-                        </MenuItem>
-                        <MenuItem onClick={() => { navigate('/assignuserrole') }}>
-                            Assign User Role
-                        </MenuItem>
-                    </SubMenu>
-                    <SubMenu label="Products">
-                        <MenuItem onClick={() => { navigate('/productentry') }}>
-                            Product Entry
-                        </MenuItem>
-                        <MenuItem onClick={() => { navigate('/productsales') }}>
-                            Product Sale
-                        </MenuItem>
-                        <MenuItem onClick={() => { navigate('/productreport') }}>
-                            Product Report
-                        </MenuItem>
-                    </SubMenu>
-                    <SubMenu label="Milk">
-                        <MenuItem onClick={() => { navigate('/milksalemaster') }}>
-                            Milk Sale Master
-                        </MenuItem>
-                        <MenuItem onClick={() => { navigate('/milksale') }}>
-                            Milk Sale
-                        </MenuItem>
-                        <MenuItem onClick={() => { navigate('/milkreport') }}>
-                            Milk Report
-                        </MenuItem>
-                        <MenuItem onClick={() => { navigate('/milkcollection') }}>
-                            Milk Collection
-                        </MenuItem>
-                    </SubMenu>
-                    <SubMenu label="Reports">
-                        <MenuItem onClick={() => { navigate('/dmwentry') }}>
-                            DMW Entry
-                        </MenuItem>
-                        <MenuItem onClick={() => { navigate('/dmwreport') }}>
-                            DMW Report
-                        </MenuItem>
-                    </SubMenu>
-                    <SubMenu label="Inventry Items">
-                        <MenuItem onClick={() => { navigate('/itementry') }}>
-                            Item Entry
-                        </MenuItem>
-                        <MenuItem onClick={() => { navigate('/iteminventry') }}>
-                            Item Inventry
-                        </MenuItem>
-                    </SubMenu>
-                    <MenuItem onClick={() => { navigate('/hostel') }}>
-                        Hostel Master
-                    </MenuItem> */}
-                    {/* <SubMenu label="Share">
-                        <MenuItem onClick={() => { navigate('/sharedetails') }}>
-                            Share Details
-                        </MenuItem>
-                        <MenuItem onClick={() => { navigate('/sharerate') }}>
-                            Share Rate
-                        </MenuItem>
-                        <MenuItem onClick={() => { navigate('/sharecream') }}>
-                            Share Cream
-                        </MenuItem>
-                        <MenuItem onClick={() => { navigate('/shareghee') }}>
-                            Share Ghee
-                        </MenuItem>
-                    </SubMenu>             */}
+                    
                 </Menu>
 
             </Box>
