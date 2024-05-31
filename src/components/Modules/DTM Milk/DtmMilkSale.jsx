@@ -1,12 +1,12 @@
-import CancelIcon from '@mui/icons-material/Cancel';
-import { Button, DialogActions, DialogTitle, IconButton } from '@mui/material';
+import CancelIcon from "@mui/icons-material/Cancel";
+import { Button, DialogActions, DialogTitle, IconButton } from "@mui/material";
 import Box from "@mui/material/Box";
-import Dialog from '@mui/material/Dialog';
+import Dialog from "@mui/material/Dialog";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import Slide from '@mui/material/Slide';
+import Slide from "@mui/material/Slide";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -56,14 +56,14 @@ const DtmSave = () => {
     { stdhostelName: "", stdQty: "" },
   ]);
 
-  const [delid, setdelid] = useState()
+  const [delid, setdelid] = useState();
 
   const [hostelData, setHostelData] = useState([]);
 
   const [openingBalance, setOpeningBalance] = useState("");
   const [stdopeningBalance, setStdopeningBalance] = useState("");
 
-  const [opendailogdel, setopendailogdel] = useState(false)
+  const [opendailogdel, setopendailogdel] = useState(false);
   const [product, setProduct] = useState("");
 
   const [dtmMilkRate, setDtmMilkRate] = useState("");
@@ -226,117 +226,120 @@ const DtmSave = () => {
 
   const saveData = async () => {
     try {
-        if (editItem) {
-            await axios.put(`http://103.38.50.113:8080/DairyApplication/updateDtmMilkSale/${editItem.id}`, {
-              openingBalance,
-              closingBalance,
-              product,
-              // tableData: JSON.stringify(firstTableAdd),
-              dtmSaleCash,
-              dtmsaleOnline,
-              dtmAmountCash,
-              dtmAmountOnline,
-              finalTotal,
-              totalQty,
-              rate: dtmMilkRate,
-              date: currDate,
-              stdopeningBalance,
-              stdclosingBalance,
-              stdproduct,
-              stdtableData: JSON.stringify(secondTableAdd),
-              stdSaleCash,
-              stdsaleOnline,
-              stdAmountCash,
-              stdAmountOnline,
-              stdrate: standardMilkRate,
-              stdfinalTotal,
-              stdtotalQty,
-              cream,
-              research,
-              sahiwalCream,
-              hloss,
-            })
-            toast.success("Data Updated Successfully", {
-                position: "top-center",
-                autoClose: 4000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            })
-        } else {
-          const resp = await axios.post(
-            "http://103.38.50.113:8080/DairyApplication/saveDtmMilkSales",
-            {
-              openingBalance,
-              closingBalance,
-              product,
-              tableData: JSON.stringify(firstTableAdd),
-              dtmSaleCash,
-              dtmsaleOnline,
-              dtmAmountCash,
-              dtmAmountOnline,
-              finalTotal,
-              totalQty,
-              rate: dtmMilkRate,
-              date: currDate,
-              stdopeningBalance,
-              stdclosingBalance,
-              stdproduct,
-              stdtableData: JSON.stringify(secondTableAdd),
-              stdSaleCash,
-              stdsaleOnline,
-              stdAmountCash,
-              stdAmountOnline,
-              stdrate: standardMilkRate,
-              stdfinalTotal,
-              stdtotalQty,
-              cream,
-              research,
-              sahiwalCream,
-              hloss,
-            }
-          );
-          toast.success("Data Saved Successfully", {
-            position: "top-center",
-            autoClose: 4000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-            setTimeout(() => {
-                window.location.reload()
-            }, 1000)
-            console.log(resp)
-        }
+      if (editItem) {
+        await axios.put(
+          `http://103.38.50.113:8080/DairyApplication/updateDtmMilkSale/${editItem.id}`,
+          {
+            openingBalance,
+            closingBalance,
+            product,
+            // tableData: JSON.stringify(firstTableAdd),
+            dtmSaleCash,
+            dtmsaleOnline,
+            dtmAmountCash,
+            dtmAmountOnline,
+            finalTotal,
+            totalQty,
+            rate: dtmMilkRate,
+            date: currDate,
+            stdopeningBalance,
+            stdclosingBalance,
+            stdproduct,
+            stdtableData: JSON.stringify(secondTableAdd),
+            stdSaleCash,
+            stdsaleOnline,
+            stdAmountCash,
+            stdAmountOnline,
+            stdrate: standardMilkRate,
+            stdfinalTotal,
+            stdtotalQty,
+            cream,
+            research,
+            sahiwalCream,
+            hloss,
+          }
+        );
+        toast.success("Data Updated Successfully", {
+          position: "top-center",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        const resp = await axios.post(
+          "http://103.38.50.113:8080/DairyApplication/saveDtmMilkSales",
+          {
+            openingBalance,
+            closingBalance,
+            product,
+            tableData: JSON.stringify(firstTableAdd),
+            dtmSaleCash,
+            dtmsaleOnline,
+            dtmAmountCash,
+            dtmAmountOnline,
+            finalTotal,
+            totalQty,
+            rate: dtmMilkRate,
+            date: currDate,
+            stdopeningBalance,
+            stdclosingBalance,
+            stdproduct,
+            stdtableData: JSON.stringify(secondTableAdd),
+            stdSaleCash,
+            stdsaleOnline,
+            stdAmountCash,
+            stdAmountOnline,
+            stdrate: standardMilkRate,
+            stdfinalTotal,
+            stdtotalQty,
+            cream,
+            research,
+            sahiwalCream,
+            hloss,
+          }
+        );
+        toast.success("Data Saved Successfully", {
+          position: "top-center",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+        console.log(resp);
+      }
 
-        setProduct("");
-        setDtmSaleCash("");
-        setDtmsaleOnline("");
-        setTotalQty("")
-        // setfirstTableAdd("");
-        setStdproduct("");
-        setStdSaleCash("");
-        setStdsaleOnline("");
-        stdtotalQty("");
-        setCream("");
-        setSahiwalCream("");
-        setResearch("");
-        setHloss("");
-        // setSecondTableAdd("")
-        setEditItem(null);
+      setProduct("");
+      setDtmSaleCash("");
+      setDtmsaleOnline("");
+      setTotalQty("");
+      // setfirstTableAdd("");
+      setStdproduct("");
+      setStdSaleCash("");
+      setStdsaleOnline("");
+      stdtotalQty("");
+      setCream("");
+      setSahiwalCream("");
+      setResearch("");
+      setHloss("");
+      // setSecondTableAdd("")
+      setEditItem(null);
 
-        // Refresh the product data
-        getProductData();
+      // Refresh the product data
+      getProductData();
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
-}
+  };
 
   useEffect(() => {
     setLoader(true);
@@ -365,93 +368,91 @@ const DtmSave = () => {
     getProductData();
   }, []);
 
-
   const dele = (id) => {
-    setdelid(id)
-    setopendailogdel(true)
-}
+    setdelid(id);
+    setopendailogdel(true);
+  };
 
-const handleClose = () => {
+  const handleClose = () => {
     setAnchorEl(null);
-    setopendailogdel(false)
-};
+    setopendailogdel(false);
+  };
 
-const handledel = async () => {
+  const handledel = async () => {
     let delobj = {
-        "id": delid
-    }
+      id: delid,
+    };
 
     try {
-        await axios.post("http://103.38.50.113:8080/DairyApplication/deleteDtmMilkSale", delobj, {
+      await axios
+        .post(
+          "http://103.38.50.113:8080/DairyApplication/deleteDtmMilkSale",
+          delobj,
+          {
             headers: {
-                'Content-Type': 'application/json'
-            }
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((resdel) => {
+          console.log(resdel.data);
         })
-            .then((resdel) => {
-                console.log(resdel.data);
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-        setTimeout(() => {
-            window.location.reload()
-        }, 1000);
+        .catch((error) => {
+          console.error(error);
+        });
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
-}
+  };
 
-
-const dailoge = () => {
-  return (
+  const dailoge = () => {
+    return (
       <>
-          <Dialog
-
-              open={opendailogdel}
-              TransitionComponent={Transition}
-              keepMounted
-              onClose={handleClose}
-              aria-describedby="alert-dialog-slide-description"
-          >
-              <DialogActions style={{ height: '2.5rem' }}>
-                  <IconButton onClick={handleClose}>
-                      <CancelIcon style={{ color: 'blue' }} />
-                  </IconButton>
-              </DialogActions>
-              <div style={{ background: 'white' }}>
-
-                  <DialogTitle>
-                      Are you sure you want to delete?
-                  </DialogTitle>
-                  <DialogActions>
-                      <Button onClick={handledel}>Yes</Button>
-                      <Button onClick={handleClose}>No</Button>
-                  </DialogActions>
-              </div>
-          </Dialog>
-
+        <Dialog
+          open={opendailogdel}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogActions style={{ height: "2.5rem" }}>
+            <IconButton onClick={handleClose}>
+              <CancelIcon style={{ color: "blue" }} />
+            </IconButton>
+          </DialogActions>
+          <div style={{ background: "white" }}>
+            <DialogTitle>Are you sure you want to delete?</DialogTitle>
+            <DialogActions>
+              <Button onClick={handledel}>Yes</Button>
+              <Button onClick={handleClose}>No</Button>
+            </DialogActions>
+          </div>
+        </Dialog>
       </>
-  )
-}
+    );
+  };
 
-// Edit data
-const editItemHandler = (item) => {
-  setProduct(item.product);
-  setDtmSaleCash(item.dtmSaleCash);
-  setDtmsaleOnline(item.dtmsaleOnline);
-  setTotalQty(item.totalQty);
-  // setfirstTableAdd(item.firstTableAdd);
-  setStdproduct(item.stdproduct)
-  setStdSaleCash(item.stdSaleCash)
-  setStdsaleOnline(item.stdsaleOnline)
-  setStdtotalQty(item.stdtotalQty);
-  setCream(item.cream)
-  setSahiwalCream(item.sahiwalCream)
-  setResearch(item.research);
-  setHloss(item.hloss)
-  // setSecondTableAdd(item.secondTableAdd);
-  setEditItem(item);
-};
+  // Edit data
+  const editItemHandler = (item) => {
+    setProduct(item.product);
+    setDtmSaleCash(item.dtmSaleCash);
+    setDtmsaleOnline(item.dtmsaleOnline);
+    setTotalQty(item.totalQty);
+    // setfirstTableAdd(item.firstTableAdd);
+    setStdproduct(item.stdproduct);
+    setStdSaleCash(item.stdSaleCash);
+    setStdsaleOnline(item.stdsaleOnline);
+    setStdtotalQty(item.stdtotalQty);
+    setCream(item.cream);
+    setSahiwalCream(item.sahiwalCream);
+    setResearch(item.research);
+    setHloss(item.hloss);
+    // setSecondTableAdd(item.secondTableAdd);
+    setEditItem(item);
+  };
 
   return (
     <>
@@ -483,7 +484,7 @@ const editItemHandler = (item) => {
               theme="light"
             ></ToastContainer>
             <div className="pt-5">
-            {dailoge()}
+              {dailoge()}
               <h3
                 className="text-center mt-3"
                 style={{ textDecoration: "underline" }}
@@ -492,16 +493,16 @@ const editItemHandler = (item) => {
               </h3>
             </div>
             <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
-                <Box
-                  component="form"
-                  sx={{
-                    "& > :not(style)": { m: 1, width: "25ch" },
-                  }}
-                  autoComplete="off"
-                >
-                  <TextField variant="standard" type="date" value={currDate} />
-                </Box>
-              </div>
+              <Box
+                component="form"
+                sx={{
+                  "& > :not(style)": { m: 1, width: "25ch" },
+                }}
+                autoComplete="off"
+              >
+                <TextField variant="standard" type="date" value={currDate} />
+              </Box>
+            </div>
             <div className="row mt-4">
               <h1
                 style={{
@@ -710,6 +711,8 @@ const editItemHandler = (item) => {
                     <th>SrNo</th>
                     <th>Hostel Name</th>
                     <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Amount</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -722,7 +725,7 @@ const editItemHandler = (item) => {
                       <td className="text-center">
                         <FormControl
                           variant="standard"
-                          sx={{ m: 1, width: "25ch" }}
+                          sx={{ m: 1, width: "20ch" }}
                         >
                           <InputLabel
                             id="demo-simple-select-standard-label"
@@ -751,7 +754,7 @@ const editItemHandler = (item) => {
                         <Box
                           component="form"
                           sx={{
-                            "& > :not(style)": { m: 1, width: "25ch" },
+                            "& > :not(style)": { m: 1, width: "20ch" },
                           }}
                           type="text"
                           autoComplete="off"
@@ -762,6 +765,40 @@ const editItemHandler = (item) => {
                             name="qty"
                             value={row.qty}
                             onChange={(event) => handleChange(index, event)}
+                          />
+                        </Box>
+                      </td>
+                      <td className="text-center">
+                        <Box
+                          component="form"
+                          sx={{
+                            "& > :not(style)": { m: 1, width: "20ch" },
+                          }}
+                          type="text"
+                          autoComplete="off"
+                        >
+                          <TextField
+                            label="Enter Rate"
+                            variant="standard"
+                            name="qty"
+                            value={row.qty}
+                          />
+                        </Box>
+                      </td>
+                      <td className="text-center">
+                        <Box
+                          component="form"
+                          sx={{
+                            "& > :not(style)": { m: 1, width: "20ch" },
+                          }}
+                          type="text"
+                          autoComplete="off"
+                        >
+                          <TextField
+                            label="Enter Amount"
+                            variant="standard"
+                            name="qty"
+                            value={row.qty}
                           />
                         </Box>
                       </td>
@@ -1036,6 +1073,23 @@ const editItemHandler = (item) => {
                   />
                 </Box>
               </div>
+
+              <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
+                <Box
+                  component="form"
+                  sx={{
+                    "& > :not(style)": { m: 1, width: "25ch" },
+                  }}
+                  type="text"
+                  autoComplete="off"
+                >
+                  <TextField
+                    label="Remarks"
+                    variant="standard"
+                    value={hloss}
+                  />
+                </Box>
+              </div>
             </div>
             <div style={{ display: "flex", justifyContent: "end" }}>
               <button
@@ -1059,6 +1113,8 @@ const editItemHandler = (item) => {
                     <th>SrNo</th>
                     <th>Hostel Name</th>
                     <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Amount</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -1071,7 +1127,7 @@ const editItemHandler = (item) => {
                       <td>
                         <FormControl
                           variant="standard"
-                          sx={{ m: 1, width: "25ch" }}
+                          sx={{ m: 1, width: "20ch" }}
                         >
                           <InputLabel
                             id="demo-simple-select-standard-label"
@@ -1100,13 +1156,49 @@ const editItemHandler = (item) => {
                         <Box
                           component="form"
                           sx={{
-                            "& > :not(style)": { m: 1, width: "25ch" },
+                            "& > :not(style)": { m: 1, width: "20ch" },
                           }}
                           type="text"
                           autoComplete="off"
                         >
                           <TextField
                             label="Enter Quantity"
+                            variant="standard"
+                            name="stdQty"
+                            value={row.stdQty}
+                            onChange={(event) => handleChange(index, event)}
+                          />
+                        </Box>
+                      </td>
+                      <td className="text-center">
+                        <Box
+                          component="form"
+                          sx={{
+                            "& > :not(style)": { m: 1, width: "20ch" },
+                          }}
+                          type="text"
+                          autoComplete="off"
+                        >
+                          <TextField
+                            label="Enter Rate"
+                            variant="standard"
+                            name="stdQty"
+                            value={row.stdQty}
+                            onChange={(event) => handleChange(index, event)}
+                          />
+                        </Box>
+                      </td>
+                      <td className="text-center">
+                        <Box
+                          component="form"
+                          sx={{
+                            "& > :not(style)": { m: 1, width: "20ch" },
+                          }}
+                          type="text"
+                          autoComplete="off"
+                        >
+                          <TextField
+                            label="Enter Amount"
                             variant="standard"
                             name="stdQty"
                             value={row.stdQty}
@@ -1127,122 +1219,152 @@ const editItemHandler = (item) => {
               <button className="savebtn" onClick={() => saveData()}>
                 Save
               </button>
-              <button
+              {/* <button
                 className="tabelbtn"
                 onClick={() => setshowtable(!showtable)}
               >
                 Show table
-              </button>
+              </button> */}
             </div>
-            {showtable ? (
-              <div className="container tableMaster mt-5 mb-3 p-0">
-                <table className="table productTableMAster table-stripped">
-                  <thead className="tableheading">
-                    <tr>
-                      <th style={{ width: "180px" }}>SrNo</th>
-                      <th style={{ width: "180px" }}>Date</th>
-                      <th style={{ width: "180px" }}>DTM Opening Balance</th>
-                      <th style={{ width: "180px" }}>DTM Closing Balance</th>
-                      <th style={{ width: "180px" }}>DTM Product</th>
-                      <th style={{ width: "180px" }}>
-                        Table Data (Hostel Name and Quantity)
-                      </th>
-                      <th style={{ width: "180px" }}>DTM Sale Cash</th>
-                      <th style={{ width: "180px" }}>DTM Sale Online</th>
-                      <th style={{ width: "180px" }}>DTM Amount Cash</th>
-                      <th style={{ width: "180px" }}>DTM Amount Online</th>
-                      <th style={{ width: "180px" }}>DTM Final Total</th>
-                      <th style={{ width: "180px" }}>DTM Total Quantity</th>
-                      <th style={{ width: "180px" }}>DTM Rate</th>
-                      <th style={{ width: "180px" }}>STD Opening Balance</th>
-                      <th style={{ width: "180px" }}>STD Closing Balance</th>
-                      <th style={{ width: "180px" }}>STD Product</th>
-                      <th style={{ width: "180px" }}>
-                        STD Table Data (Hostel Name and Quantity)
-                      </th>
-                      <th style={{ width: "180px" }}>STD Sale Cash</th>
-                      <th style={{ width: "180px" }}>STD Sale Online</th>
-                      <th style={{ width: "180px" }}>STD Amount Cash</th>
-                      <th style={{ width: "180px" }}>STD Amount Online</th>
-                      <th style={{ width: "180px" }}>STD Rate</th>
-                      <th style={{ width: "180px" }}>STD Final Total</th>
-                      <th style={{ width: "180px" }}>STD Total Quantity</th>
-                      <th style={{ width: "180px" }}>Cream</th>
-                      <th style={{ width: "180px" }}>Research</th>
-                      <th style={{ width: "180px" }}>Sahiwal Cream</th>
-                      <th style={{ width: "180px" }}>HLoss</th>
-                      <th style={{ width: "180px" }}>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="border">
-                    {prodTableData.map((item, i) => {
-                      const tableData = JSON.parse(item.tableData);
-                      const stdTableData = JSON.parse(item.stdtableData);
-                      return (
-                        <tr key={i}>
-                          <th scope="row" className="text-center">
-                            {i + 1}
-                          </th>
-                          <td>{item.date}</td>
-                          <td>{item.openingBalance}</td>
-                          <td>{item.closingBalance}</td>
-                          <td>{item.product}</td>
-                          <td>
-                            {tableData.map((td, index) => (
-                              <div key={index}>
-                                {td.hostelName} : {td.qty}
-                              </div>
-                            ))}
-                          </td>
-                          <td>{item.dtmSaleCash}</td>
-                          <td>{item.dtmsaleOnline}</td>
-                          <td>{item.dtmAmountCash}</td>
-                          <td>{item.dtmAmountOnline}</td>
-                          <td>{item.finalTotal}</td>
-                          <td>{item.totalQty}</td>
-                          <td>{item.rate}</td>
-                          <td>{item.stdopeningBalance}</td>
-                          <td>{item.stdclosingBalance}</td>
-                          <td>{item.stdproduct}</td>
-                          <td>
-                            {stdTableData.map((td, index) => (
-                              <div key={index}>
-                                {td.stdhostelName} : {td.stdQty}
-                              </div>
-                            ))}
-                          </td>
-                          <td>{item.stdSaleCash}</td>
-                          <td>{item.stdsaleOnline}</td>
-                          <td>{item.stdAmountCash}</td>
-                          <td>{item.stdAmountOnline}</td>
-                          <td>{item.stdrate}</td>
-                          <td>{item.stdfinalTotal}</td>
-                          <td>{item.stdtotalQty}</td>
-                          <td>{item.cream}</td>
-                          <td>{item.research}</td>
-                          <td>{item.sahiwalCream}</td>
-                          <td>{item.hloss}</td>
-                          <td>
-                            <button 
+            <div className="container tableMaster mt-5 mb-3 p-0">
+              <table className="table productTableMAster table-stripped">
+                <thead className="tableheading">
+                  <tr>
+                    <th style={{ width: "180px" }}>SrNo</th>
+                    <th style={{ width: "180px" }}>Date</th>
+                    <th style={{ width: "180px" }}>DTM Opening Balance</th>
+                    <th style={{ width: "180px" }}>DTM Closing Balance</th>
+                    <th style={{ width: "180px" }}>DTM Product</th>
+                    <th style={{ width: "180px" }}>
+                      Table Data (Hostel Name and Quantity)
+                    </th>
+                    <th style={{ width: "180px" }}>DTM Sale Cash</th>
+                    <th style={{ width: "180px" }}>DTM Sale Online</th>
+                    <th style={{ width: "180px" }}>DTM Amount Cash</th>
+                    <th style={{ width: "180px" }}>DTM Amount Online</th>
+                    <th style={{ width: "180px" }}>DTM Final Total</th>
+                    <th style={{ width: "180px" }}>DTM Total Quantity</th>
+                    <th style={{ width: "180px" }}>DTM Rate</th>
+                    <th style={{ width: "180px" }}>Action</th>
+                  </tr>
+                </thead>
+                <tbody className="border">
+                  {prodTableData.map((item, i) => {
+                    const tableData = JSON.parse(item.tableData);
+                    return (
+                      <tr key={i}>
+                        <th scope="row" className="text-center">
+                          {i + 1}
+                        </th>
+                        <td>{item.date}</td>
+                        <td>{item.openingBalance}</td>
+                        <td>{item.closingBalance}</td>
+                        <td>{item.product}</td>
+                        <td>
+                          {tableData.map((td, index) => (
+                            <div key={index}>
+                              {td.hostelName} : {td.qty}
+                            </div>
+                          ))}
+                        </td>
+                        <td>{item.dtmSaleCash}</td>
+                        <td>{item.dtmsaleOnline}</td>
+                        <td>{item.dtmAmountCash}</td>
+                        <td>{item.dtmAmountOnline}</td>
+                        <td>{item.finalTotal}</td>
+                        <td>{item.totalQty}</td>
+                        <td>{item.rate}</td>
+                        <td>
+                          <button
                             className="btn"
-                            onClick={() => editItemHandler(item.id)}>
-                              <FiEdit className="editicon" 
-                              />
-                            </button>
-                            <button
-                              className="btn"
-                              onClick={() => dele(item.id)}
-                            >
-                              <MdDeleteOutline className="delicon" />
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            ) : null}
+                            onClick={() => editItemHandler(item.id)}
+                          >
+                            <FiEdit className="editicon" />
+                          </button>
+                          <button className="btn" onClick={() => dele(item.id)}>
+                            <MdDeleteOutline className="delicon" />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="container tableMaster mt-5 mb-3 p-0">
+              <table className="table productTableMAster table-stripped">
+                <thead className="tableheading">
+                  <tr>
+                    <th style={{ width: "180px" }}>SrNo</th>
+                    <th style={{ width: "180px" }}>Date</th>
+                    <th style={{ width: "180px" }}>STD Opening Balance</th>
+                    <th style={{ width: "180px" }}>STD Closing Balance</th>
+                    <th style={{ width: "180px" }}>STD Product</th>
+                    <th style={{ width: "180px" }} colSpan="4">
+                      STD Table Data (Hostel Name and Quantity)
+                    </th>
+                    <th style={{ width: "180px" }}>STD Sale Cash</th>
+                    <th style={{ width: "180px" }}>STD Sale Online</th>
+                    <th style={{ width: "180px" }}>STD Amount Cash</th>
+                    <th style={{ width: "180px" }}>STD Amount Online</th>
+                    <th style={{ width: "180px" }}>STD Rate</th>
+                    <th style={{ width: "180px" }}>STD Final Total</th>
+                    <th style={{ width: "180px" }}>STD Total Quantity</th>
+                    <th style={{ width: "180px" }}>Cream</th>
+                    <th style={{ width: "180px" }}>Research</th>
+                    <th style={{ width: "180px" }}>Sahiwal Cream</th>
+                    <th style={{ width: "180px" }}>HLoss</th>
+                    <th style={{ width: "180px" }}>Action</th>
+                  </tr>
+                </thead>
+                <tbody className="border">
+                  {prodTableData.map((item, i) => {
+                    const stdTableData = JSON.parse(item.stdtableData);
+                    return (
+                      <tr key={i}>
+                        <th scope="row" className="text-center">
+                          {i + 1}
+                        </th>
+                        <td>{item.date}</td>
+                        <td>{item.stdopeningBalance}</td>
+                        <td>{item.stdclosingBalance}</td>
+                        <td>{item.stdproduct}</td>
+                        <td>
+                          {stdTableData.map((td, index) => (
+                            <div key={index}>
+                              {td.stdhostelName} : {td.stdQty}
+                            </div>
+                          ))}
+                        </td>
+                        <td>{item.stdSaleCash}</td>
+                        <td>{item.stdsaleOnline}</td>
+                        <td>{item.stdAmountCash}</td>
+                        <td>{item.stdAmountOnline}</td>
+                        <td>{item.stdrate}</td>
+                        <td>{item.stdfinalTotal}</td>
+                        <td>{item.stdtotalQty}</td>
+                        <td>{item.cream}</td>
+                        <td>{item.research}</td>
+                        <td>{item.sahiwalCream}</td>
+                        <td>{item.hloss}</td>
+                        <td>
+                          <button
+                            className="btn"
+                            onClick={() => editItemHandler(item.id)}
+                          >
+                            <FiEdit className="editicon" />
+                          </button>
+                          <button className="btn" onClick={() => dele(item.id)}>
+                            <MdDeleteOutline className="delicon" />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}

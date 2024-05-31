@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import "./Product.css"
+import Box from '@mui/material/Box';
+import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios'
+import axios from 'axios';
+import * as FileSaver from 'file-saver';
+import React, { useEffect, useState } from 'react';
 import { Bars } from 'react-loader-spinner';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import * as XLSX from "xlsx";
+import "./Product.css";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -172,6 +174,22 @@ const ProductSale = () => {
 
     const { cashTotal, onlineTotal, totalAmt, closingBalance } = CalculateTotals();
 
+
+    // Export to excel code
+    const exportToExcel = async () => {
+        const fileName = "Product Sale";
+        const fileType =
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+        const fileExtension = ".xlsx";
+
+
+        const ws = XLSX.utils.json_to_sheet(tableData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Table Data");
+        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        const data = new Blob([excelBuffer], { type: fileType });
+        FileSaver.saveAs(data, fileName + fileExtension);
+    };
 
 
     return (
@@ -436,6 +454,7 @@ const ProductSale = () => {
                         </div>
                         <div className='col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center' style={{ gap: "1rem" }}>
                             <button className='savebtn' onClick={() => handleSave()}>Save</button>
+                            <button className='btn btn-success' onClick={()=>exportToExcel()}>Export To Excel</button>
                             {/* <button className='savebtn' style={{ backgroundColor: 'green', width: "150px" }} onClick={() => exporttoexcel()}>Export To Excel</button> */}
                         </div>
                     </div>
