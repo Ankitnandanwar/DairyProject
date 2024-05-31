@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import "./Product.css"
-import axios from 'axios'
-import { Bars } from 'react-loader-spinner';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import axios from 'axios';
+import * as FileSaver from 'file-saver';
+import React, { useEffect, useState } from 'react';
+import { Bars } from 'react-loader-spinner';
+import * as XLSX from 'xlsx';
+import "./Product.css";
 
 const MilkSale = () => {
     const [products, setProducts] = useState([]);
@@ -85,6 +87,21 @@ const MilkSale = () => {
         getProductData();
     }, [])
 
+    const exportToExcel = async () => {
+        const fileName = "DMW Report";
+        const fileType =
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+        const fileExtension = ".xlsx";
+
+
+        const ws = XLSX.utils.json_to_sheet(products);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Table Data");
+        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        const data = new Blob([excelBuffer], { type: fileType });
+        FileSaver.saveAs(data, fileName + fileExtension);
+    };
+
     return (
 
         <>
@@ -150,6 +167,7 @@ const MilkSale = () => {
 
                             <div className='col-12 col-lg-12 col-xl-12 col-md-12 d-flex justify-content-center align-items-center mt-3' style={{ gap: "1rem" }}>
                                 <button disabled={dates.fdate === '' && dates.tdate === ''} className='btn btn-primary' onClick={() => searchData()}>Search</button>
+                                <button className='btn btn-success' onClick={()=>exportToExcel()}>Export To Excel</button>
                             </div>
                         </div>
 

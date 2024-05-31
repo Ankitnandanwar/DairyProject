@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import "../Product/Product.css"
+import CancelIcon from '@mui/icons-material/Cancel';
+import { Button, DialogActions, DialogTitle, IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
-import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
+import Dialog from '@mui/material/Dialog';
+import Slide from '@mui/material/Slide';
 import TextField from '@mui/material/TextField';
+import axios from 'axios';
+import * as FileSaver from 'file-saver';
+import React, { useEffect, useState } from 'react';
 import { FiEdit } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
-import { DialogActions, DialogTitle, Button } from '@mui/material';
-import Dialog from '@mui/material/Dialog'
-import Slide from '@mui/material/Slide';
-import { IconButton } from '@mui/material';
-import CancelIcon from '@mui/icons-material/Cancel';
 import { Bars } from 'react-loader-spinner';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import * as XLSX from "xlsx";
+import "../Product/Product.css";
 
 
 
@@ -239,6 +240,20 @@ const DtmMilkCollection = () => {
 
     const { closingBalance, totalMilk } = CalculateTotals();
 
+    const exportToExcel = async () => {
+        const fileName = "DTM Milk Collection";
+        const fileType =
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+        const fileExtension = ".xlsx";
+
+
+        const ws = XLSX.utils.json_to_sheet(prodTableData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Table Data");
+        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        const data = new Blob([excelBuffer], { type: fileType });
+        FileSaver.saveAs(data, fileName + fileExtension);
+    };
 
     return (
         <>
@@ -384,6 +399,7 @@ const DtmMilkCollection = () => {
                                 <div className='col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center' style={{ gap: "1rem" }}>
                                     <button className='savebtn' onClick={() => { saveData() }}>Save</button>
                                     <button className='tabelbtn' onClick={() => setshowtable(!showtable)}>Show table</button>
+                                    <button className='btn btn-success' onClick={()=>exportToExcel()}>Export To Excel</button>
                                 </div>
 
                                 {/*Table Code */}
