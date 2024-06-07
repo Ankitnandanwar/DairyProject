@@ -50,10 +50,10 @@ const DtmSave = () => {
   };
 
   const [firstTableAdd, setfirstTableAdd] = useState([
-    { hostelName: "", qty: "" },
+    { hostelName: "", qty: "", dtmrate: "", dtmamount: "" },
   ]);
   const [secondTableAdd, setSecondTableAdd] = useState([
-    { stdhostelName: "", stdQty: "" },
+    { stdhostelName: "", stdQty: "", stdrate: "", stdamount: "" },
   ]);
 
   const [delid, setdelid] = useState()
@@ -97,25 +97,41 @@ const DtmSave = () => {
 
   // Adding row of first table
   const addRow = () => {
-    setfirstTableAdd([...firstTableAdd, { hostelName: "", qty: "" }]);
+    setfirstTableAdd([...firstTableAdd, { hostelName: "", qty: "", dtmrate: "", dtmamount: "" }]);
   };
 
   const addSecondRow = () => {
-    setSecondTableAdd([...secondTableAdd, { stdhostelName: "", stdQty: "" }]);
+    setSecondTableAdd([...secondTableAdd, { stdhostelName: "", stdQty: "", stdrate: "", stdamount: "" }]);
   };
 
-  const handleChange = (index, event) => {
+  // const handleChange = (index, event) => {
+  //   const { name, value } = event.target;
+  //   const updatedRows = firstTableAdd.map((row, i) =>
+  //     i === index ? { ...row, [name]: value } : row
+  //   );
+
+  //   const updateRows2 = secondTableAdd.map((row, i) =>
+  //     i === index ? { ...row, [name]: value } : row
+  //   );
+  //   setfirstTableAdd(updatedRows);
+  //   setSecondTableAdd(updateRows2);
+  // };
+
+  const handleFirstTableChange = (index, event) => {
     const { name, value } = event.target;
     const updatedRows = firstTableAdd.map((row, i) =>
       i === index ? { ...row, [name]: value } : row
     );
+    setfirstTableAdd(updatedRows);
+  }
 
+  const handleSecondTableChange = (index, event) => {
+    const { name, value } = event.target;
     const updateRows2 = secondTableAdd.map((row, i) =>
       i === index ? { ...row, [name]: value } : row
     );
-    setfirstTableAdd(updatedRows);
     setSecondTableAdd(updateRows2);
-  };
+  }
 
   useEffect(() => {
     // Hostel array data
@@ -141,7 +157,7 @@ const DtmSave = () => {
         const lastClosingBalance = response.data;
 
         setOpeningBalance(lastClosingBalance);
-        setTimeout(() => {}, 1000);
+        setTimeout(() => { }, 1000);
       } catch (error) {
         console.error("Error fetching closing balance:", error);
       }
@@ -155,7 +171,7 @@ const DtmSave = () => {
         const lastClosingBalance = response.data;
 
         setStdopeningBalance(lastClosingBalance);
-        setTimeout(() => {}, 1000);
+        setTimeout(() => { }, 1000);
       } catch (error) {
         console.error("Error fetching closing balance:", error);
       }
@@ -170,7 +186,7 @@ const DtmSave = () => {
 
         setStandardMilkRate(MilkRate[0].standardMilkRate);
         setDtmMilkRate(MilkRate[0].dtmMilkRate);
-        setTimeout(() => {}, 1000);
+        setTimeout(() => { }, 1000);
       } catch (error) {
         console.error("Error fetching closing balance:", error);
       }
@@ -226,117 +242,117 @@ const DtmSave = () => {
 
   const saveData = async () => {
     try {
-        if (editItem) {
-            await axios.put(`http://103.38.50.113:8080/DairyApplication/updateDtmMilkSale/${editItem.id}`, {
-              openingBalance,
-              closingBalance,
-              product,
-              // tableData: JSON.stringify(firstTableAdd),
-              dtmSaleCash,
-              dtmsaleOnline,
-              dtmAmountCash,
-              dtmAmountOnline,
-              finalTotal,
-              totalQty,
-              rate: dtmMilkRate,
-              date: currDate,
-              stdopeningBalance,
-              stdclosingBalance,
-              stdproduct,
-              stdtableData: JSON.stringify(secondTableAdd),
-              stdSaleCash,
-              stdsaleOnline,
-              stdAmountCash,
-              stdAmountOnline,
-              stdrate: standardMilkRate,
-              stdfinalTotal,
-              stdtotalQty,
-              cream,
-              research,
-              sahiwalCream,
-              hloss,
-            })
-            toast.success("Data Updated Successfully", {
-                position: "top-center",
-                autoClose: 4000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            })
-        } else {
-          const resp = await axios.post(
-            "http://103.38.50.113:8080/DairyApplication/saveDtmMilkSales",
-            {
-              openingBalance,
-              closingBalance,
-              product,
-              tableData: JSON.stringify(firstTableAdd),
-              dtmSaleCash,
-              dtmsaleOnline,
-              dtmAmountCash,
-              dtmAmountOnline,
-              finalTotal,
-              totalQty,
-              rate: dtmMilkRate,
-              date: currDate,
-              stdopeningBalance,
-              stdclosingBalance,
-              stdproduct,
-              stdtableData: JSON.stringify(secondTableAdd),
-              stdSaleCash,
-              stdsaleOnline,
-              stdAmountCash,
-              stdAmountOnline,
-              stdrate: standardMilkRate,
-              stdfinalTotal,
-              stdtotalQty,
-              cream,
-              research,
-              sahiwalCream,
-              hloss,
-            }
-          );
-          toast.success("Data Saved Successfully", {
-            position: "top-center",
-            autoClose: 4000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-            setTimeout(() => {
-                window.location.reload()
-            }, 1000)
-            console.log(resp)
-        }
+      if (editItem) {
+        await axios.put(`http://103.38.50.113:8080/DairyApplication/updateDtmMilkSale/${editItem.id}`, {
+          openingBalance,
+          closingBalance,
+          product,
+          // tableData: JSON.stringify(firstTableAdd),
+          dtmSaleCash,
+          dtmsaleOnline,
+          dtmAmountCash,
+          dtmAmountOnline,
+          finalTotal,
+          totalQty,
+          rate: dtmMilkRate,
+          date: currDate,
+          stdopeningBalance,
+          stdclosingBalance,
+          stdproduct,
+          stdtableData: JSON.stringify(secondTableAdd),
+          stdSaleCash,
+          stdsaleOnline,
+          stdAmountCash,
+          stdAmountOnline,
+          stdrate: standardMilkRate,
+          stdfinalTotal,
+          stdtotalQty,
+          cream,
+          research,
+          sahiwalCream,
+          hloss,
+        })
+        toast.success("Data Updated Successfully", {
+          position: "top-center",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      } else {
+        const resp = await axios.post(
+          "http://103.38.50.113:8080/DairyApplication/saveDtmMilkSales",
+          {
+            openingBalance,
+            closingBalance,
+            product,
+            tableData: JSON.stringify(firstTableAdd),
+            dtmSaleCash,
+            dtmsaleOnline,
+            dtmAmountCash,
+            dtmAmountOnline,
+            finalTotal,
+            totalQty,
+            rate: dtmMilkRate,
+            date: currDate,
+            stdopeningBalance,
+            stdclosingBalance,
+            stdproduct,
+            stdtableData: JSON.stringify(secondTableAdd),
+            stdSaleCash,
+            stdsaleOnline,
+            stdAmountCash,
+            stdAmountOnline,
+            stdrate: standardMilkRate,
+            stdfinalTotal,
+            stdtotalQty,
+            cream,
+            research,
+            sahiwalCream,
+            hloss,
+          }
+        );
+        toast.success("Data Saved Successfully", {
+          position: "top-center",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
+        console.log(resp)
+      }
 
-        setProduct("");
-        setDtmSaleCash("");
-        setDtmsaleOnline("");
-        setTotalQty("")
-        // setfirstTableAdd("");
-        setStdproduct("");
-        setStdSaleCash("");
-        setStdsaleOnline("");
-        stdtotalQty("");
-        setCream("");
-        setSahiwalCream("");
-        setResearch("");
-        setHloss("");
-        // setSecondTableAdd("")
-        setEditItem(null);
+      setProduct("");
+      setDtmSaleCash("");
+      setDtmsaleOnline("");
+      setTotalQty("")
+      // setfirstTableAdd("");
+      setStdproduct("");
+      setStdSaleCash("");
+      setStdsaleOnline("");
+      stdtotalQty("");
+      setCream("");
+      setSahiwalCream("");
+      setResearch("");
+      setHloss("");
+      // setSecondTableAdd("")
+      setEditItem(null);
 
-        // Refresh the product data
-        getProductData();
+      // Refresh the product data
+      getProductData();
     } catch (error) {
-        console.log(error)
+      console.log(error)
     }
-}
+  }
 
   useEffect(() => {
     setLoader(true);
@@ -369,89 +385,89 @@ const DtmSave = () => {
   const dele = (id) => {
     setdelid(id)
     setopendailogdel(true)
-}
+  }
 
-const handleClose = () => {
+  const handleClose = () => {
     setAnchorEl(null);
     setopendailogdel(false)
-};
+  };
 
-const handledel = async () => {
+  const handledel = async () => {
     let delobj = {
-        "id": delid
+      "id": delid
     }
 
     try {
-        await axios.post("http://103.38.50.113:8080/DairyApplication/deleteDtmMilkSale", delobj, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
+      await axios.post("http://103.38.50.113:8080/DairyApplication/deleteDtmMilkSale", delobj, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then((resdel) => {
+          console.log(resdel.data);
         })
-            .then((resdel) => {
-                console.log(resdel.data);
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-        setTimeout(() => {
-            window.location.reload()
-        }, 1000);
+        .catch((error) => {
+          console.error(error)
+        })
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000);
     } catch (error) {
-        console.log(error)
+      console.log(error)
     }
-}
+  }
 
 
-const dailoge = () => {
-  return (
+  const dailoge = () => {
+    return (
       <>
-          <Dialog
+        <Dialog
 
-              open={opendailogdel}
-              TransitionComponent={Transition}
-              keepMounted
-              onClose={handleClose}
-              aria-describedby="alert-dialog-slide-description"
-          >
-              <DialogActions style={{ height: '2.5rem' }}>
-                  <IconButton onClick={handleClose}>
-                      <CancelIcon style={{ color: 'blue' }} />
-                  </IconButton>
-              </DialogActions>
-              <div style={{ background: 'white' }}>
+          open={opendailogdel}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogActions style={{ height: '2.5rem' }}>
+            <IconButton onClick={handleClose}>
+              <CancelIcon style={{ color: 'blue' }} />
+            </IconButton>
+          </DialogActions>
+          <div style={{ background: 'white' }}>
 
-                  <DialogTitle>
-                      Are you sure you want to delete?
-                  </DialogTitle>
-                  <DialogActions>
-                      <Button onClick={handledel}>Yes</Button>
-                      <Button onClick={handleClose}>No</Button>
-                  </DialogActions>
-              </div>
-          </Dialog>
+            <DialogTitle>
+              Are you sure you want to delete?
+            </DialogTitle>
+            <DialogActions>
+              <Button onClick={handledel}>Yes</Button>
+              <Button onClick={handleClose}>No</Button>
+            </DialogActions>
+          </div>
+        </Dialog>
 
       </>
-  )
-}
+    )
+  }
 
-// Edit data
-const editItemHandler = (item) => {
-  setProduct(item.product);
-  setDtmSaleCash(item.dtmSaleCash);
-  setDtmsaleOnline(item.dtmsaleOnline);
-  setTotalQty(item.totalQty);
-  // setfirstTableAdd(item.firstTableAdd);
-  setStdproduct(item.stdproduct)
-  setStdSaleCash(item.stdSaleCash)
-  setStdsaleOnline(item.stdsaleOnline)
-  setStdtotalQty(item.stdtotalQty);
-  setCream(item.cream)
-  setSahiwalCream(item.sahiwalCream)
-  setResearch(item.research);
-  setHloss(item.hloss)
-  // setSecondTableAdd(item.secondTableAdd);
-  setEditItem(item);
-};
+  // Edit data
+  const editItemHandler = (item) => {
+    setProduct(item.product);
+    setDtmSaleCash(item.dtmSaleCash);
+    setDtmsaleOnline(item.dtmsaleOnline);
+    setTotalQty(item.totalQty);
+    // setfirstTableAdd(item.firstTableAdd);
+    setStdproduct(item.stdproduct)
+    setStdSaleCash(item.stdSaleCash)
+    setStdsaleOnline(item.stdsaleOnline)
+    setStdtotalQty(item.stdtotalQty);
+    setCream(item.cream)
+    setSahiwalCream(item.sahiwalCream)
+    setResearch(item.research);
+    setHloss(item.hloss)
+    // setSecondTableAdd(item.secondTableAdd);
+    setEditItem(item);
+  };
 
   return (
     <>
@@ -483,7 +499,7 @@ const editItemHandler = (item) => {
               theme="light"
             ></ToastContainer>
             <div className="pt-5">
-            {dailoge()}
+              {dailoge()}
               <h3
                 className="text-center mt-3"
                 style={{ textDecoration: "underline" }}
@@ -492,16 +508,16 @@ const editItemHandler = (item) => {
               </h3>
             </div>
             <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
-                <Box
-                  component="form"
-                  sx={{
-                    "& > :not(style)": { m: 1, width: "25ch" },
-                  }}
-                  autoComplete="off"
-                >
-                  <TextField variant="standard" type="date" value={currDate} />
-                </Box>
-              </div>
+              <Box
+                component="form"
+                sx={{
+                  "& > :not(style)": { m: 1, width: "25ch" },
+                }}
+                autoComplete="off"
+              >
+                <TextField variant="standard" type="date" value={currDate} />
+              </Box>
+            </div>
             <div className="row mt-4">
               <h1
                 style={{
@@ -710,19 +726,21 @@ const editItemHandler = (item) => {
                     <th>SrNo</th>
                     <th>Hostel Name</th>
                     <th>Quantity</th>
+                    <th>DTM RATE</th>
+                    <th>DTM AMOUNT</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {firstTableAdd.map((row, index) => (
                     <tr key={index}>
-                      <th scope="row" className="text-center">
+                      <td scope="row" className="text-center">
                         {index + 1}
-                      </th>
+                      </td>
                       <td className="text-center">
                         <FormControl
                           variant="standard"
-                          sx={{ m: 1, width: "25ch" }}
+                          sx={{ m: 1, width: "18ch" }}
                         >
                           <InputLabel
                             id="demo-simple-select-standard-label"
@@ -737,7 +755,7 @@ const editItemHandler = (item) => {
                             MenuProps={MenuProps}
                             name="hostelName"
                             value={row.hostelName}
-                            onChange={(event) => handleChange(index, event)}
+                            onChange={(event) => handleFirstTableChange(index, event)}
                           >
                             {hostelData.map((hostel, index) => (
                               <MenuItem key={index} value={hostel}>
@@ -751,7 +769,7 @@ const editItemHandler = (item) => {
                         <Box
                           component="form"
                           sx={{
-                            "& > :not(style)": { m: 1, width: "25ch" },
+                            "& > :not(style)": { m: 1, width: "18ch" },
                           }}
                           type="text"
                           autoComplete="off"
@@ -761,7 +779,43 @@ const editItemHandler = (item) => {
                             variant="standard"
                             name="qty"
                             value={row.qty}
-                            onChange={(event) => handleChange(index, event)}
+                            onChange={(event) => handleFirstTableChange(index, event)}
+                          />
+                        </Box>
+                      </td>
+                      <td className="text-center">
+                        <Box
+                          component="form"
+                          sx={{
+                            "& > :not(style)": { m: 1, width: "18ch" },
+                          }}
+                          type="text"
+                          autoComplete="off"
+                        >
+                          <TextField
+                            label="Enter DTM Rate"
+                            variant="standard"
+                            name="dtmrate"
+                            value={row.dtmrate}
+                            onChange={(event) => handleFirstTableChange(index, event)}
+                          />
+                        </Box>
+                      </td>
+                      <td className="text-center">
+                        <Box
+                          component="form"
+                          sx={{
+                            "& > :not(style)": { m: 1, width: "18ch" },
+                          }}
+                          type="text"
+                          autoComplete="off"
+                        >
+                          <TextField
+                            label="Enter DTM Amount"
+                            variant="standard"
+                            name="dtmamount"
+                            value={row.dtmamount}
+                            onChange={(event) => handleFirstTableChange(index, event)}
                           />
                         </Box>
                       </td>
@@ -1059,19 +1113,21 @@ const editItemHandler = (item) => {
                     <th>SrNo</th>
                     <th>Hostel Name</th>
                     <th>Quantity</th>
-                    <th>Actions</th>
+                    <th>STD Rate</th>
+                    <th>STD Amount</th>
+                    {/* <th>Actions</th> */}
                   </tr>
                 </thead>
                 <tbody>
                   {secondTableAdd.map((row, index) => (
                     <tr key={index}>
-                      <th scope="row" className="text-center">
+                      <td scope="row" className="text-center">
                         {index + 1}
-                      </th>
+                      </td>
                       <td>
                         <FormControl
                           variant="standard"
-                          sx={{ m: 1, width: "25ch" }}
+                          sx={{ m: 1, width: "18ch" }}
                         >
                           <InputLabel
                             id="demo-simple-select-standard-label"
@@ -1086,7 +1142,7 @@ const editItemHandler = (item) => {
                             MenuProps={MenuProps}
                             name="stdhostelName"
                             value={row.stdhostelName}
-                            onChange={(event) => handleChange(index, event)}
+                            onChange={(event) => handleSecondTableChange(index, event)}
                           >
                             {hostelData.map((hostel, index) => (
                               <MenuItem key={index} value={hostel}>
@@ -1100,7 +1156,7 @@ const editItemHandler = (item) => {
                         <Box
                           component="form"
                           sx={{
-                            "& > :not(style)": { m: 1, width: "25ch" },
+                            "& > :not(style)": { m: 1, width: "18ch" },
                           }}
                           type="text"
                           autoComplete="off"
@@ -1110,11 +1166,46 @@ const editItemHandler = (item) => {
                             variant="standard"
                             name="stdQty"
                             value={row.stdQty}
-                            onChange={(event) => handleChange(index, event)}
+                            onChange={(event) => handleSecondTableChange(index, event)}
                           />
                         </Box>
                       </td>
-                      <td className="text-center"></td>
+                      <td className="text-center">
+                        <Box
+                          component="form"
+                          sx={{
+                            "& > :not(style)": { m: 1, width: "18ch" },
+                          }}
+                          type="text"
+                          autoComplete="off"
+                        >
+                          <TextField
+                            label="Enter STD rate"
+                            variant="standard"
+                            name="stdrate"
+                            value={row.stdrate}
+                            onChange={(event) => handleSecondTableChange(index, event)}
+                          />
+                        </Box>
+                      </td>
+                      <td className="text-center">
+                        <Box
+                          component="form"
+                          sx={{
+                            "& > :not(style)": { m: 1, width: "18ch" },
+                          }}
+                          type="text"
+                          autoComplete="off"
+                        >
+                          <TextField
+                            label="Enter STD Amount"
+                            variant="standard"
+                            name="stdamount"
+                            value={row.stdamount}
+                            onChange={(event) => handleSecondTableChange(index, event)}
+                          />
+                        </Box>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -1190,7 +1281,7 @@ const editItemHandler = (item) => {
                           <td>
                             {tableData.map((td, index) => (
                               <div key={index}>
-                                {td.hostelName} : {td.qty}
+                                {td.hostelName} : {td.qty} : {td.dtmrate} : {td.dtmamount}
                               </div>
                             ))}
                           </td>
@@ -1223,10 +1314,10 @@ const editItemHandler = (item) => {
                           <td>{item.sahiwalCream}</td>
                           <td>{item.hloss}</td>
                           <td>
-                            <button 
-                            className="btn"
-                            onClick={() => editItemHandler(item.id)}>
-                              <FiEdit className="editicon" 
+                            <button
+                              className="btn"
+                              onClick={() => editItemHandler(item.id)}>
+                              <FiEdit className="editicon"
                               />
                             </button>
                             <button
