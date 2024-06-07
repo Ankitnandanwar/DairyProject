@@ -50,10 +50,10 @@ const DtmSave = () => {
   };
 
   const [firstTableAdd, setfirstTableAdd] = useState([
-    { hostelName: "", qty: "" },
+    { hostelName: "", qty: "", dtmrate: "", dtmamount: "" },
   ]);
   const [secondTableAdd, setSecondTableAdd] = useState([
-    { stdhostelName: "", stdQty: "" },
+    { stdhostelName: "", stdQty: "", stdrate: "", stdamount: "" },
   ]);
 
   const [delid, setdelid] = useState();
@@ -65,6 +65,8 @@ const DtmSave = () => {
 
   const [opendailogdel, setopendailogdel] = useState(false);
   const [product, setProduct] = useState("");
+
+  const [hotelMilkRate, setHotelMilkRate] = useState(0);
 
   const [dtmMilkRate, setDtmMilkRate] = useState("");
   const [dtmSaleCash, setDtmSaleCash] = useState("");
@@ -81,6 +83,7 @@ const DtmSave = () => {
   const [sahiwalCream, setSahiwalCream] = useState("");
   const [research, setResearch] = useState("");
   const [hloss, setHloss] = useState("");
+  const [remark, setRemark] = useState("");
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -97,24 +100,50 @@ const DtmSave = () => {
 
   // Adding row of first table
   const addRow = () => {
-    setfirstTableAdd([...firstTableAdd, { hostelName: "", qty: "" }]);
+    setfirstTableAdd([
+      ...firstTableAdd,
+      { hostelName: "", qty: "", dtmrate: "", dtmamount: "" },
+    ]);
   };
 
   const addSecondRow = () => {
-    setSecondTableAdd([...secondTableAdd, { stdhostelName: "", stdQty: "" }]);
+    setSecondTableAdd([
+      ...secondTableAdd,
+      { stdhostelName: "", stdQty: "", stdrate: "", stdamount: "" },
+    ]);
   };
 
-  const handleChange = (index, event) => {
-    const { name, value } = event.target;
-    const updatedRows = firstTableAdd.map((row, i) =>
-      i === index ? { ...row, [name]: value } : row
-    );
+  // const handleChange = (index, event) => {
+  //   const { name, value } = event.target;
+  //   const updatedRows = firstTableAdd.map((row, i) =>
+  //     i === index ? { ...row, [name]: value } : row
+  //   );
 
-    const updateRows2 = secondTableAdd.map((row, i) =>
-      i === index ? { ...row, [name]: value } : row
-    );
-    setfirstTableAdd(updatedRows);
-    setSecondTableAdd(updateRows2);
+  //   const updateRows2 = secondTableAdd.map((row1, i) =>
+  //     i === index ? { ...row1, [name]: value } : row1
+  //   );
+  //   setfirstTableAdd(updatedRows);
+  //   setSecondTableAdd(updateRows2);
+  // };
+
+  const handleFirstTableChange = (index, event) => {
+    const { name, value } = event.target;
+    const list = [...firstTableAdd];
+    list[index][name] = value;
+    if (name === "qty" || name === "dtmrate") {
+      list[index].dtmamount = list[index].qty * hotelMilkRate; 
+    }
+    setfirstTableAdd(list);
+  };
+
+  const handleSecondTableChange = (index, event) => {
+    const { name, value } = event.target;
+    const list = [...secondTableAdd];
+    list[index][name] = value;
+    if (name === "stdQty" || name === "stdrate") {
+      list[index].stdamount = list[index].stdQty * hotelMilkRate; 
+    }
+    setSecondTableAdd(list);
   };
 
   useEffect(() => {
@@ -167,9 +196,10 @@ const DtmSave = () => {
           "http://103.38.50.113:8080/DairyApplication/getAllDataOfMilkRateMaster"
         );
         const MilkRate = response.data;
-
+        setHotelMilkRate(MilkRate[0].hotelMilkRate);
         setStandardMilkRate(MilkRate[0].standardMilkRate);
         setDtmMilkRate(MilkRate[0].dtmMilkRate);
+        console.log(response.data)
         setTimeout(() => {}, 1000);
       } catch (error) {
         console.error("Error fetching closing balance:", error);
@@ -222,7 +252,6 @@ const DtmSave = () => {
     stdclosingBalance,
   } = CalculateTotals();
 
-  // save whole data as per the filed and calcilations done
 
   const saveData = async () => {
     try {
@@ -257,6 +286,7 @@ const DtmSave = () => {
             research,
             sahiwalCream,
             hloss,
+            remark,
           }
         );
         toast.success("Data Updated Successfully", {
@@ -300,6 +330,7 @@ const DtmSave = () => {
             research,
             sahiwalCream,
             hloss,
+            remark,
           }
         );
         toast.success("Data Saved Successfully", {
@@ -725,7 +756,7 @@ const DtmSave = () => {
                       <td className="text-center">
                         <FormControl
                           variant="standard"
-                          sx={{ m: 1, width: "20ch" }}
+                          sx={{ m: 1, width: "18ch" }}
                         >
                           <InputLabel
                             id="demo-simple-select-standard-label"
@@ -740,7 +771,7 @@ const DtmSave = () => {
                             MenuProps={MenuProps}
                             name="hostelName"
                             value={row.hostelName}
-                            onChange={(event) => handleChange(index, event)}
+                            onChange={(event) => handleFirstTableChange(index, event)}
                           >
                             {hostelData.map((hostel, index) => (
                               <MenuItem key={index} value={hostel}>
@@ -754,7 +785,7 @@ const DtmSave = () => {
                         <Box
                           component="form"
                           sx={{
-                            "& > :not(style)": { m: 1, width: "20ch" },
+                            "& > :not(style)": { m: 1, width: "18ch" },
                           }}
                           type="text"
                           autoComplete="off"
@@ -764,7 +795,7 @@ const DtmSave = () => {
                             variant="standard"
                             name="qty"
                             value={row.qty}
-                            onChange={(event) => handleChange(index, event)}
+                            onChange={(event) => handleFirstTableChange(index, event)}
                           />
                         </Box>
                       </td>
@@ -772,7 +803,7 @@ const DtmSave = () => {
                         <Box
                           component="form"
                           sx={{
-                            "& > :not(style)": { m: 1, width: "20ch" },
+                            "& > :not(style)": { m: 1, width: "18ch" },
                           }}
                           type="text"
                           autoComplete="off"
@@ -780,8 +811,8 @@ const DtmSave = () => {
                           <TextField
                             label="Enter Rate"
                             variant="standard"
-                            name="qty"
-                            value={row.qty}
+                            name="dtmrate"
+                            value={hotelMilkRate}
                           />
                         </Box>
                       </td>
@@ -789,7 +820,7 @@ const DtmSave = () => {
                         <Box
                           component="form"
                           sx={{
-                            "& > :not(style)": { m: 1, width: "20ch" },
+                            "& > :not(style)": { m: 1, width: "18ch" },
                           }}
                           type="text"
                           autoComplete="off"
@@ -797,15 +828,12 @@ const DtmSave = () => {
                           <TextField
                             label="Enter Amount"
                             variant="standard"
-                            name="qty"
-                            value={row.qty}
+                            name="dtmamount"
+                            value={row.dtmamount}
                           />
                         </Box>
                       </td>
                       <td>
-                        <button className="btn">
-                          <FiEdit className="editicon" />
-                        </button>
                         <button className="btn">
                           <MdDeleteOutline className="delicon" />
                         </button>
@@ -1073,7 +1101,6 @@ const DtmSave = () => {
                   />
                 </Box>
               </div>
-
               <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
                 <Box
                   component="form"
@@ -1084,9 +1111,10 @@ const DtmSave = () => {
                   autoComplete="off"
                 >
                   <TextField
-                    label="Remarks"
+                    label="Remark"
                     variant="standard"
-                    value={hloss}
+                    value={remark}
+                    onChange={(e) => setRemark(e.target.value)}
                   />
                 </Box>
               </div>
@@ -1127,7 +1155,7 @@ const DtmSave = () => {
                       <td>
                         <FormControl
                           variant="standard"
-                          sx={{ m: 1, width: "20ch" }}
+                          sx={{ m: 1, width: "18ch" }}
                         >
                           <InputLabel
                             id="demo-simple-select-standard-label"
@@ -1142,7 +1170,7 @@ const DtmSave = () => {
                             MenuProps={MenuProps}
                             name="stdhostelName"
                             value={row.stdhostelName}
-                            onChange={(event) => handleChange(index, event)}
+                            onChange={(event) => handleSecondTableChange(index, event)}
                           >
                             {hostelData.map((hostel, index) => (
                               <MenuItem key={index} value={hostel}>
@@ -1156,7 +1184,7 @@ const DtmSave = () => {
                         <Box
                           component="form"
                           sx={{
-                            "& > :not(style)": { m: 1, width: "20ch" },
+                            "& > :not(style)": { m: 1, width: "18ch" },
                           }}
                           type="text"
                           autoComplete="off"
@@ -1166,7 +1194,7 @@ const DtmSave = () => {
                             variant="standard"
                             name="stdQty"
                             value={row.stdQty}
-                            onChange={(event) => handleChange(index, event)}
+                            onChange={(event) => handleSecondTableChange(index, event)}
                           />
                         </Box>
                       </td>
@@ -1174,17 +1202,16 @@ const DtmSave = () => {
                         <Box
                           component="form"
                           sx={{
-                            "& > :not(style)": { m: 1, width: "20ch" },
+                            "& > :not(style)": { m: 1, width: "18ch" },
                           }}
                           type="text"
                           autoComplete="off"
                         >
                           <TextField
-                            label="Enter Rate"
+                            label="Enter STD Rate"
                             variant="standard"
-                            name="stdQty"
-                            value={row.stdQty}
-                            onChange={(event) => handleChange(index, event)}
+                            name="stdrate"
+                            value={hotelMilkRate}
                           />
                         </Box>
                       </td>
@@ -1192,21 +1219,24 @@ const DtmSave = () => {
                         <Box
                           component="form"
                           sx={{
-                            "& > :not(style)": { m: 1, width: "20ch" },
+                            "& > :not(style)": { m: 1, width: "18ch" },
                           }}
                           type="text"
                           autoComplete="off"
                         >
                           <TextField
-                            label="Enter Amount"
+                            label="Enter STD Amount"
                             variant="standard"
-                            name="stdQty"
-                            value={row.stdQty}
-                            onChange={(event) => handleChange(index, event)}
+                            name="stdamount"
+                            value={row.stdamount}
                           />
                         </Box>
                       </td>
-                      <td className="text-center"></td>
+                      <td>
+                        <button className="btn">
+                          <MdDeleteOutline className="delicon" />
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -1219,33 +1249,65 @@ const DtmSave = () => {
               <button className="savebtn" onClick={() => saveData()}>
                 Save
               </button>
-              {/* <button
+              <button
                 className="tabelbtn"
                 onClick={() => setshowtable(!showtable)}
               >
                 Show table
-              </button> */}
+              </button>
             </div>
-            <div className="container tableMaster mt-5 mb-3 p-0">
+             <div className="container tableMaster mt-5 mb-3 p-0">
               <table className="table productTableMAster table-stripped">
                 <thead className="tableheading">
                   <tr>
-                    <th style={{ width: "180px" }}>SrNo</th>
-                    <th style={{ width: "180px" }}>Date</th>
-                    <th style={{ width: "180px" }}>DTM Opening Balance</th>
-                    <th style={{ width: "180px" }}>DTM Closing Balance</th>
-                    <th style={{ width: "180px" }}>DTM Product</th>
-                    <th style={{ width: "180px" }}>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      SrNo
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      Date
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Opening Balance
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Closing Balance
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Product
+                    </th>
+                    <th style={{ width: "600px" }} colSpan={4}>
                       Table Data (Hostel Name and Quantity)
                     </th>
-                    <th style={{ width: "180px" }}>DTM Sale Cash</th>
-                    <th style={{ width: "180px" }}>DTM Sale Online</th>
-                    <th style={{ width: "180px" }}>DTM Amount Cash</th>
-                    <th style={{ width: "180px" }}>DTM Amount Online</th>
-                    <th style={{ width: "180px" }}>DTM Final Total</th>
-                    <th style={{ width: "180px" }}>DTM Total Quantity</th>
-                    <th style={{ width: "180px" }}>DTM Rate</th>
-                    <th style={{ width: "180px" }}>Action</th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Sale Cash
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Sale Online
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Amount Cash
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Amount Online
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Final Total
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Total Quantity
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Rate
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      Action
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Amount</th>
                   </tr>
                 </thead>
                 <tbody className="border">
@@ -1260,11 +1322,16 @@ const DtmSave = () => {
                         <td>{item.openingBalance}</td>
                         <td>{item.closingBalance}</td>
                         <td>{item.product}</td>
-                        <td>
+                        <td colSpan={4}>
                           {tableData.map((td, index) => (
-                            <div key={index}>
-                              {td.hostelName} : {td.qty}
-                            </div>
+                            <tr key={index}>
+                              <td style={{ width: "150px" }}>
+                                {td.hostelName}
+                              </td>
+                              <td style={{ width: "150px" }}>{td.qty}</td>
+                              <td style={{ width: "150px" }}>{td.dtmrate}</td>
+                              <td style={{ width: "150px" }}>{td.dtmamount}</td>
+                            </tr>
                           ))}
                         </td>
                         <td>{item.dtmSaleCash}</td>
@@ -1296,26 +1363,69 @@ const DtmSave = () => {
               <table className="table productTableMAster table-stripped">
                 <thead className="tableheading">
                   <tr>
-                    <th style={{ width: "180px" }}>SrNo</th>
-                    <th style={{ width: "180px" }}>Date</th>
-                    <th style={{ width: "180px" }}>STD Opening Balance</th>
-                    <th style={{ width: "180px" }}>STD Closing Balance</th>
-                    <th style={{ width: "180px" }}>STD Product</th>
-                    <th style={{ width: "180px" }} colSpan="4">
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      SrNo
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      Date
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Opening Balance
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Closing Balance
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Product
+                    </th>
+                    <th style={{ width: "600px" }} colSpan={4}>
                       STD Table Data (Hostel Name and Quantity)
                     </th>
-                    <th style={{ width: "180px" }}>STD Sale Cash</th>
-                    <th style={{ width: "180px" }}>STD Sale Online</th>
-                    <th style={{ width: "180px" }}>STD Amount Cash</th>
-                    <th style={{ width: "180px" }}>STD Amount Online</th>
-                    <th style={{ width: "180px" }}>STD Rate</th>
-                    <th style={{ width: "180px" }}>STD Final Total</th>
-                    <th style={{ width: "180px" }}>STD Total Quantity</th>
-                    <th style={{ width: "180px" }}>Cream</th>
-                    <th style={{ width: "180px" }}>Research</th>
-                    <th style={{ width: "180px" }}>Sahiwal Cream</th>
-                    <th style={{ width: "180px" }}>HLoss</th>
-                    <th style={{ width: "180px" }}>Action</th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Sale Cash
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Sale Online
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Amount Cash
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Amount Online
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Rate
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Final Total
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Total Quantity
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      Cream
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      Research
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      Sahiwal Cream
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      HLoss
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      Remark
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      Action
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>STD Product</th>
+                    <th>STD Quantity</th>
+                    <th>STD Rate</th>
+                    <th>STD Amount</th>
                   </tr>
                 </thead>
                 <tbody className="border">
@@ -1330,11 +1440,16 @@ const DtmSave = () => {
                         <td>{item.stdopeningBalance}</td>
                         <td>{item.stdclosingBalance}</td>
                         <td>{item.stdproduct}</td>
-                        <td>
+                        <td colSpan={4}>
                           {stdTableData.map((td, index) => (
-                            <div key={index}>
-                              {td.stdhostelName} : {td.stdQty}
-                            </div>
+                            <tr key={index}>
+                              <td style={{ width: "150px" }}>
+                                {td.stdhostelName}
+                              </td>
+                              <td style={{ width: "150px" }}>{td.stdQty}</td>
+                              <td style={{ width: "150px" }}>{td.stdrate}</td>
+                              <td style={{ width: "150px" }}>{td.stdamount}</td>
+                            </tr>
                           ))}
                         </td>
                         <td>{item.stdSaleCash}</td>
@@ -1348,6 +1463,7 @@ const DtmSave = () => {
                         <td>{item.research}</td>
                         <td>{item.sahiwalCream}</td>
                         <td>{item.hloss}</td>
+                        <td>{item.remark}</td>
                         <td>
                           <button
                             className="btn"
