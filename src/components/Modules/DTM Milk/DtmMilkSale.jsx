@@ -1,12 +1,12 @@
-import CancelIcon from '@mui/icons-material/Cancel';
-import { Button, DialogActions, DialogTitle, IconButton } from '@mui/material';
+import CancelIcon from "@mui/icons-material/Cancel";
+import { Button, DialogActions, DialogTitle, IconButton } from "@mui/material";
 import Box from "@mui/material/Box";
-import Dialog from '@mui/material/Dialog';
+import Dialog from "@mui/material/Dialog";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import Slide from '@mui/material/Slide';
+import Slide from "@mui/material/Slide";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -56,31 +56,34 @@ const DtmSave = () => {
     { stdhostelName: "", stdQty: "", stdrate: "", stdamount: "" },
   ]);
 
-  const [delid, setdelid] = useState()
+  const [delid, setdelid] = useState();
 
   const [hostelData, setHostelData] = useState([]);
 
   const [openingBalance, setOpeningBalance] = useState("");
   const [stdopeningBalance, setStdopeningBalance] = useState("");
 
-  const [opendailogdel, setopendailogdel] = useState(false)
+  const [opendailogdel, setopendailogdel] = useState(false);
   const [product, setProduct] = useState("");
+
+  const [hotelMilkRate, setHotelMilkRate] = useState(0);
 
   const [dtmMilkRate, setDtmMilkRate] = useState("");
   const [dtmSaleCash, setDtmSaleCash] = useState("");
   const [standardMilkRate, setStandardMilkRate] = useState("");
   const [dtmsaleOnline, setDtmsaleOnline] = useState("");
-  const [totalQty, setTotalQty] = useState("");
+  // const [totalQty, setTotalQty] = useState("");
 
   // second table usestate
   const [stdproduct, setStdproduct] = useState("");
   const [stdSaleCash, setStdSaleCash] = useState("");
   const [stdsaleOnline, setStdsaleOnline] = useState("");
-  const [stdtotalQty, setStdtotalQty] = useState("");
+  // const [stdtotalQty, setStdtotalQty] = useState("");
   const [cream, setCream] = useState("");
   const [sahiwalCream, setSahiwalCream] = useState("");
   const [research, setResearch] = useState("");
   const [hloss, setHloss] = useState("");
+  const [remark, setRemark] = useState("");
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -95,43 +98,49 @@ const DtmSave = () => {
 
   const [currDate, setCurrDate] = useState("");
 
+  const [dynamicRowsTotal, setDynamicRowsTotal] = useState(0);
+  const [dynamicRowsTotal2, setDynamicRowsTotal2] = useState(0);
+
+
   // Adding row of first table
   const addRow = () => {
-    setfirstTableAdd([...firstTableAdd, { hostelName: "", qty: "", dtmrate: "", dtmamount: "" }]);
+    setfirstTableAdd([
+      ...firstTableAdd,
+      { hostelName: "", qty: "", dtmrate: "", dtmamount: "" },
+    ]);
   };
 
   const addSecondRow = () => {
-    setSecondTableAdd([...secondTableAdd, { stdhostelName: "", stdQty: "", stdrate: "", stdamount: "" }]);
+    setSecondTableAdd([
+      ...secondTableAdd,
+      { stdhostelName: "", stdQty: "", stdrate: "", stdamount: "" },
+    ]);
   };
 
-  // const handleChange = (index, event) => {
-  //   const { name, value } = event.target;
-  //   const updatedRows = firstTableAdd.map((row, i) =>
-  //     i === index ? { ...row, [name]: value } : row
-  //   );
-
-  //   const updateRows2 = secondTableAdd.map((row, i) =>
-  //     i === index ? { ...row, [name]: value } : row
-  //   );
-  //   setfirstTableAdd(updatedRows);
-  //   setSecondTableAdd(updateRows2);
-  // };
 
   const handleFirstTableChange = (index, event) => {
     const { name, value } = event.target;
-    const updatedRows = firstTableAdd.map((row, i) =>
-      i === index ? { ...row, [name]: value } : row
-    );
-    setfirstTableAdd(updatedRows);
-  }
+    const list = [...firstTableAdd];
+    list[index][name] = value;
+    if (name === "qty" || name === "dtmrate") {
+      const qty = parseFloat(list[index].qty);
+      const rate = parseFloat(list[index].dtmrate);
+      list[index].dtmamount = list[index].qty * hotelMilkRate; 
+    }
+    setfirstTableAdd(list);
+  };
 
   const handleSecondTableChange = (index, event) => {
     const { name, value } = event.target;
-    const updateRows2 = secondTableAdd.map((row, i) =>
-      i === index ? { ...row, [name]: value } : row
-    );
-    setSecondTableAdd(updateRows2);
-  }
+    const list = [...secondTableAdd];
+    list[index][name] = value;
+    if (name === "stdQty" || name === "stdrate") {
+      const stdQty = parseFloat(list[index].stdQty);
+      const stdrate = parseFloat(list[index].stdrate);
+      list[index].stdamount = list[index].stdQty * hotelMilkRate; 
+    }
+    setSecondTableAdd(list);
+  };
 
   useEffect(() => {
     // Hostel array data
@@ -183,10 +192,11 @@ const DtmSave = () => {
           "http://103.38.50.113:8080/DairyApplication/getAllDataOfMilkRateMaster"
         );
         const MilkRate = response.data;
-
+        setHotelMilkRate(MilkRate[0].hotelMilkRate);
         setStandardMilkRate(MilkRate[0].standardMilkRate);
         setDtmMilkRate(MilkRate[0].dtmMilkRate);
-        setTimeout(() => { }, 1000);
+        console.log(response.data)
+        setTimeout(() => {}, 1000);
       } catch (error) {
         console.error("Error fetching closing balance:", error);
       }
@@ -204,6 +214,8 @@ const DtmSave = () => {
   // Calculation data
 
   const CalculateTotals = () => {
+    const totalQty = parseInt(product) + parseInt(dtmsaleOnline) + parseInt(dtmSaleCash) + dynamicRowsTotal
+    // console.log(totalQty)
     const dtmAmountCash = parseInt(dtmMilkRate) * parseInt(dtmSaleCash);
     const dtmAmountOnline = parseInt(dtmMilkRate) * parseInt(dtmsaleOnline);
     const finalTotal = parseInt(dtmAmountCash) + parseInt(dtmAmountOnline);
@@ -213,7 +225,10 @@ const DtmSave = () => {
       parseInt(standardMilkRate) * parseInt(stdsaleOnline);
     const stdfinalTotal = parseInt(stdAmountCash) + parseInt(stdAmountOnline);
     const stdclosingBalance =
-      parseInt(stdopeningBalance) - parseInt(stdtotalQty);
+      parseInt(stdopeningBalance) 
+      // - parseInt(stdtotalQty);
+
+      const stdtotalQty = parseInt(stdproduct) + parseInt(stdSaleCash)+ parseInt(stdsaleOnline) + dynamicRowsTotal2
 
     return {
       dtmAmountCash,
@@ -224,6 +239,9 @@ const DtmSave = () => {
       stdAmountOnline,
       stdfinalTotal,
       stdclosingBalance,
+      totalQty,
+      stdtotalQty
+
     };
   };
 
@@ -236,42 +254,47 @@ const DtmSave = () => {
     stdAmountOnline,
     stdfinalTotal,
     stdclosingBalance,
+    totalQty,
+    stdtotalQty
   } = CalculateTotals();
 
-  // save whole data as per the filed and calcilations done
 
   const saveData = async () => {
     try {
       if (editItem) {
-        await axios.put(`http://103.38.50.113:8080/DairyApplication/updateDtmMilkSale/${editItem.id}`, {
-          openingBalance,
-          closingBalance,
-          product,
-          // tableData: JSON.stringify(firstTableAdd),
-          dtmSaleCash,
-          dtmsaleOnline,
-          dtmAmountCash,
-          dtmAmountOnline,
-          finalTotal,
-          totalQty,
-          rate: dtmMilkRate,
-          date: currDate,
-          stdopeningBalance,
-          stdclosingBalance,
-          stdproduct,
-          stdtableData: JSON.stringify(secondTableAdd),
-          stdSaleCash,
-          stdsaleOnline,
-          stdAmountCash,
-          stdAmountOnline,
-          stdrate: standardMilkRate,
-          stdfinalTotal,
-          stdtotalQty,
-          cream,
-          research,
-          sahiwalCream,
-          hloss,
-        })
+        await axios.put(
+          `http://103.38.50.113:8080/DairyApplication/updateDtmMilkSale/${editItem.id}`,
+          {
+            openingBalance,
+            closingBalance,
+            product,
+            // tableData: JSON.stringify(firstTableAdd),
+            dtmSaleCash,
+            dtmsaleOnline,
+            dtmAmountCash,
+            dtmAmountOnline,
+            finalTotal,
+            totalQty,
+            rate: dtmMilkRate,
+            date: currDate,
+            stdopeningBalance,
+            stdclosingBalance,
+            stdproduct,
+            stdtableData: JSON.stringify(secondTableAdd),
+            stdSaleCash,
+            stdsaleOnline,
+            stdAmountCash,
+            stdAmountOnline,
+            stdrate: standardMilkRate,
+            stdfinalTotal,
+            // stdtotalQty,
+            cream,
+            research,
+            sahiwalCream,
+            hloss,
+            remark,
+          }
+        );
         toast.success("Data Updated Successfully", {
           position: "top-center",
           autoClose: 4000,
@@ -281,7 +304,7 @@ const DtmSave = () => {
           draggable: true,
           progress: undefined,
           theme: "light",
-        })
+        });
       } else {
         const resp = await axios.post(
           "http://103.38.50.113:8080/DairyApplication/saveDtmMilkSales",
@@ -308,11 +331,12 @@ const DtmSave = () => {
             stdAmountOnline,
             stdrate: standardMilkRate,
             stdfinalTotal,
-            stdtotalQty,
+            // stdtotalQty,
             cream,
             research,
             sahiwalCream,
             hloss,
+            remark,
           }
         );
         toast.success("Data Saved Successfully", {
@@ -326,20 +350,20 @@ const DtmSave = () => {
           theme: "light",
         });
         setTimeout(() => {
-          window.location.reload()
-        }, 1000)
-        console.log(resp)
+          window.location.reload();
+        }, 1000);
+        console.log(resp);
       }
 
       setProduct("");
       setDtmSaleCash("");
       setDtmsaleOnline("");
-      setTotalQty("")
+      // setTotalQty("");
       // setfirstTableAdd("");
       setStdproduct("");
       setStdSaleCash("");
       setStdsaleOnline("");
-      stdtotalQty("");
+      // stdtotalQty("");
       setCream("");
       setSahiwalCream("");
       setResearch("");
@@ -350,9 +374,9 @@ const DtmSave = () => {
       // Refresh the product data
       getProductData();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     setLoader(true);
@@ -381,93 +405,105 @@ const DtmSave = () => {
     getProductData();
   }, []);
 
-
   const dele = (id) => {
-    setdelid(id)
-    setopendailogdel(true)
-  }
+    setdelid(id);
+    setopendailogdel(true);
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
-    setopendailogdel(false)
+    setopendailogdel(false);
   };
 
   const handledel = async () => {
     let delobj = {
-      "id": delid
-    }
+      id: delid,
+    };
 
     try {
-      await axios.post("http://103.38.50.113:8080/DairyApplication/deleteDtmMilkSale", delobj, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
+      await axios
+        .post(
+          "http://103.38.50.113:8080/DairyApplication/deleteDtmMilkSale",
+          delobj,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
         .then((resdel) => {
           console.log(resdel.data);
         })
         .catch((error) => {
-          console.error(error)
-        })
+          console.error(error);
+        });
       setTimeout(() => {
-        window.location.reload()
+        window.location.reload();
       }, 1000);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
-
+  };
 
   const dailoge = () => {
     return (
       <>
         <Dialog
-
           open={opendailogdel}
           TransitionComponent={Transition}
           keepMounted
           onClose={handleClose}
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogActions style={{ height: '2.5rem' }}>
+          <DialogActions style={{ height: "2.5rem" }}>
             <IconButton onClick={handleClose}>
-              <CancelIcon style={{ color: 'blue' }} />
+              <CancelIcon style={{ color: "blue" }} />
             </IconButton>
           </DialogActions>
-          <div style={{ background: 'white' }}>
-
-            <DialogTitle>
-              Are you sure you want to delete?
-            </DialogTitle>
+          <div style={{ background: "white" }}>
+            <DialogTitle>Are you sure you want to delete?</DialogTitle>
             <DialogActions>
               <Button onClick={handledel}>Yes</Button>
               <Button onClick={handleClose}>No</Button>
             </DialogActions>
           </div>
         </Dialog>
-
       </>
-    )
-  }
+    );
+  };
 
   // Edit data
   const editItemHandler = (item) => {
     setProduct(item.product);
     setDtmSaleCash(item.dtmSaleCash);
     setDtmsaleOnline(item.dtmsaleOnline);
-    setTotalQty(item.totalQty);
+    // setTotalQty(item.totalQty);
     // setfirstTableAdd(item.firstTableAdd);
-    setStdproduct(item.stdproduct)
-    setStdSaleCash(item.stdSaleCash)
-    setStdsaleOnline(item.stdsaleOnline)
-    setStdtotalQty(item.stdtotalQty);
-    setCream(item.cream)
-    setSahiwalCream(item.sahiwalCream)
+    setStdproduct(item.stdproduct);
+    setStdSaleCash(item.stdSaleCash);
+    setStdsaleOnline(item.stdsaleOnline);
+    // setStdtotalQty(item.stdtotalQty);
+    setCream(item.cream);
+    setSahiwalCream(item.sahiwalCream);
     setResearch(item.research);
-    setHloss(item.hloss)
+    setHloss(item.hloss);
     // setSecondTableAdd(item.secondTableAdd);
     setEditItem(item);
   };
+
+
+  useEffect(() => {
+    const sum = firstTableAdd.reduce((acc, row)=> acc + parseFloat(row.qty)||0, 0)
+    setDynamicRowsTotal(sum);
+  }, [firstTableAdd])
+
+  useEffect(() => {
+    const sum2 = secondTableAdd.reduce((acc, row) => acc + parseFloat(row.stdQty)|| 0, 0)
+    // console.log(sum2)
+    setDynamicRowsTotal2(sum2)
+  }, [secondTableAdd])
+  
+  
 
   return (
     <>
@@ -699,7 +735,7 @@ const DtmSave = () => {
                     label="Total Quantity"
                     variant="standard"
                     value={totalQty}
-                    onChange={(e) => setTotalQty(e.target.value)}
+                    // onChange={(e) => setTotalQty(e.target.value)}
                   />
                 </Box>
               </div>
@@ -726,8 +762,8 @@ const DtmSave = () => {
                     <th>SrNo</th>
                     <th>Hostel Name</th>
                     <th>Quantity</th>
-                    <th>DTM RATE</th>
-                    <th>DTM AMOUNT</th>
+                    <th>Rate</th>
+                    <th>Amount</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -793,11 +829,10 @@ const DtmSave = () => {
                           autoComplete="off"
                         >
                           <TextField
-                            label="Enter DTM Rate"
+                            label="Enter Rate"
                             variant="standard"
                             name="dtmrate"
-                            value={row.dtmrate}
-                            onChange={(event) => handleFirstTableChange(index, event)}
+                            value={hotelMilkRate}
                           />
                         </Box>
                       </td>
@@ -811,18 +846,14 @@ const DtmSave = () => {
                           autoComplete="off"
                         >
                           <TextField
-                            label="Enter DTM Amount"
+                            label="Enter Amount"
                             variant="standard"
                             name="dtmamount"
                             value={row.dtmamount}
-                            onChange={(event) => handleFirstTableChange(index, event)}
                           />
                         </Box>
                       </td>
                       <td>
-                        <button className="btn">
-                          <FiEdit className="editicon" />
-                        </button>
                         <button className="btn">
                           <MdDeleteOutline className="delicon" />
                         </button>
@@ -1014,7 +1045,7 @@ const DtmSave = () => {
                     label="Standard Total Quantity"
                     variant="standard"
                     value={stdtotalQty}
-                    onChange={(e) => setStdtotalQty(e.target.value)}
+                    // onChange={(e) => setStdtotalQty(e.target.value)}
                   />
                 </Box>
               </div>
@@ -1090,6 +1121,23 @@ const DtmSave = () => {
                   />
                 </Box>
               </div>
+              <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
+                <Box
+                  component="form"
+                  sx={{
+                    "& > :not(style)": { m: 1, width: "25ch" },
+                  }}
+                  type="text"
+                  autoComplete="off"
+                >
+                  <TextField
+                    label="Remark"
+                    variant="standard"
+                    value={remark}
+                    onChange={(e) => setRemark(e.target.value)}
+                  />
+                </Box>
+              </div>
             </div>
             <div style={{ display: "flex", justifyContent: "end" }}>
               <button
@@ -1113,9 +1161,9 @@ const DtmSave = () => {
                     <th>SrNo</th>
                     <th>Hostel Name</th>
                     <th>Quantity</th>
-                    <th>STD Rate</th>
-                    <th>STD Amount</th>
-                    {/* <th>Actions</th> */}
+                    <th>Rate</th>
+                    <th>Amount</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1180,11 +1228,10 @@ const DtmSave = () => {
                           autoComplete="off"
                         >
                           <TextField
-                            label="Enter STD rate"
+                            label="Enter STD Rate"
                             variant="standard"
                             name="stdrate"
-                            value={row.stdrate}
-                            onChange={(event) => handleSecondTableChange(index, event)}
+                            value={hotelMilkRate}
                           />
                         </Box>
                       </td>
@@ -1202,9 +1249,13 @@ const DtmSave = () => {
                             variant="standard"
                             name="stdamount"
                             value={row.stdamount}
-                            onChange={(event) => handleSecondTableChange(index, event)}
                           />
                         </Box>
+                      </td>
+                      <td>
+                        <button className="btn">
+                          <MdDeleteOutline className="delicon" />
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -1225,115 +1276,231 @@ const DtmSave = () => {
                 Show table
               </button>
             </div>
-            {showtable ? (
-              <div className="container tableMaster mt-5 mb-3 p-0">
-                <table className="table productTableMAster table-stripped">
-                  <thead className="tableheading">
-                    <tr>
-                      <th style={{ width: "180px" }}>SrNo</th>
-                      <th style={{ width: "180px" }}>Date</th>
-                      <th style={{ width: "180px" }}>DTM Opening Balance</th>
-                      <th style={{ width: "180px" }}>DTM Closing Balance</th>
-                      <th style={{ width: "180px" }}>DTM Product</th>
-                      <th style={{ width: "180px" }}>
-                        Table Data (Hostel Name and Quantity)
-                      </th>
-                      <th style={{ width: "180px" }}>DTM Sale Cash</th>
-                      <th style={{ width: "180px" }}>DTM Sale Online</th>
-                      <th style={{ width: "180px" }}>DTM Amount Cash</th>
-                      <th style={{ width: "180px" }}>DTM Amount Online</th>
-                      <th style={{ width: "180px" }}>DTM Final Total</th>
-                      <th style={{ width: "180px" }}>DTM Total Quantity</th>
-                      <th style={{ width: "180px" }}>DTM Rate</th>
-                      <th style={{ width: "180px" }}>STD Opening Balance</th>
-                      <th style={{ width: "180px" }}>STD Closing Balance</th>
-                      <th style={{ width: "180px" }}>STD Product</th>
-                      <th style={{ width: "180px" }}>
-                        STD Table Data (Hostel Name and Quantity)
-                      </th>
-                      <th style={{ width: "180px" }}>STD Sale Cash</th>
-                      <th style={{ width: "180px" }}>STD Sale Online</th>
-                      <th style={{ width: "180px" }}>STD Amount Cash</th>
-                      <th style={{ width: "180px" }}>STD Amount Online</th>
-                      <th style={{ width: "180px" }}>STD Rate</th>
-                      <th style={{ width: "180px" }}>STD Final Total</th>
-                      <th style={{ width: "180px" }}>STD Total Quantity</th>
-                      <th style={{ width: "180px" }}>Cream</th>
-                      <th style={{ width: "180px" }}>Research</th>
-                      <th style={{ width: "180px" }}>Sahiwal Cream</th>
-                      <th style={{ width: "180px" }}>HLoss</th>
-                      <th style={{ width: "180px" }}>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="border">
-                    {prodTableData.map((item, i) => {
-                      const tableData = JSON.parse(item.tableData);
-                      const stdTableData = JSON.parse(item.stdtableData);
-                      return (
-                        <tr key={i}>
-                          <th scope="row" className="text-center">
-                            {i + 1}
-                          </th>
-                          <td>{item.date}</td>
-                          <td>{item.openingBalance}</td>
-                          <td>{item.closingBalance}</td>
-                          <td>{item.product}</td>
-                          <td>
-                            {tableData.map((td, index) => (
-                              <div key={index}>
-                                {td.hostelName} : {td.qty} : {td.dtmrate} : {td.dtmamount}
-                              </div>
-                            ))}
-                          </td>
-                          <td>{item.dtmSaleCash}</td>
-                          <td>{item.dtmsaleOnline}</td>
-                          <td>{item.dtmAmountCash}</td>
-                          <td>{item.dtmAmountOnline}</td>
-                          <td>{item.finalTotal}</td>
-                          <td>{item.totalQty}</td>
-                          <td>{item.rate}</td>
-                          <td>{item.stdopeningBalance}</td>
-                          <td>{item.stdclosingBalance}</td>
-                          <td>{item.stdproduct}</td>
-                          <td>
-                            {stdTableData.map((td, index) => (
-                              <div key={index}>
-                                {td.stdhostelName} : {td.stdQty}
-                              </div>
-                            ))}
-                          </td>
-                          <td>{item.stdSaleCash}</td>
-                          <td>{item.stdsaleOnline}</td>
-                          <td>{item.stdAmountCash}</td>
-                          <td>{item.stdAmountOnline}</td>
-                          <td>{item.stdrate}</td>
-                          <td>{item.stdfinalTotal}</td>
-                          <td>{item.stdtotalQty}</td>
-                          <td>{item.cream}</td>
-                          <td>{item.research}</td>
-                          <td>{item.sahiwalCream}</td>
-                          <td>{item.hloss}</td>
-                          <td>
-                            <button
-                              className="btn"
-                              onClick={() => editItemHandler(item.id)}>
-                              <FiEdit className="editicon"
-                              />
-                            </button>
-                            <button
-                              className="btn"
-                              onClick={() => dele(item.id)}
-                            >
-                              <MdDeleteOutline className="delicon" />
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            ) : null}
+             <div className="container tableMaster mt-5 mb-3 p-0">
+              <table className="table productTableMAster table-stripped">
+                <thead className="tableheading">
+                  <tr>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      SrNo
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      Date
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Opening Balance
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Closing Balance
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Product
+                    </th>
+                    <th style={{ width: "600px" }} colSpan={4}>
+                      Table Data (Hostel Name and Quantity)
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Sale Cash
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Sale Online
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Amount Cash
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Amount Online
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Final Total
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Total Quantity
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      DTM Rate
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      Action
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody className="border">
+                  {prodTableData.map((item, i) => {
+                    const tableData = JSON.parse(item.tableData);
+                    return (
+                      <tr key={i}>
+                        <th scope="row" className="text-center">
+                          {i + 1}
+                        </th>
+                        <td>{item.date}</td>
+                        <td>{item.openingBalance}</td>
+                        <td>{item.closingBalance}</td>
+                        <td>{item.product}</td>
+                        <td colSpan={4}>
+                          {tableData.map((td, index) => (
+                            <tr key={index}>
+                              <td style={{ width: "150px" }}>
+                                {td.hostelName}
+                              </td>
+                              <td style={{ width: "150px" }}>{td.qty}</td>
+                              <td style={{ width: "150px" }}>{td.dtmrate}</td>
+                              <td style={{ width: "150px" }}>{td.dtmamount}</td>
+                            </tr>
+                          ))}
+                        </td>
+                        <td>{item.dtmSaleCash}</td>
+                        <td>{item.dtmsaleOnline}</td>
+                        <td>{item.dtmAmountCash}</td>
+                        <td>{item.dtmAmountOnline}</td>
+                        <td>{item.finalTotal}</td>
+                        <td>{item.totalQty}</td>
+                        <td>{item.rate}</td>
+                        <td>
+                          <button
+                            className="btn"
+                            onClick={() => editItemHandler(item.id)}
+                          >
+                            <FiEdit className="editicon" />
+                          </button>
+                          <button className="btn" onClick={() => dele(item.id)}>
+                            <MdDeleteOutline className="delicon" />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="container tableMaster mt-5 mb-3 p-0">
+              <table className="table productTableMAster table-stripped">
+                <thead className="tableheading">
+                  <tr>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      SrNo
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      Date
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Opening Balance
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Closing Balance
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Product
+                    </th>
+                    <th style={{ width: "600px" }} colSpan={4}>
+                      STD Table Data (Hostel Name and Quantity)
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Sale Cash
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Sale Online
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Amount Cash
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Amount Online
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Rate
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Final Total
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      STD Total Quantity
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      Cream
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      Research
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      Sahiwal Cream
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      HLoss
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      Remark
+                    </th>
+                    <th style={{ width: "180px" }} rowSpan={2}>
+                      Action
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>STD Product</th>
+                    <th>STD Quantity</th>
+                    <th>STD Rate</th>
+                    <th>STD Amount</th>
+                  </tr>
+                </thead>
+                <tbody className="border">
+                  {prodTableData.map((item, i) => {
+                    const stdTableData = JSON.parse(item.stdtableData);
+                    return (
+                      <tr key={i}>
+                        <th scope="row" className="text-center">
+                          {i + 1}
+                        </th>
+                        <td>{item.date}</td>
+                        <td>{item.stdopeningBalance}</td>
+                        <td>{item.stdclosingBalance}</td>
+                        <td>{item.stdproduct}</td>
+                        <td colSpan={4}>
+                          {stdTableData.map((td, index) => (
+                            <tr key={index}>
+                              <td style={{ width: "150px" }}>
+                                {td.stdhostelName}
+                              </td>
+                              <td style={{ width: "150px" }}>{td.stdQty}</td>
+                              <td style={{ width: "150px" }}>{td.stdrate}</td>
+                              <td style={{ width: "150px" }}>{td.stdamount}</td>
+                            </tr>
+                          ))}
+                        </td>
+                        <td>{item.stdSaleCash}</td>
+                        <td>{item.stdsaleOnline}</td>
+                        <td>{item.stdAmountCash}</td>
+                        <td>{item.stdAmountOnline}</td>
+                        <td>{item.stdrate}</td>
+                        <td>{item.stdfinalTotal}</td>
+                        <td>{item.stdtotalQty}</td>
+                        <td>{item.cream}</td>
+                        <td>{item.research}</td>
+                        <td>{item.sahiwalCream}</td>
+                        <td>{item.hloss}</td>
+                        <td>{item.remark}</td>
+                        <td>
+                          <button
+                            className="btn"
+                            onClick={() => editItemHandler(item.id)}
+                          >
+                            <FiEdit className="editicon" />
+                          </button>
+                          <button className="btn" onClick={() => dele(item.id)}>
+                            <MdDeleteOutline className="delicon" />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}

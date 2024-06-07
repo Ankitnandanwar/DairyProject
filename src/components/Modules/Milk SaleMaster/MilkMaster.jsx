@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import "../Product/Product.css"
-import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
-import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import axios from 'axios';
+import * as FileSaver from 'file-saver';
+import React, { useEffect, useState } from 'react';
 import { FiEdit } from "react-icons/fi";
-import axios from 'axios'
 import { Bars } from 'react-loader-spinner';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import * as XLSX from "xlsx";
+import "../Product/Product.css";
 
 
 const MilkMaster = () => {
@@ -98,6 +100,20 @@ const MilkMaster = () => {
         }
     }
 
+    const exportToExcel = async () => {
+        const fileName = "Milk Master";
+        const fileType =
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+        const fileExtension = ".xlsx";
+
+
+        const ws = XLSX.utils.json_to_sheet(prodTableData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Table Data");
+        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        const data = new Blob([excelBuffer], { type: fileType });
+        FileSaver.saveAs(data, fileName + fileExtension);
+    };
 
     return (
         <>
@@ -161,7 +177,7 @@ const MilkMaster = () => {
                                         type="number"
                                         autoComplete="off"
                                     >
-                                        <TextField label="Hotel Milk Rate" variant="standard" value={hotelMilkRate} onChange={(e) => setHotelMilkRate(e.target.value)} />
+                                        <TextField label="Hostel Milk Rate" variant="standard" value={hotelMilkRate} onChange={(e) => setHotelMilkRate(e.target.value)} />
                                     </Box>
                                 </div>
                                 <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
@@ -173,12 +189,13 @@ const MilkMaster = () => {
                                         type="number"
                                         autoComplete="off"
                                     >
-                                        <TextField label="Saling Milk Rate" variant="standard" value={salingMilkRate} onChange={(e) => setSalingMilkRate(e.target.value)} />
+                                        <TextField label="Bulk Milk Rate" variant="standard" value={salingMilkRate} onChange={(e) => setSalingMilkRate(e.target.value)} />
                                     </Box>
                                 </div>
                                 <div className='col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center' style={{ gap: "1rem" }}>
                                     <button className='savebtn' onClick={() => { saveData() }}>Save</button>
                                     <button className='tabelbtn' onClick={() => setshowtable(!showtable)}>Show table</button>
+                                    <button className='btn btn-success' onClick={()=>exportToExcel()}>Export To Excel</button>
                                 </div>
 
                                 {/*Table Code */}
@@ -191,8 +208,8 @@ const MilkMaster = () => {
                                                         <th>SrNo</th>
                                                         <th style={{ width: "180px" }}>DTM Milk Rate</th>
                                                         <th> Standard Milk Rate </th>
-                                                        <th>Hotel Milk Rate</th>
-                                                        <th>Saling Milk Rate</th>
+                                                        <th>Hostel Milk Rate</th>
+                                                        <th>Bulk Milk Rate</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
