@@ -9,12 +9,14 @@ import Select from "@mui/material/Select";
 import Slide from "@mui/material/Slide";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
+import * as FileSaver from 'file-saver';
 import React, { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
 import { Bars } from "react-loader-spinner";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import * as XLSX from "xlsx";
 import "../Product/Product.css";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -110,11 +112,23 @@ const DtmSave = () => {
     ]);
   };
 
+  const deleteRow = (index) => {
+    const list = [...firstTableAdd];
+    list.splice(index, 1);
+    setfirstTableAdd(list);
+  };
+
   const addSecondRow = () => {
     setSecondTableAdd([
       ...secondTableAdd,
       { stdhostelName: "", stdQty: "", stdrate: "", stdamount: "" },
     ]);
+  };
+
+  const deleteRow1 = (index) => {
+    const list = [...secondTableAdd];
+    list.splice(index, 1);
+    setSecondTableAdd(list);
   };
 
 
@@ -224,11 +238,10 @@ const DtmSave = () => {
     const stdAmountOnline =
       parseInt(standardMilkRate) * parseInt(stdsaleOnline);
     const stdfinalTotal = parseInt(stdAmountCash) + parseInt(stdAmountOnline);
-    const stdclosingBalance =
-      parseInt(stdopeningBalance) 
-      // - parseInt(stdtotalQty);
-
       const stdtotalQty = parseInt(stdproduct) + parseInt(stdSaleCash)+ parseInt(stdsaleOnline) + dynamicRowsTotal2
+      const stdclosingBalance =
+      parseInt(stdopeningBalance) 
+       - parseInt(stdtotalQty);
 
     return {
       dtmAmountCash,
@@ -268,7 +281,6 @@ const DtmSave = () => {
             openingBalance,
             closingBalance,
             product,
-            // tableData: JSON.stringify(firstTableAdd),
             dtmSaleCash,
             dtmsaleOnline,
             dtmAmountCash,
@@ -280,14 +292,13 @@ const DtmSave = () => {
             stdopeningBalance,
             stdclosingBalance,
             stdproduct,
-            stdtableData: JSON.stringify(secondTableAdd),
             stdSaleCash,
             stdsaleOnline,
             stdAmountCash,
             stdAmountOnline,
             stdrate: standardMilkRate,
             stdfinalTotal,
-            // stdtotalQty,
+            stdtotalQty,
             cream,
             research,
             sahiwalCream,
@@ -331,7 +342,7 @@ const DtmSave = () => {
             stdAmountOnline,
             stdrate: standardMilkRate,
             stdfinalTotal,
-            // stdtotalQty,
+            stdtotalQty,
             cream,
             research,
             sahiwalCream,
@@ -355,20 +366,19 @@ const DtmSave = () => {
         console.log(resp);
       }
 
+      setOpeningBalance("");
       setProduct("");
       setDtmSaleCash("");
       setDtmsaleOnline("");
-      // setTotalQty("");
-      // setfirstTableAdd("");
       setStdproduct("");
+      setStdopeningBalance("");
       setStdSaleCash("");
       setStdsaleOnline("");
-      // stdtotalQty("");
       setCream("");
       setSahiwalCream("");
       setResearch("");
       setHloss("");
-      // setSecondTableAdd("")
+      setRemark("");
       setEditItem(null);
 
       // Refresh the product data
@@ -475,21 +485,35 @@ const DtmSave = () => {
   // Edit data
   const editItemHandler = (item) => {
     setProduct(item.product);
+    setOpeningBalance(item.openingBalance);
     setDtmSaleCash(item.dtmSaleCash);
     setDtmsaleOnline(item.dtmsaleOnline);
-    // setTotalQty(item.totalQty);
-    // setfirstTableAdd(item.firstTableAdd);
     setStdproduct(item.stdproduct);
+    setStdopeningBalance(item.stdopeningBalance);
     setStdSaleCash(item.stdSaleCash);
     setStdsaleOnline(item.stdsaleOnline);
-    // setStdtotalQty(item.stdtotalQty);
     setCream(item.cream);
     setSahiwalCream(item.sahiwalCream);
     setResearch(item.research);
     setHloss(item.hloss);
-    // setSecondTableAdd(item.secondTableAdd);
+    setRemark(item.remark)
     setEditItem(item);
   };
+
+  const exportToExcel = async () => {
+    const fileName = "DTM Milk Sale";
+    const fileType =
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const fileExtension = ".xlsx";
+
+
+    const ws = XLSX.utils.json_to_sheet(prodTableData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Table Data");
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const data = new Blob([excelBuffer], { type: fileType });
+    FileSaver.saveAs(data, fileName + fileExtension);
+};
 
 
   useEffect(() => {
@@ -854,7 +878,7 @@ const DtmSave = () => {
                         </Box>
                       </td>
                       <td>
-                        <button className="btn">
+                        <button className="btn"onClick={() => deleteRow(index)}>
                           <MdDeleteOutline className="delicon" />
                         </button>
                       </td>
@@ -1253,7 +1277,7 @@ const DtmSave = () => {
                         </Box>
                       </td>
                       <td>
-                        <button className="btn">
+                        <button className="btn"onClick={() => deleteRow1(index)}>
                           <MdDeleteOutline className="delicon" />
                         </button>
                       </td>
@@ -1269,12 +1293,8 @@ const DtmSave = () => {
               <button className="savebtn" onClick={() => saveData()}>
                 Save
               </button>
-              <button
-                className="tabelbtn"
-                onClick={() => setshowtable(!showtable)}
-              >
-                Show table
-              </button>
+              <button className='btn btn-success' onClick={()=>exportToExcel()}>Export To Excel</button>
+
             </div>
              <div className="container tableMaster mt-5 mb-3 p-0">
               <table className="table productTableMAster table-stripped">

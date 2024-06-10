@@ -23,11 +23,11 @@ const Hostel = () => {
     const [loader, setLoader] = useState(true)
     const [showtable, setshowtable] = useState(false)
 
+    const [currentdate, setCurrentDate] = useState("")
     const [openingBalance, setOpeningBalance] = useState("")
     const [cowmilk, setCowmilk] = useState("")
     const [sahiwalMilk, setSahiwalMilk] = useState("")
     const [buffaloMilk, setBuffaloMilk] = useState("")
-    const [date, setCurrentDate] = useState("")
 
     const [hostelTableData, setHostelTableData] = useState([])
 
@@ -53,8 +53,8 @@ const Hostel = () => {
     const saveData = async () => {
         try {
             if (editItem) {
-                await axios.put(`http://103.38.50.113:8080/DairyApplication/milkCollections/${editItem.id}`, {
-                    date, openingBalance, cowmilk, sahiwalMilk, buffaloMilk, closingBalance
+                await axios.put(`http://103.38.50.113:8080/DairyApplication/updateMilkCollections/${editItem.id}`, {
+                    currentdate, openingBalance, cowmilk, sahiwalMilk, buffaloMilk
                 })
                 toast.success("Hostel Name Updated Successfully", {
                     position: "top-center",
@@ -68,7 +68,7 @@ const Hostel = () => {
                 })
             } else {
                 const res = await axios.post("http://103.38.50.113:8080/DairyApplication/saveMilkCollection", {
-                    date, openingBalance, cowmilk, sahiwalMilk, buffaloMilk, closingBalance, totalMilk
+                    currentdate, openingBalance, cowmilk, sahiwalMilk, buffaloMilk, closingBalance, totalMilk
                 })
                 toast.success("Hostel Name saved Successfully", {
                     position: "top-center",
@@ -283,7 +283,7 @@ const Hostel = () => {
                                         }}
                                         autoComplete="off"
                                     >
-                                        <TextField label="Date" variant="standard" value={date} onChange={(e) => setCurrentDate(e.target.value)} />
+                                        <TextField label="Date" variant="standard" value={currentdate} onChange={(e) => setCurrentDate(e.target.value)} />
                                     </Box>
                                 </div>
                                 <div className='col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center'>
@@ -366,13 +366,15 @@ const Hostel = () => {
                                             <table className='table productTableMAster table-stripped'>
                                                 <thead>
                                                     <tr>
-                                                        <th>SrNo</th>
+                                                        <th style={{ width: "180px" }}>SrNo</th>
+                                                        <th style={{ width: "180px" }}>Date</th>
                                                         <th style={{ width: "180px" }}>Opening Balance</th>
                                                         <th style={{ width: "180px" }}>Cow Milk</th>
                                                         <th style={{ width: "180px" }}>Sahiwal Milk</th>
                                                         <th style={{ width: "180px" }}>Buffalo Milk</th>
                                                         <th style={{ width: "180px" }}>Closing Balance</th>
-                                                        <th>Action</th>
+                                                        <th style={{ width: "180px" }}>Total Milk</th>
+                                                        <th style={{ width: "180px" }}>Action</th>
 
                                                     </tr>
                                                 </thead>
@@ -381,7 +383,12 @@ const Hostel = () => {
                                                         hostelTableData.map((item, i) => {
                                                             return (
                                                                 <tr key={i}>
-                                                                    <th scope='row' className='text-center'>{i + 1}</th>
+                                                                    <td className='text-center'>
+                                                                        {i + 1}
+                                                                    </td>
+                                                                    <td>
+                                                                        {item.date}
+                                                                    </td>
                                                                     <td>
                                                                         {item.openingBalance}
                                                                     </td>
@@ -397,7 +404,9 @@ const Hostel = () => {
                                                                     <td>
                                                                         {item.closingBalance}
                                                                     </td>
-
+                                                                    <td>
+                                                                        {item.totalMilk}
+                                                                    </td>
                                                                     <td>
                                                                         <button className='btn' onClick={() => editItemHandler(item)}><FiEdit className='editicon' /></button>
                                                                         <button className='btn' onClick={() => dele(item.id)}><MdDeleteOutline className='delicon' /></button>
