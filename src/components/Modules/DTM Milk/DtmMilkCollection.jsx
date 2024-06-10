@@ -32,6 +32,7 @@ const DtmMilkCollection = () => {
     const [openingBalance, setOpeningBalance] = useState("")
     const [dtmMilk, setDtmMilk] = useState("")
     const [cream, setCream] = useState("")
+
     const [prodTableData, setProdTableData] = useState([])
 
     const [opendailogdel, setopendailogdel] = useState(false)
