@@ -349,13 +349,13 @@ const Hostel = () => {
                                         }}
                                         autoComplete="off"
                                     >
-                                        <TextField label="Total Milk" variant="standard" value={totalMilk}/>
+                                        <TextField label="Total Milk" variant="standard" value={totalMilk} />
                                     </Box>
                                 </div>
                                 <div className='col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center' style={{ gap: "1rem" }}>
                                     <button className='savebtn' onClick={() => { saveData() }}>Save</button>
                                     <button className='tabelbtn' onClick={() => setshowtable(!showtable)}>Show table</button>
-                                    <button className='btn btn-success' onClick={()=>exportToExcel()}>Export To Excel</button>
+                                    <button className='btn btn-success' onClick={() => exportToExcel()}>Export To Excel</button>
                                 </div>
 
                                 {/* Table code */}

@@ -96,12 +96,15 @@ const DtmSave = () => {
 
   const [prodTableData, setProdTableData] = useState([]);
 
-  const [showtable, setshowtable] = useState(false);
 
   const [currDate, setCurrDate] = useState("");
 
   const [dynamicRowsTotal, setDynamicRowsTotal] = useState(0);
   const [dynamicRowsTotal2, setDynamicRowsTotal2] = useState(0);
+
+  const [bulkMilkRate, setBulkMilkRate] = useState('')
+
+  
 
 
   // Adding row of first table
@@ -136,6 +139,15 @@ const DtmSave = () => {
     const { name, value } = event.target;
     const list = [...firstTableAdd];
     list[index][name] = value;
+
+    if(name === "hostelName"){
+      if(value === 'Bulk'){
+        list[index]['dtmrate'] = bulkMilkRate;
+      }else {
+        list[index]['dtmrate'] = hotelMilkRate;
+      }
+    }
+
     if (name === "qty" || name === "dtmrate") {
       const qty = parseFloat(list[index].qty);
       const rate = parseFloat(list[index].dtmrate);
@@ -148,6 +160,15 @@ const DtmSave = () => {
     const { name, value } = event.target;
     const list = [...secondTableAdd];
     list[index][name] = value;
+
+    if(name === 'stdhostelName'){
+      if(value === 'Bulk'){
+        list[index]['stdrate'] = bulkMilkRate;
+      }else {
+        list[index]['stdrate'] = hotelMilkRate;
+      }
+    }
+
     if (name === "stdQty" || name === "stdrate") {
       const stdQty = parseFloat(list[index].stdQty);
       const stdrate = parseFloat(list[index].stdrate);
@@ -209,6 +230,8 @@ const DtmSave = () => {
         setHotelMilkRate(MilkRate[0].hotelMilkRate);
         setStandardMilkRate(MilkRate[0].standardMilkRate);
         setDtmMilkRate(MilkRate[0].dtmMilkRate);
+        setBulkMilkRate(MilkRate[0].salingMilkRate)
+        // console.log(MilkRate[0].salingMilkRate)
         console.log(response.data)
         setTimeout(() => {}, 1000);
       } catch (error) {
@@ -856,7 +879,8 @@ const DtmSave = () => {
                             label="Enter Rate"
                             variant="standard"
                             name="dtmrate"
-                            value={hotelMilkRate}
+                            value={row.dtmrate}
+                            onChange={(event) => handleFirstTableChange(index, event)}
                           />
                         </Box>
                       </td>
@@ -1255,7 +1279,8 @@ const DtmSave = () => {
                             label="Enter STD Rate"
                             variant="standard"
                             name="stdrate"
-                            value={hotelMilkRate}
+                            value={row.stdrate}
+                            onChange={(event) => handleSecondTableChange(index, event)}
                           />
                         </Box>
                       </td>

@@ -98,6 +98,16 @@ const Sidebar = ({ toggle, state, setState }) => {
                         </SubMenu>
                     )}
 
+                    {assignedModules.includes('Ghee') && (
+                        <SubMenu label = "Ghee">
+                            <MenuItem>
+                                Ghee Entry
+                            </MenuItem>
+                        </SubMenu>
+                    )}
+
+
+
                     
                 </Menu>
 

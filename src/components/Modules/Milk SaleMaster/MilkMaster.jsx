@@ -219,9 +219,7 @@ const MilkMaster = () => {
                                                             return (
                                                                 <tr key={i}>
                                                                     <th scope='row' className='text-center'>{i+1}</th>
-                                                                    <td>
-                                                                        <p className='sub1'>{item.dtmMilkRate}</p>
-                                                                    </td>
+                                                                    <td>{item.dtmMilkRate}</td>
                                                                     <td>{item.standardMilkRate}</td>
                                                                     <td>{item.hotelMilkRate}</td>
                                                                     <td>{item.salingMilkRate}</td>

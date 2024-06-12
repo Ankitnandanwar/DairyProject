@@ -32,6 +32,11 @@ const DtmMilkCollection = () => {
     const [openingBalance, setOpeningBalance] = useState("")
     const [dtmMilk, setDtmMilk] = useState("")
     const [cream, setCream] = useState("")
+    const [openingCream, setOpeningCream] = useState("")
+    const [sahiwalCream, setSahiwalCream] = useState("")
+    const [opningSahiwalCream, setOpningSahiwalCream] = useState("")
+
+
 
     const [prodTableData, setProdTableData] = useState([])
 
@@ -58,12 +63,55 @@ const DtmMilkCollection = () => {
         return `${year}-${month}-${day}`;
     };
 
+    const fetchGetCream = async () => {
+        setLoader(true)
+
+        try {
+            const res = await axios.get('http://103.38.50.113:8080/DairyApplication/lastClosingCream')
+            console.log(res.data)
+            setCream(res.data)
+            setTimeout(() => {
+                setLoader(false)
+            }, 1000);
+        } catch (error) {
+            console.log("Error while fetching Get Cream", error)
+        }
+    }
+
+    const fetchGetSahiwalCream = async () => {
+        setLoader(true)
+
+        try {
+            const res = await axios.get('http://103.38.50.113:8080/DairyApplication/lastClosingSahiwalCream')
+            console.log(res.data)
+            setSahiwalCream(res.data)
+            setTimeout(() => {
+                setLoader(false)
+            }, 1000);
+        } catch (error) {
+            console.log("Error while fetching Get Sahiwal Cream", error)
+        }
+    }
+
     // Save data
     const saveData = async () => {
         try {
             if (editItem) {
                 await axios.put(`http://103.38.50.113:8080/DairyApplication/updateDTmMilkCollection/${editItem.id}`, {
-                    cowmilk, sahiwalMilk, buffaloMilk, openingBalance, closingBalance, totalMilk, dtmMilk, cream, date
+                    cowmilk, 
+                    sahiwalMilk, 
+                    buffaloMilk, 
+                    openingBalance, 
+                    closingBalance,
+                    totalMilk, 
+                    dtmMilk, 
+                    date,
+                    cream,
+                    openingCream,
+                    closingCream,
+                    sahiwalCream,
+                    opningSahiwalCream,
+                    closingSahiwalCream
                 })
                 toast.success("Data Updated Successfully", {
                     position: "top-center",
@@ -77,7 +125,20 @@ const DtmMilkCollection = () => {
                 })
             } else {
                 const res = await axios.post("http://103.38.50.113:8080/DairyApplication/saveDtmMilkCollection", {
-                    cowmilk, sahiwalMilk, buffaloMilk, openingBalance, closingBalance, totalMilk, dtmMilk, cream, date
+                    cowmilk,
+                    sahiwalMilk,
+                    buffaloMilk,
+                    openingBalance,
+                    closingBalance,
+                    totalMilk,
+                    dtmMilk,
+                    date,
+                    cream,
+                    openingCream,
+                    closingCream,
+                    sahiwalCream,
+                    opningSahiwalCream,
+                    closingSahiwalCream
                 })
                 toast.success("Data Saved Successfully", {
                     position: "top-center",
@@ -96,12 +157,13 @@ const DtmMilkCollection = () => {
             }
 
             setDtmMilk("");
-            setCream("");
             setCurrentDate("");
             setCowmilk("");
             setSahiwalMilk("");
             setOpeningBalance("");
             setBuffaloMilk("")
+            setOpeningCream("")
+            setOpningSahiwalCream("")
             setEditItem(null);
 
             // Refresh the product data
@@ -129,6 +191,8 @@ const DtmMilkCollection = () => {
 
     useEffect(() => {
         getProductData();
+        fetchGetCream()
+        fetchGetSahiwalCream()
     }, [])
 
 
@@ -228,18 +292,20 @@ const DtmMilkCollection = () => {
         setSahiwalMilk(item.sahiwalMilk);
         setBuffaloMilk(item.buffaloMilk);
         setDtmMilk(item.dtmMilk);
-        setCream(item.cream)
-        setCurrentDate(item.date)
+        setOpeningCream(item.openingCream)
+        setOpningSahiwalCream(item.opningSahiwalCream)
         setEditItem(item);
     };
 
     const CalculateTotals = () => {
         const totalMilk = parseInt(cowmilk) + parseInt(buffaloMilk) + parseInt(sahiwalMilk);
         const closingBalance = parseInt(openingBalance) + parseInt(dtmMilk);
-        return { closingBalance, totalMilk };
+        const closingCream = parseInt(openingCream) + parseInt(cream)
+        const closingSahiwalCream = parseInt(sahiwalCream) + parseInt(opningSahiwalCream)
+        return { closingBalance, totalMilk, closingCream, closingSahiwalCream };
     };
 
-    const { closingBalance, totalMilk } = CalculateTotals();
+    const { closingBalance, totalMilk, closingCream, closingSahiwalCream } = CalculateTotals();
 
     const exportToExcel = async () => {
         const fileName = "DTM Milk Collection";
@@ -301,7 +367,7 @@ const DtmMilkCollection = () => {
                                         <TextField variant="standard" type='date' value={date} onChange={(e) => setCurrentDate(e.target.value)} />
                                     </Box>
                                 </div>
-      
+
                                 <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                                     <div class="textfield">
                                         <input class="inputfield" type="text" required value={openingBalance} onChange={(e) => setOpeningBalance(e.target.value)} />
@@ -380,7 +446,7 @@ const DtmMilkCollection = () => {
                                         type="number"
                                         autoComplete="off"
                                     >
-                                        <TextField label="Cream" variant="standard" value={cream} onChange={(e) => setCream(e.target.value)} />
+                                        <TextField label="Cream" variant="standard" value={cream} />
                                     </Box>
                                 </div>
 
@@ -397,10 +463,85 @@ const DtmMilkCollection = () => {
                                     </Box>
                                 </div>
 
+                                <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
+                                    <Box
+                                        component="form"
+                                        sx={{
+                                            '& > :not(style)': { m: 1, width: '25ch' },
+                                        }}
+                                        type="number"
+                                        autoComplete="off"
+                                    >
+                                        <TextField
+                                            label="Opening Cream"
+                                            variant="standard"
+                                            value={openingCream}
+                                            onChange={(e) => setOpeningCream(e.target.value)}
+                                        />
+                                    </Box>
+                                </div>
+
+                                <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
+                                    <Box
+                                        component="form"
+                                        sx={{
+                                            '& > :not(style)': { m: 1, width: '25ch' },
+                                        }}
+                                        type="number"
+                                        autoComplete="off"
+                                    >
+                                        <TextField label="Closing Cream" variant="standard" value={closingCream} />
+                                    </Box>
+                                </div>
+
+                                <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
+                                    <Box
+                                        component="form"
+                                        sx={{
+                                            '& > :not(style)': { m: 1, width: '25ch' },
+                                        }}
+                                        type="number"
+                                        autoComplete="off"
+                                    >
+                                        <TextField label="Sahiwal Cream" variant="standard" value={sahiwalCream} />
+                                    </Box>
+                                </div>
+
+                                <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
+                                    <Box
+                                        component="form"
+                                        sx={{
+                                            '& > :not(style)': { m: 1, width: '25ch' },
+                                        }}
+                                        type="number"
+                                        autoComplete="off"
+                                    >
+                                        <TextField
+                                            label="Opening Sahiwal Cream"
+                                            variant="standard"
+                                            value={opningSahiwalCream}
+                                            onChange={(e) => setOpningSahiwalCream(e.target.value)}
+                                        />
+                                    </Box>
+                                </div>
+
+                                <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
+                                    <Box
+                                        component="form"
+                                        sx={{
+                                            '& > :not(style)': { m: 1, width: '25ch' },
+                                        }}
+                                        type="number"
+                                        autoComplete="off"
+                                    >
+                                        <TextField label="Closing Sahiwal Cream" variant="standard" value={closingSahiwalCream} />
+                                    </Box>
+                                </div>
+
                                 <div className='col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center' style={{ gap: "1rem" }}>
                                     <button className='savebtn' onClick={() => { saveData() }}>Save</button>
                                     <button className='tabelbtn' onClick={() => setshowtable(!showtable)}>Show table</button>
-                                    <button className='btn btn-success' onClick={()=>exportToExcel()}>Export To Excel</button>
+                                    <button className='btn btn-success' onClick={() => exportToExcel()}>Export To Excel</button>
                                 </div>
 
                                 {/*Table Code */}
@@ -411,16 +552,22 @@ const DtmMilkCollection = () => {
                                             <table className='table productTableMAster table-stripped'>
                                                 <thead className='tableheading'>
                                                     <tr>
-                                                        <th>SrNo</th>
-                                                        <th>Opening Balance</th>
-                                                        <th>Cow Milk</th>
-                                                        <th>Sahiwal Milk</th>
-                                                        <th>Buffalo Milk</th>
-                                                        <th>Total Milk</th>
-                                                        <th>DTM Milk</th>
-                                                        <th>Cream</th>
-                                                        <th>Closing Balance</th>
-                                                        <th>Action</th>
+                                                        <th style={{ width: '80px' }}>SrNo</th>
+                                                        <th style={{ width: '150px' }}>Date</th>
+                                                        <th style={{ width: '150px' }}>Opening Balance</th>
+                                                        <th style={{ width: '150px' }}>Cow Milk</th>
+                                                        <th style={{ width: '150px' }}>Sahiwal Milk</th>
+                                                        <th style={{ width: '150px' }}>Buffalo Milk</th>
+                                                        <th style={{ width: '150px' }}>Total Milk</th>
+                                                        <th style={{ width: '150px' }}>DTM Milk</th>
+                                                        <th style={{ width: '150px' }}>Cream</th>
+                                                        <th style={{ width: '150px' }}>Closing Balance</th>
+                                                        <th style={{ width: '150px' }}>Opening Cream</th>
+                                                        <th style={{ width: '150px' }}>Closing Cream</th>
+                                                        <th style={{ width: '150px' }}>Sahiwal Cream</th>
+                                                        <th style={{ width: '150px' }}>Opening Sahiwal Cream</th>
+                                                        <th style={{ width: '150px' }}>Closing Sahiwal Cream</th>
+                                                        <th style={{ width: '150px' }}>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody className='border'>
@@ -429,9 +576,8 @@ const DtmMilkCollection = () => {
                                                             return (
                                                                 <tr key={i}>
                                                                     <th scope='row' className='text-center'>{i + 1}</th>
-                                                                    <td>
-                                                                        {item.openingBalance}
-                                                                    </td>
+                                                                    <td>{item.date}</td>
+                                                                    <td>{item.openingBalance}</td>
                                                                     <td>{item.cowmilk}</td>
                                                                     <td>{item.sahiwalMilk}</td>
                                                                     <td>{item.buffaloMilk}</td>
@@ -439,6 +585,11 @@ const DtmMilkCollection = () => {
                                                                     <td>{item.dtmMilk}</td>
                                                                     <td>{item.cream}</td>
                                                                     <td>{item.closingBalance}</td>
+                                                                    <td>{item.openingCream}</td>
+                                                                    <td>{item.closingCream}</td>
+                                                                    <td>{item.sahiwalCream}</td>
+                                                                    <td>{item.opningSahiwalCream}</td>
+                                                                    <td>{item.closingSahiwalCream}</td>
                                                                     <td>
                                                                         <button className='btn' onClick={() => editItemHandler(item)}><FiEdit className='editicon' /></button>
                                                                         <button className='btn' onClick={() => dele(item.id)}><MdDeleteOutline className='delicon' /></button>

@@ -23,6 +23,7 @@ import MilkCollection from './pages/MilkMasterModulePage/MilkcollectionPage'
 import Hostel from './pages/HostelMasterPage/HostelPage'
 import DtmMilkCollection from './pages/DTMMilkPage/DtmMilkCollectionPage'
 import DtmMilkSale from './pages/DTMMilkPage/DtmMIlkSalePage'
+import GheeEntryPage from './pages/GheeModulePage/GheeEntryPage'
 
 const App = () => {
 
@@ -62,6 +63,7 @@ const App = () => {
           <Route path="/milkcollection" element={<MilkCollection/>}/>
 
 
+          <Route path="/gheeentry" element={<GheeEntryPage/>}/>
 
 
         </Routes>

@@ -207,7 +207,6 @@ const ProductEntry = () => {
 
     const CalculateTotals = () => {
         const gstAmount = parseInt(gst) / 100 * parseInt(rate)
-
         return {gstAmount};
     };
 
@@ -227,7 +226,6 @@ const ProductEntry = () => {
                             wrapperClass=""
                             visible={true}
                         />
-
                     </div> :
 
                     <div className='container mt-4'>
