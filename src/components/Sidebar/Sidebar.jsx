@@ -50,6 +50,7 @@ const Sidebar = ({ toggle, state, setState }) => {
                         </SubMenu>
                     )}
 
+
                     {assignedModules.includes('Milk') && (
                         <SubMenu label="Milk">
                             <MenuItem onClick={() => { navigate('/milksalemaster') }}>

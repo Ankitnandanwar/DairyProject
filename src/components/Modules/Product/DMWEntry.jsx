@@ -45,9 +45,13 @@ const Table = () => {
   const [c10Online, setC10Online] = useState("")
   const [c40Cash, setC40Cash] = useState("")
   const [c40Online, setC40Online] = useState("")
-  
+
 
   const [products, setProducts] = useState([]);
+  const [fetchSTDOpeningBal, setFetchSTDOpeningBal] = useState("");
+  const [fetchDMWOpeningBal, setFetchDMWOpeningBal] = useState("");
+
+
 
   const getCurrentDate = () => {
     const today = new Date();
@@ -57,8 +61,32 @@ const Table = () => {
     return `${year}-${month}-${day}`;
   };
 
+  // fetch standard milk opening balance
+
+  const stdOpeningBal = async () => {
+    try {
+      const response = await axios.get("http://103.38.50.113:8080/DairyApplication/closingBalance")
+      setFetchSTDOpeningBal(response.data)
+    } catch (error) {
+      console.log("Error fetching standard milk opening bal", error)
+    }
+  }
+
+  const dmwOpeningBal = async () => {
+    try {
+      const response = await axios.get(
+        "http://103.38.50.113:8080/DairyApplication/dtmClosingBalance"
+      );
+      setFetchDMWOpeningBal(response.data)
+    } catch (error) {
+      console.log("Error fetching dmw milk opening bal", error)
+    }
+  }
+
   useEffect(() => {
     setCurrentDate(getCurrentDate());
+    stdOpeningBal();
+    dmwOpeningBal();
   }, [])
 
   const fetchProductDetails = async () => {
@@ -254,6 +282,28 @@ const Table = () => {
                 </FormControl>
               </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
+                <Box
+                  component="form"
+                  sx={{
+                    '& > :not(style)': { m: 1, width: '25ch' },
+                  }}
+                  autoComplete="off"
+                >
+                  <TextField label="Standard Milk Opening Balance" type='number' variant="standard" value={fetchSTDOpeningBal}/>
+                </Box>
+              </div>
+              <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
+                <Box
+                  component="form"
+                  sx={{
+                    '& > :not(style)': { m: 1, width: '25ch' },
+                  }}
+                  autoComplete="off"
+                >
+                  <TextField label="DMW Milk Opening Balance" type='number' variant="standard" value={fetchDMWOpeningBal}/>
+                </Box>
+              </div>
+              <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                 <div class="textfield">
                   <input class="inputfield" type="text" required value={productDetails.rate} />
                   <span></span>
@@ -309,10 +359,13 @@ const Table = () => {
                   }}
                   autoComplete="off"
                 >
-                  <TextField label="Product Rate" type='number' variant="standard" value={productRate}/>
+                  <TextField label="Product Rate" type='number' variant="standard" value={productRate} />
                 </Box>
               </div>
-              <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>Plant Sale (EDP)</h1>
+              <div className='d-flex align-items-center justify-content-between'>
+                <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>Plant Sale (EDP)</h1>
+                <button className='savebtn'>Add Row</button>
+              </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                 <Box
                   component="form"
@@ -357,7 +410,10 @@ const Table = () => {
                   <TextField label="Amt." type='number' variant="standard" value={plantOnlineAmount} />
                 </Box>
               </div>
-              <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>Milk Parlour</h1>
+              <div className='d-flex align-items-center justify-content-between'>
+                <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>Milk Parlour</h1>
+                <button className='savebtn'>Add Row</button>
+              </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                 <Box
                   component="form"
@@ -402,7 +458,10 @@ const Table = () => {
                   <TextField label="Amt." type='number' variant="standard" value={parlourOnlineAmount} />
                 </Box>
               </div>
-              <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>Admin Block Canteen</h1> <br />
+              <div className='d-flex align-items-center justify-content-between'>
+                <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>Admin Block Canteen</h1> <br />
+                <button className='savebtn'>Add Row</button>
+              </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                 <Box
                   component="form"
@@ -447,7 +506,10 @@ const Table = () => {
                   <TextField label="Amt." type='number' variant="standard" value={adminOnlineAmount} />
                 </Box>
               </div>
-              <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>E-Rikshaw</h1> <br />
+              <div className='d-flex align-items-center justify-content-between'>
+                <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>E-Rikshaw</h1> <br />
+                <button className='savebtn'>Add Row</button>
+              </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                 <Box
                   component="form"
@@ -492,7 +554,10 @@ const Table = () => {
                   <TextField label="Amt." type='number' variant="standard" value={eOnlineAmount} />
                 </Box>
               </div>
-              <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>Tata Yodha</h1> <br />
+              <div className='d-flex align-items-center justify-content-between'>
+                <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>Tata Yodha</h1> <br />
+                <button className='savebtn'>Add Row</button>
+              </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                 <Box
                   component="form"
@@ -537,7 +602,10 @@ const Table = () => {
                   <TextField label="Amt." type='number' variant="standard" value={yodhaOnlineAmount} />
                 </Box>
               </div>
-              <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>Concession 5% Only</h1> <br />
+              <div className='d-flex align-items-center justify-content-between'>
+                <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>Concession 5% Only</h1> <br />
+                <button className='savebtn'>Add Row</button>
+              </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                 <Box
                   component="form"
@@ -582,7 +650,10 @@ const Table = () => {
                   <TextField label="Amt." type='number' variant="standard" value={c5OnlineAmount} />
                 </Box>
               </div>
-              <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>Concession 10% Only</h1> <br />
+              <div className='d-flex align-items-center justify-content-between'>
+                <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>Concession 10% Only</h1> <br />
+                <button className='savebtn'>Add Row</button>
+              </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                 <Box
                   component="form"
@@ -627,7 +698,10 @@ const Table = () => {
                   <TextField label="Amt." type='number' variant="standard" value={c10OnlineAmount} />
                 </Box>
               </div>
-              <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>Concession 40% Only</h1> <br />
+              <div className='d-flex align-items-center justify-content-between'>
+                <h1 style={{ fontSize: '20px', marginTop: '25px', marginLeft: '25px', textDecoration: 'underline' }}>Concession 40% Only</h1> <br />
+                <button className='savebtn'>Add Row</button>
+              </div>
               <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                 <Box
                   component="form"

@@ -24,6 +24,8 @@ import Hostel from './pages/HostelMasterPage/HostelPage'
 import DtmMilkCollection from './pages/DTMMilkPage/DtmMilkCollectionPage'
 import DtmMilkSale from './pages/DTMMilkPage/DtmMIlkSalePage'
 import GheeEntryPage from './pages/GheeModulePage/GheeEntryPage'
+import PrivateRoute from './components/PrivateRoute/PrivateRoute'
+import ErrorPage from './components/ErrorPage/ErrorPage'
 
 const App = () => {
 
@@ -31,39 +33,91 @@ const App = () => {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Login/>} />
+          <Route path='/' element={<Login />} />
 
-          <Route path='/createuser' element={<CreationUserPage/>} />
-          <Route path='/assignuserrole' element={<AssignUserRolePage/>} />
+          <Route element={<PrivateRoute />}>
+            <Route path='/createuser' element={<CreationUserPage />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path='/assignuserrole' element={<AssignUserRolePage />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path='/dashboardpage' element={<DashboardPage />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path='/productentry' element={<ProductEntryPage />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path='/productsales' element={<ProductSalesPage />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path='/productreport' element={<ProductReportPage />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path='/milksalemaster' element={<MilkMasterPage />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path='/milksale' element={<MilkSalePage />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path='/milkreport' element={<MilkReportPage />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path="/dmwentry" element={<DMWEntry />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path='/dmwreport' element={<DMWReport />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path='/Hostel' element={<Hostel />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path='/dtmmilksale' element={<DtmMilkSale />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path='/dtmmilkcollection' element={<DtmMilkCollection />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path='/itementry' element={<ItemEntry />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path='/iteminventry' element={<ItemInventry />} />
+          </Route>
+
+          <Route path='/sharedetails' element={<ShareDetails />} />
+          <Route path='/sharerate' element={<ShareRate />} />
+          <Route path='/sharecream' element={<ShareCream />} />
+          <Route path='/shareghee' element={<ShareGhee />} />
+
+          <Route element={<PrivateRoute />}>
+            <Route path='/hostel' element={<HostelPage />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path="/milkcollection" element={<MilkCollection />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path="/gheeentry" element={<GheeEntryPage />} />
+          </Route>
 
 
-          <Route path='/dashboardpage' element={<DashboardPage/>} />
-          <Route path='/productentry' element={<ProductEntryPage/>} />
-          <Route path='/productsales' element={<ProductSalesPage/>} />
-          <Route path='/productreport' element={<ProductReportPage/>} />
-
-          <Route path='/milksalemaster' element={<MilkMasterPage/>} />
-          <Route path='/milksale' element={<MilkSalePage/>} />
-          <Route path='/milkreport' element={<MilkReportPage/>} />
-          <Route path="/dmwentry" element={<DMWEntry/>} />
-          <Route path='/dmwreport' element={<DMWReport/>}/>
-          <Route path='/Hostel' element={<Hostel/>}/>
-          <Route path='/dtmmilksale' element={<DtmMilkSale/>}/>
-          <Route path='/dtmmilkcollection' element={<DtmMilkCollection/>}/>
-
-          <Route path='/itementry' element={<ItemEntry/>}/>
-          <Route path='/iteminventry' element={<ItemInventry/>}/>
-
-          <Route path='/sharedetails' element={<ShareDetails/>}/>
-          <Route path='/sharerate' element={<ShareRate/>}/>
-          <Route path='/sharecream' element={<ShareCream/>}/>
-          <Route path='/shareghee' element={<ShareGhee/>}/>
-
-          <Route path='/hostel' element={<HostelPage/>}/>
-          <Route path="/milkcollection" element={<MilkCollection/>}/>
-
-
-          <Route path="/gheeentry" element={<GheeEntryPage/>}/>
+          <Route path='/*' element={<ErrorPage />} />
 
 
         </Routes>
