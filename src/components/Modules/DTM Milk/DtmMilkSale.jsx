@@ -9,7 +9,7 @@ import Select from "@mui/material/Select";
 import Slide from "@mui/material/Slide";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
-import * as FileSaver from 'file-saver';
+import * as FileSaver from "file-saver";
 import React, { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
@@ -35,12 +35,6 @@ const MenuProps = {
 };
 
 const DtmSave = () => {
-  const n = new Date();
-  const [Dates] = useState({
-    d: String(n.getDate()),
-    m: String(n.getMonth()),
-    y: String(n.getFullYear()),
-  });
 
   // to fetch current date
   const getCurrentDate = () => {
@@ -96,16 +90,12 @@ const DtmSave = () => {
 
   const [prodTableData, setProdTableData] = useState([]);
 
-
   const [currDate, setCurrDate] = useState("");
 
   const [dynamicRowsTotal, setDynamicRowsTotal] = useState(0);
   const [dynamicRowsTotal2, setDynamicRowsTotal2] = useState(0);
 
-  const [bulkMilkRate, setBulkMilkRate] = useState('')
-
-  
-
+  const [bulkMilkRate, setBulkMilkRate] = useState("");
 
   // Adding row of first table
   const addRow = () => {
@@ -134,24 +124,23 @@ const DtmSave = () => {
     setSecondTableAdd(list);
   };
 
-
   const handleFirstTableChange = (index, event) => {
     const { name, value } = event.target;
     const list = [...firstTableAdd];
     list[index][name] = value;
 
-    if(name === "hostelName"){
-      if(value === 'Bulk'){
-        list[index]['dtmrate'] = bulkMilkRate;
-      }else {
-        list[index]['dtmrate'] = hotelMilkRate;
+    if (name === "hostelName") {
+      if (value === "Bulk") {
+        list[index]["dtmrate"] = bulkMilkRate;
+      } else {
+        list[index]["dtmrate"] = hotelMilkRate;
       }
     }
 
     if (name === "qty" || name === "dtmrate") {
       const qty = parseFloat(list[index].qty);
       const rate = parseFloat(list[index].dtmrate);
-      list[index].dtmamount = list[index].qty * hotelMilkRate; 
+      list[index].dtmamount = list[index].qty * hotelMilkRate;
     }
     setfirstTableAdd(list);
   };
@@ -161,18 +150,18 @@ const DtmSave = () => {
     const list = [...secondTableAdd];
     list[index][name] = value;
 
-    if(name === 'stdhostelName'){
-      if(value === 'Bulk'){
-        list[index]['stdrate'] = bulkMilkRate;
-      }else {
-        list[index]['stdrate'] = hotelMilkRate;
+    if (name === "stdhostelName") {
+      if (value === "Bulk") {
+        list[index]["stdrate"] = bulkMilkRate;
+      } else {
+        list[index]["stdrate"] = hotelMilkRate;
       }
     }
 
     if (name === "stdQty" || name === "stdrate") {
       const stdQty = parseFloat(list[index].stdQty);
       const stdrate = parseFloat(list[index].stdrate);
-      list[index].stdamount = list[index].stdQty * hotelMilkRate; 
+      list[index].stdamount = list[index].stdQty * hotelMilkRate;
     }
     setSecondTableAdd(list);
   };
@@ -201,7 +190,7 @@ const DtmSave = () => {
         const lastClosingBalance = response.data;
 
         setOpeningBalance(lastClosingBalance);
-        setTimeout(() => { }, 1000);
+        setTimeout(() => {}, 1000);
       } catch (error) {
         console.error("Error fetching closing balance:", error);
       }
@@ -215,7 +204,7 @@ const DtmSave = () => {
         const lastClosingBalance = response.data;
 
         setStdopeningBalance(lastClosingBalance);
-        setTimeout(() => { }, 1000);
+        setTimeout(() => {}, 1000);
       } catch (error) {
         console.error("Error fetching closing balance:", error);
       }
@@ -230,9 +219,9 @@ const DtmSave = () => {
         setHotelMilkRate(MilkRate[0].hotelMilkRate);
         setStandardMilkRate(MilkRate[0].standardMilkRate);
         setDtmMilkRate(MilkRate[0].dtmMilkRate);
-        setBulkMilkRate(MilkRate[0].salingMilkRate)
+        setBulkMilkRate(MilkRate[0].salingMilkRate);
         // console.log(MilkRate[0].salingMilkRate)
-        console.log(response.data)
+        console.log(response.data);
         setTimeout(() => {}, 1000);
       } catch (error) {
         console.error("Error fetching closing balance:", error);
@@ -251,7 +240,11 @@ const DtmSave = () => {
   // Calculation data
 
   const CalculateTotals = () => {
-    const totalQty = parseInt(product) + parseInt(dtmsaleOnline) + parseInt(dtmSaleCash) + dynamicRowsTotal
+    const totalQty =
+      parseInt(product) +
+      parseInt(dtmsaleOnline) +
+      parseInt(dtmSaleCash) +
+      dynamicRowsTotal;
     // console.log(totalQty)
     const dtmAmountCash = parseInt(dtmMilkRate) * parseInt(dtmSaleCash);
     const dtmAmountOnline = parseInt(dtmMilkRate) * parseInt(dtmsaleOnline);
@@ -261,10 +254,13 @@ const DtmSave = () => {
     const stdAmountOnline =
       parseInt(standardMilkRate) * parseInt(stdsaleOnline);
     const stdfinalTotal = parseInt(stdAmountCash) + parseInt(stdAmountOnline);
-      const stdtotalQty = parseInt(stdproduct) + parseInt(stdSaleCash)+ parseInt(stdsaleOnline) + dynamicRowsTotal2
-      const stdclosingBalance =
-      parseInt(stdopeningBalance) 
-       - parseInt(stdtotalQty);
+    const stdtotalQty =
+      parseInt(stdproduct) +
+      parseInt(stdSaleCash) +
+      parseInt(stdsaleOnline) +
+      dynamicRowsTotal2;
+    const stdclosingBalance =
+      parseInt(stdopeningBalance) - parseInt(stdtotalQty);
 
     return {
       dtmAmountCash,
@@ -276,8 +272,7 @@ const DtmSave = () => {
       stdfinalTotal,
       stdclosingBalance,
       totalQty,
-      stdtotalQty
-
+      stdtotalQty,
     };
   };
 
@@ -291,9 +286,8 @@ const DtmSave = () => {
     stdfinalTotal,
     stdclosingBalance,
     totalQty,
-    stdtotalQty
+    stdtotalQty,
   } = CalculateTotals();
-
 
   const saveData = async () => {
     try {
@@ -519,16 +513,15 @@ const DtmSave = () => {
     setSahiwalCream(item.sahiwalCream);
     setResearch(item.research);
     setHloss(item.hloss);
-    setRemark(item.remark)
+    setRemark(item.remark);
     setEditItem(item);
   };
 
   const exportToExcel = async () => {
     const fileName = "DTM Milk Sale";
     const fileType =
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
     const fileExtension = ".xlsx";
-
 
     const ws = XLSX.utils.json_to_sheet(prodTableData);
     const wb = XLSX.utils.book_new();
@@ -536,21 +529,23 @@ const DtmSave = () => {
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: fileType });
     FileSaver.saveAs(data, fileName + fileExtension);
-};
-
+  };
 
   useEffect(() => {
-    const sum = firstTableAdd.reduce((acc, row)=> acc + parseFloat(row.qty)||0, 0)
+    const sum = firstTableAdd.reduce(
+      (acc, row) => acc + parseFloat(row.qty) || 0,
+      0
+    );
     setDynamicRowsTotal(sum);
-  }, [firstTableAdd])
+  }, [firstTableAdd]);
 
   useEffect(() => {
-    const sum2 = secondTableAdd.reduce((acc, row) => acc + parseFloat(row.stdQty)|| 0, 0)
-    // console.log(sum2)
-    setDynamicRowsTotal2(sum2)
-  }, [secondTableAdd])
-  
-  
+    const sum2 = secondTableAdd.reduce(
+      (acc, row) => acc + parseFloat(row.stdQty) || 0,
+      0
+    );
+    setDynamicRowsTotal2(sum2);
+  }, [secondTableAdd]);
 
   return (
     <>
@@ -817,9 +812,7 @@ const DtmSave = () => {
                 <tbody>
                   {firstTableAdd.map((row, index) => (
                     <tr key={index}>
-                      <td scope="row" className="text-center">
-                        {index + 1}
-                      </td>
+                      <td className="text-center">{index + 1}</td>
                       <td className="text-center">
                         <FormControl
                           variant="standard"
@@ -838,7 +831,9 @@ const DtmSave = () => {
                             MenuProps={MenuProps}
                             name="hostelName"
                             value={row.hostelName}
-                            onChange={(event) => handleFirstTableChange(index, event)}
+                            onChange={(event) =>
+                              handleFirstTableChange(index, event)
+                            }
                           >
                             {hostelData.map((hostel, index) => (
                               <MenuItem key={index} value={hostel}>
@@ -862,7 +857,9 @@ const DtmSave = () => {
                             variant="standard"
                             name="qty"
                             value={row.qty}
-                            onChange={(event) => handleFirstTableChange(index, event)}
+                            onChange={(event) =>
+                              handleFirstTableChange(index, event)
+                            }
                           />
                         </Box>
                       </td>
@@ -880,7 +877,9 @@ const DtmSave = () => {
                             variant="standard"
                             name="dtmrate"
                             value={row.dtmrate}
-                            onChange={(event) => handleFirstTableChange(index, event)}
+                            onChange={(event) =>
+                              handleFirstTableChange(index, event)
+                            }
                           />
                         </Box>
                       </td>
@@ -902,7 +901,10 @@ const DtmSave = () => {
                         </Box>
                       </td>
                       <td>
-                        <button className="btn"onClick={() => deleteRow(index)}>
+                        <button
+                          className="btn"
+                          onClick={() => deleteRow(index)}
+                        >
                           <MdDeleteOutline className="delicon" />
                         </button>
                       </td>
@@ -1217,9 +1219,7 @@ const DtmSave = () => {
                 <tbody>
                   {secondTableAdd.map((row, index) => (
                     <tr key={index}>
-                      <td scope="row" className="text-center">
-                        {index + 1}
-                      </td>
+                      <td className="text-center">{index + 1}</td>
                       <td>
                         <FormControl
                           variant="standard"
@@ -1238,7 +1238,9 @@ const DtmSave = () => {
                             MenuProps={MenuProps}
                             name="stdhostelName"
                             value={row.stdhostelName}
-                            onChange={(event) => handleSecondTableChange(index, event)}
+                            onChange={(event) =>
+                              handleSecondTableChange(index, event)
+                            }
                           >
                             {hostelData.map((hostel, index) => (
                               <MenuItem key={index} value={hostel}>
@@ -1262,7 +1264,9 @@ const DtmSave = () => {
                             variant="standard"
                             name="stdQty"
                             value={row.stdQty}
-                            onChange={(event) => handleSecondTableChange(index, event)}
+                            onChange={(event) =>
+                              handleSecondTableChange(index, event)
+                            }
                           />
                         </Box>
                       </td>
@@ -1280,7 +1284,9 @@ const DtmSave = () => {
                             variant="standard"
                             name="stdrate"
                             value={row.stdrate}
-                            onChange={(event) => handleSecondTableChange(index, event)}
+                            onChange={(event) =>
+                              handleSecondTableChange(index, event)
+                            }
                           />
                         </Box>
                       </td>
@@ -1302,7 +1308,10 @@ const DtmSave = () => {
                         </Box>
                       </td>
                       <td>
-                        <button className="btn"onClick={() => deleteRow1(index)}>
+                        <button
+                          className="btn"
+                          onClick={() => deleteRow1(index)}
+                        >
                           <MdDeleteOutline className="delicon" />
                         </button>
                       </td>
@@ -1318,10 +1327,14 @@ const DtmSave = () => {
               <button className="savebtn" onClick={() => saveData()}>
                 Save
               </button>
-              <button className='btn btn-success' onClick={()=>exportToExcel()}>Export To Excel</button>
-
+              <button
+                className="btn btn-success"
+                onClick={() => exportToExcel()}
+              >
+                Export To Excel
+              </button>
             </div>
-             <div className="container tableMaster mt-5 mb-3 p-0">
+            <div className="container tableMaster mt-5 mb-3 p-0">
               <table className="table productTableMAster table-stripped">
                 <thead className="tableheading">
                   <tr>
