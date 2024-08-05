@@ -35,7 +35,6 @@ const MenuProps = {
 };
 
 const DtmSave = () => {
-
   // to fetch current date
   const getCurrentDate = () => {
     const today = new Date();
@@ -62,13 +61,15 @@ const DtmSave = () => {
   const [opendailogdel, setopendailogdel] = useState(false);
   const [product, setProduct] = useState("");
 
-  const [hotelMilkRate, setHotelMilkRate] = useState(0);
 
   const [dtmMilkRate, setDtmMilkRate] = useState("");
   const [dtmSaleCash, setDtmSaleCash] = useState("");
-  const [standardMilkRate, setStandardMilkRate] = useState("");
+  const [stdMilkRate, setSTDMilkRate] = useState("");
   const [dtmsaleOnline, setDtmsaleOnline] = useState("");
   // const [totalQty, setTotalQty] = useState("");
+
+  const [dtmhotelMilkRate, setDTMHotelMilkRate] = useState(0);
+  const [stdhotelMilkRate, setSTDHotelMilkRate] = useState(0);
 
   // second table usestate
   const [stdproduct, setStdproduct] = useState("");
@@ -95,7 +96,8 @@ const DtmSave = () => {
   const [dynamicRowsTotal, setDynamicRowsTotal] = useState(0);
   const [dynamicRowsTotal2, setDynamicRowsTotal2] = useState(0);
 
-  const [bulkMilkRate, setBulkMilkRate] = useState("");
+  const [dtmBulkMilkRate, setDTMBulkMilkRate] = useState("");
+  const [stdBulkMilkRate, setSTDBulkMilkRate] = useState("")
 
   // Adding row of first table
   const addRow = () => {
@@ -131,16 +133,16 @@ const DtmSave = () => {
 
     if (name === "hostelName") {
       if (value === "Bulk") {
-        list[index]["dtmrate"] = bulkMilkRate;
+        list[index]["dtmrate"] = dtmBulkMilkRate;
       } else {
-        list[index]["dtmrate"] = hotelMilkRate;
+        list[index]["dtmrate"] = dtmhotelMilkRate;
       }
     }
 
     if (name === "qty" || name === "dtmrate") {
       const qty = parseFloat(list[index].qty);
       const rate = parseFloat(list[index].dtmrate);
-      list[index].dtmamount = list[index].qty * hotelMilkRate;
+      list[index].dtmamount = list[index].qty * dtmBulkMilkRate;
     }
     setfirstTableAdd(list);
   };
@@ -152,16 +154,16 @@ const DtmSave = () => {
 
     if (name === "stdhostelName") {
       if (value === "Bulk") {
-        list[index]["stdrate"] = bulkMilkRate;
+        list[index]["stdrate"] = dtmBulkMilkRate;
       } else {
-        list[index]["stdrate"] = hotelMilkRate;
+        list[index]["stdrate"] = stdhotelMilkRate;
       }
     }
 
     if (name === "stdQty" || name === "stdrate") {
       const stdQty = parseFloat(list[index].stdQty);
       const stdrate = parseFloat(list[index].stdrate);
-      list[index].stdamount = list[index].stdQty * hotelMilkRate;
+      list[index].stdamount = list[index].stdQty * stdBulkMilkRate;
     }
     setSecondTableAdd(list);
   };
@@ -171,7 +173,7 @@ const DtmSave = () => {
     const fetchHostels = async () => {
       try {
         const response = await axios.get(
-          "http://103.38.50.113:8080/DairyApplication/getHostel"
+          "http://103.14.99.198:8082/DairyApplication/getHostel"
         );
         console.log(response.data);
         setHostelData(response.data);
@@ -185,7 +187,7 @@ const DtmSave = () => {
     const fetchOpeningBalance = async () => {
       try {
         const response = await axios.get(
-          "http://103.38.50.113:8080/DairyApplication/dtmClosingBalance"
+          "http://103.14.99.198:8082/DairyApplication/dtmClosingBalance"
         );
         const lastClosingBalance = response.data;
 
@@ -199,7 +201,7 @@ const DtmSave = () => {
     const fetchStdOpeningBalance = async () => {
       try {
         const response = await axios.get(
-          "http://103.38.50.113:8080/DairyApplication/closingBalance"
+          "http://103.14.99.198:8082/DairyApplication/closingBalance"
         );
         const lastClosingBalance = response.data;
 
@@ -210,17 +212,29 @@ const DtmSave = () => {
       }
     };
 
-    const fetchMilkRate = async () => {
+    const fetchDTMMilkRate = async () => {
       try {
         const response = await axios.get(
-          "http://103.38.50.113:8080/DairyApplication/getAllDataOfMilkRateMaster"
+          "http://103.14.99.198:8082/DairyApplication/getAllDTMMilkRates"
         );
-        const MilkRate = response.data;
-        setHotelMilkRate(MilkRate[0].hotelMilkRate);
-        setStandardMilkRate(MilkRate[0].standardMilkRate);
-        setDtmMilkRate(MilkRate[0].dtmMilkRate);
-        setBulkMilkRate(MilkRate[0].salingMilkRate);
-        // console.log(MilkRate[0].salingMilkRate)
+        setDtmMilkRate(response.data.data[0].dtmMilkRate);
+        setDTMHotelMilkRate(response.data.data[0].dtmhotelMilkRate)
+        setDTMBulkMilkRate(response.data.data[0].dtmBulkMilkRate)
+        console.log(response.data);
+        setTimeout(() => {}, 1000);
+      } catch (error) {
+        console.error("Error fetching closing balance:", error);
+      }
+    };
+
+    const fetchSTDMilkRate = async () => {
+      try {
+        const response = await axios.get(
+          "http://103.14.99.198:8082/DairyApplication/getAllSTDMilkRates"
+        );
+        setSTDMilkRate(response.data.data[0].stdMilkRate);
+        setSTDHotelMilkRate(response.data.data[0].stdhotelMilkRate)
+        setSTDBulkMilkRate(response.data.data[0].stdBulkMilkRate)
         console.log(response.data);
         setTimeout(() => {}, 1000);
       } catch (error) {
@@ -234,7 +248,8 @@ const DtmSave = () => {
     fetchHostels();
     fetchOpeningBalance();
     fetchStdOpeningBalance();
-    fetchMilkRate();
+    fetchDTMMilkRate();
+    fetchSTDMilkRate();
   }, []);
 
   // Calculation data
@@ -250,9 +265,9 @@ const DtmSave = () => {
     const dtmAmountOnline = parseInt(dtmMilkRate) * parseInt(dtmsaleOnline);
     const finalTotal = parseInt(dtmAmountCash) + parseInt(dtmAmountOnline);
     const closingBalance = parseInt(openingBalance) - parseInt(totalQty);
-    const stdAmountCash = parseInt(standardMilkRate) * parseInt(stdSaleCash);
+    const stdAmountCash = parseInt(stdMilkRate) * parseInt(stdSaleCash);
     const stdAmountOnline =
-      parseInt(standardMilkRate) * parseInt(stdsaleOnline);
+      parseInt(stdMilkRate) * parseInt(stdsaleOnline);
     const stdfinalTotal = parseInt(stdAmountCash) + parseInt(stdAmountOnline);
     const stdtotalQty =
       parseInt(stdproduct) +
@@ -293,7 +308,7 @@ const DtmSave = () => {
     try {
       if (editItem) {
         await axios.put(
-          `http://103.38.50.113:8080/DairyApplication/updateDtmMilkSale/${editItem.id}`,
+          `http://103.14.99.198:8082/DairyApplication/updateDtmMilkSale/${editItem.id}`,
           {
             openingBalance,
             closingBalance,
@@ -313,7 +328,7 @@ const DtmSave = () => {
             stdsaleOnline,
             stdAmountCash,
             stdAmountOnline,
-            stdrate: standardMilkRate,
+            stdrate: stdMilkRate,
             stdfinalTotal,
             stdtotalQty,
             cream,
@@ -335,7 +350,7 @@ const DtmSave = () => {
         });
       } else {
         const resp = await axios.post(
-          "http://103.38.50.113:8080/DairyApplication/saveDtmMilkSales",
+          "http://103.14.99.198:8082/DairyApplication/saveDtmMilkSales",
           {
             openingBalance,
             closingBalance,
@@ -357,7 +372,7 @@ const DtmSave = () => {
             stdsaleOnline,
             stdAmountCash,
             stdAmountOnline,
-            stdrate: standardMilkRate,
+            stdrate: stdMilkRate,
             stdfinalTotal,
             stdtotalQty,
             cream,
@@ -416,7 +431,7 @@ const DtmSave = () => {
     setLoader(true);
     try {
       await axios
-        .get("http://103.38.50.113:8080/DairyApplication/fetchDtmMilkSale")
+        .get("http://103.14.99.198:8082/DairyApplication/fetchDtmMilkSale")
         .then((res) => {
           setProdTableData(res.data);
           setTimeout(() => {
@@ -450,7 +465,7 @@ const DtmSave = () => {
     try {
       await axios
         .post(
-          "http://103.38.50.113:8080/DairyApplication/deleteDtmMilkSale",
+          "http://103.14.99.198:8082/DairyApplication/deleteDtmMilkSale",
           delobj,
           {
             headers: {
@@ -1060,7 +1075,7 @@ const DtmSave = () => {
                   <TextField
                     label="Standard Rate"
                     variant="standard"
-                    value={standardMilkRate}
+                    value={stdMilkRate}
                   />
                 </Box>
               </div>

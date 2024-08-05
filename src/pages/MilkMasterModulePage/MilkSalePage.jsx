@@ -1,6 +1,6 @@
 import React from 'react'
+import MilkSale from '../../components/Modules/Milk Sale Master/MilkSale'
 import Navbar from '../../components/Navbar/Navbar'
-import MilkSale from '../../components/Modules/Milk SaleMaster/MilkSale'
 
 
 const MilkSalePage = () => {

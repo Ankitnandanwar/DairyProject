@@ -1,6 +1,6 @@
 import React from 'react'
+import MilkMaster from '../../components/Modules/Milk Sale Master/MilkMaster'
 import Navbar from '../../components/Navbar/Navbar'
-import MilkMaster from '../../components/Modules/Milk SaleMaster/MilkMaster'
 
 const MilkMasterPage = () => {
   return (

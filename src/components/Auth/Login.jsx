@@ -50,7 +50,7 @@ const Login = () => {
           });
           return;
         }
-        const response = await axios.post('http://103.38.50.113:8080/DairyApplication/loginValidate', loginUser);
+        const response = await axios.post('http://103.14.99.198:8082/DairyApplication/loginValidate', loginUser);
         const data = response.data;
         console.log(data);
 
@@ -91,7 +91,7 @@ const Login = () => {
   useEffect(() => {
     const fetchUniqueUser = async() =>{
       try {
-        const res = await axios.get('http://103.38.50.113:8080/DairyApplication/userNames');
+        const res = await axios.get('http://103.14.99.198:8082/DairyApplication/userNames');
         console.log(res.data)
         setUniqueUser(res.data)
       } catch (error) {
@@ -174,7 +174,6 @@ const Login = () => {
                     </MenuItem>
                   </Select>
                 </FormControl>
-
 
               </div>
               <button type="submit" className="login-btn" onClick={() => handleloginSubmit()}>Login</button>

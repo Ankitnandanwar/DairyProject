@@ -41,7 +41,7 @@ const ProductEntry = () => {
     const saveData = async () => {
         try {
             if (editItem) {
-                await axios.put(`http://103.38.50.113:8080/DairyApplication/upadteItemMaster/${editItem.id}`, {
+                await axios.put(`http://103.14.99.198:8082/DairyApplication/upadteItemMaster/${editItem.id}`, {
                     item, presentStock, unit
                 })
                 toast.success("Data Updated Successfully", {
@@ -55,7 +55,7 @@ const ProductEntry = () => {
                     theme: "light",
                 })
             } else {
-                const res = await axios.post("http://103.38.50.113:8080/DairyApplication/saveItemMaster", {
+                const res = await axios.post("http://103.14.99.198:8082/DairyApplication/saveItemMaster", {
                     item, presentStock, unit
                 })
                 toast.success("Data Saved Successfully", {
@@ -90,7 +90,7 @@ const ProductEntry = () => {
     const getProductData = async () => {
         setLoader(true)
         try {
-            await axios.get("http://103.38.50.113:8080/DairyApplication/getItemMaster").then((res) => {
+            await axios.get("http://103.14.99.198:8082/DairyApplication/getItemMaster").then((res) => {
                 setProdTableData(res.data)
                 setTimeout(() => {
                     setLoader(false)
@@ -123,7 +123,7 @@ const ProductEntry = () => {
         }
 
         try {
-            await axios.post("http://103.38.50.113:8080/DairyApplication/deleteItemMaster", delobj, {
+            await axios.post("http://103.14.99.198:8082/DairyApplication/deleteItemMaster", delobj, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

@@ -54,7 +54,7 @@ const ProductSale = () => {
 
     const fetchProductDetails = async () => {
         try {
-            const response = await axios.get(`http://103.38.50.113:8080/DairyApplication/getItemData?item=${selectedProduct}`);
+            const response = await axios.get(`http://103.14.99.198:8082/DairyApplication/getItemData?item=${selectedProduct}`);
             const details = response.data[0];
             setProductDetails({
                 presentStock: details.presentStock,
@@ -67,7 +67,7 @@ const ProductSale = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('http://103.38.50.113:8080/DairyApplication/getItem');
+                const response = await axios.get('http://103.14.99.198:8082/DairyApplication/getItem');
                 setProducts(response.data);
                 setCurrentDate(getCurrentDate())
             } catch (error) {
@@ -90,7 +90,7 @@ const ProductSale = () => {
 
     const handleSave = async () => {
         try {
-            const res = await axios.post("http://103.38.50.113:8080/DairyApplication/saveDairyInventory", {
+            const res = await axios.post("http://103.14.99.198:8082/DairyApplication/saveDairyInventory", {
                 item: selectedProduct,
                 presentStock: productDetails.presentStock,
                 addQtyStock,
@@ -126,7 +126,7 @@ const ProductSale = () => {
     const getProductData = async () => {
         setLoader(true)
         try {
-             await axios.get("http://103.38.50.113:8080/DairyApplication/getAllInventoryData").then((res) => {
+             await axios.get("http://103.14.99.198:8082/DairyApplication/getAllInventoryData").then((res) => {
                 setProdTableData(res.data)
                 setTimeout(() => {
                     setLoader(false)
@@ -309,7 +309,7 @@ const ProductSale = () => {
                                     <TextField label="Quantity Used For Purpose" variant="standard" value={purpose} onChange={(e) => setPurpose(e.target.value)} />
                                 </Box>
                             </div>
-                            <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
+                            {/* <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                                 <Box
                                     component="form"
                                     sx={{
@@ -320,7 +320,7 @@ const ProductSale = () => {
                                 >
                                     <TextField label="Total Daily Quantity Used" variant="standard" value={totalDailyUsedQty} onChange={(e) => setTotalDailyUsedQty(e.target.value)} />
                                 </Box>
-                            </div>
+                            </div> */}
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center'>
                                 <Box
                                     component="form"
@@ -359,14 +359,13 @@ const ProductSale = () => {
                                         <th style={{ width: "100px" }}>SrNo</th>
                                         <th style={{ width: "100px" }}>Date</th>
                                         <th style={{ width: "250px" }}>Name of Item</th>
+                                        <th style={{ width: "150px" }}>Quantity Issued</th>
                                         <th style={{ width: "150px" }}>Present Stock</th>
                                         <th style={{ width: "150px" }}>Add Quantity to Stock</th>
                                         <th style={{ width: "150px" }}>Quantity Received From</th>
                                         <th style={{ width: "150px" }}>Total Value of the Quantity</th>
                                         <th style={{ width: "150px" }}>Name of the Person Who Issued Quantity</th>
-                                        <th style={{ width: "150px" }}>Quantity Issued</th>
                                         <th style={{ width: "150px" }}>Quantity Used for Purpose</th>
-                                        <th style={{ width: "150px" }}>Total Daily Quantity Used</th>
                                         <th style={{ width: "150px" }}>Closing Stock</th>
                                         <th style={{ width: "150px" }}>Remarks</th>
                                     </tr>
@@ -380,13 +379,12 @@ const ProductSale = () => {
                                                     <td>{item.date}</td>
                                                     <td>{item.item}</td>
                                                     <td>{item.presentStock}</td>
+                                                    <td>{item.qtyIssued}</td>
                                                     <td>{item.addQtyStock}</td>
                                                     <td>{item.qtyReceived}</td>
                                                     <td>{item.totalQty}</td>
                                                     <td>{item.personName}</td>
-                                                    <td>{item.qtyIssued}</td>
                                                     <td>{item.purpose}</td>
-                                                    <td>{item.totalDailyUsedQty}</td>
                                                     <td>{item.closingStock}</td>
                                                     <td>{item.remark}</td>
                                                 </tr>
