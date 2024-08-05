@@ -23,7 +23,7 @@ const MilkSale = () => {
     const getProductData = async () => {
         setLoader(true)
         try {
-             await axios.get("http://103.38.50.113:8080/DairyApplication/getAllDailyData").then((res) => {
+             await axios.get("http://103.14.99.198:8082/DairyApplication/getAllDailyData").then((res) => {
                 setProducts(res.data)
                 setTimeout(() => {
                     setLoader(false)
@@ -38,7 +38,7 @@ const MilkSale = () => {
         setLoader(true);
         try {
             const response = await axios.post(
-                'http://103.38.50.113:8080/DairyApplication/calculateTotals',
+                'http://103.14.99.198:8082/DairyApplication/calculateTotals',
                 {
                     startDate: dates.fdate,
                     endDate: dates.tdate,
@@ -63,7 +63,7 @@ const MilkSale = () => {
                     endDate: dates.tdate
                 }
                 console.log(dateObj, 'sdshdhsd')
-                axios.post('http://103.38.50.113:8080/DairyApplication/calculateTotals', dateObj).then((data) => {
+                axios.post('http://103.14.99.198:8082/DairyApplication/calculateTotals', dateObj).then((data) => {
                     if (data.data?.length > 0) {
                         setProducts(data?.data)
                     } else {
@@ -293,6 +293,39 @@ const MilkSale = () => {
                                 </tbody>
                             </table>
                         </div>
+                        <div className='container tableMaster mt-5 mb-3 p-0'>
+                                <div><h5 className='p-2' style={{ fontWeight: "600", textAlign: "center" }}>Grand Total</h5></div>
+                                <div className='row m-2'>
+                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
+                                        <div className='totalstitle'>Total GST Amount</div>
+                                        <div className='totalnos'>{}</div>
+                                    </div>
+                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
+                                        <div className='totalstitle'>Total Cash Sale</div>
+                                        <div className='totalnos'>{}</div>
+                                    </div>
+                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
+                                        <div className='totalstitle'>Total Online Sale</div>
+                                        <div className='totalnos'>{}</div>
+                                    </div>
+                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
+                                        <div className='totalstitle'>Total Sale</div>
+                                        <div className='totalnos'>{}</div>
+                                    </div>
+                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
+                                        <div className='totalstitle'>Total Amount Cash</div>
+                                        <div className='totalnos'>{}</div>
+                                    </div>
+                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
+                                        <div className='totalstitle'>Total Amount Online</div>
+                                        <div className='totalnos'>{}</div>
+                                    </div>
+                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
+                                        <div className='totalstitle'>Grand Total</div>
+                                        <div className='totalnos'>{}</div>
+                                    </div>
+                                </div>
+                            </div>
                     </div>
             }
 

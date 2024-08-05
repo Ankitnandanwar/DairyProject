@@ -25,15 +25,16 @@ const CreateUser = () => {
 
 
   const saveData = async () => {
+    setLoader(true)
     try {
-      const res = await axios.post("http://103.38.50.113:8080/DairyApplication/userCreation", {
+      const res = await axios.post("http://103.14.99.198:8082/DairyApplication/userCreation", {
         fullName, mobileNo, email, userName, password, role
       })
 
       // console.log(res.data)
       toast.success("Data Saved Successfully", {
         position: "top-center",
-        autoClose: 4000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -58,15 +59,13 @@ const CreateUser = () => {
   }
 
   const getUserData = async () => {
-    setLoader(false)
-
     try {
-      await axios.get("http://103.38.50.113:8080/DairyApplication/getuserCreate").then((res) => {
+      await axios.get("http://103.14.99.198:8082/DairyApplication/getuserCreate").then((res) => {
         console.log(res.data.data)
         setProdTableData(res.data.data)
         setTimeout(() => {
           setLoader(false)
-        }, 1000);
+        }, 2000);
       })
     } catch (error) {
       console.log(error, "server issue")
