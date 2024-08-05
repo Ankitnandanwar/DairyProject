@@ -1,31 +1,30 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Login from './components/Auth/Login'
-import DashboardPage from './pages/Dashboard/DashboardPage'
-import ProductEntryPage from './pages/ProductModulePage/ProductEntryPage'
-import ProductSalesPage from './pages/ProductModulePage/ProductSalesPage'
-import ProductReportPage from './pages/ProductModulePage/ProductReportPage'
-import MilkMasterPage from './pages/MilkMasterModulePage/MilkMasterPage'
-import MilkSalePage from './pages/MilkMasterModulePage/MilkSalePage'
-import MilkReportPage from './pages/MilkMasterModulePage/MilkReportPage'
-import DMWEntry from './pages/MilkMasterModulePage/DMWEntryPage'
-import DMWReport from './pages/MilkMasterModulePage/DMWReportPage'
-import ItemEntry from './pages/ItemModulePage/ItemEntryPage'
-import ItemInventry from './pages/ItemModulePage/ItemInventryPage'
-import ShareDetails from './pages/SharePage/ShareDetailsPage'
-import ShareRate from './pages/SharePage/ShareRatePage'
-import ShareCream from './pages/SharePage/ShareCreamPage'
-import ShareGhee from './pages/SharePage/ShareGheePage'
-import CreationUserPage from './pages/CreationUserPage/CreationUserPage'
+import ErrorPage from './components/ErrorPage/ErrorPage'
+import PrivateRoute from './components/PrivateRoute/PrivateRoute'
 import AssignUserRolePage from './pages/CreationUserPage/AssignUserRolePage'
-import HostelPage from './pages/HostelMasterPage/HostelPage'
-import MilkCollection from './pages/MilkMasterModulePage/MilkcollectionPage'
-import Hostel from './pages/HostelMasterPage/HostelPage'
+import CreationUserPage from './pages/CreationUserPage/CreationUserPage'
+import DashboardPage from './pages/Dashboard/DashboardPage'
 import DtmMilkCollection from './pages/DTMMilkPage/DtmMilkCollectionPage'
 import DtmMilkSale from './pages/DTMMilkPage/DtmMIlkSalePage'
 import GheeEntryPage from './pages/GheeModulePage/GheeEntryPage'
-import PrivateRoute from './components/PrivateRoute/PrivateRoute'
-import ErrorPage from './components/ErrorPage/ErrorPage'
+import { default as Hostel, default as HostelPage } from './pages/HostelMasterPage/HostelPage'
+import ItemEntry from './pages/ItemModulePage/ItemEntryPage'
+import ItemInventry from './pages/ItemModulePage/ItemInventryPage'
+import DMWEntry from './pages/MilkMasterModulePage/DMWEntryPage'
+import DMWReport from './pages/MilkMasterModulePage/DMWReportPage'
+import MilkCollection from './pages/MilkMasterModulePage/MilkcollectionPage'
+import MilkMasterPage from './pages/MilkMasterModulePage/MilkMasterPage'
+import MilkReportPage from './pages/MilkMasterModulePage/MilkReportPage'
+import MilkSalePage from './pages/MilkMasterModulePage/MilkSalePage'
+import ProductEntryPage from './pages/ProductModulePage/ProductEntryPage'
+import ProductReportPage from './pages/ProductModulePage/ProductReportPage'
+import ProductSalesPage from './pages/ProductModulePage/ProductSalesPage'
+import ShareCream from './pages/SharePage/ShareCreamPage'
+import ShareDetails from './pages/SharePage/ShareDetailsPage'
+import ShareGhee from './pages/SharePage/ShareGheePage'
+import ShareRate from './pages/SharePage/ShareRatePage'
 
 const App = () => {
 
@@ -118,7 +117,6 @@ const App = () => {
 
 
           <Route path='/*' element={<ErrorPage />} />
-
 
         </Routes>
       </BrowserRouter>

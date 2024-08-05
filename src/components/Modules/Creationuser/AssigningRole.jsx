@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
-import { Bars } from 'react-loader-spinner';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import MenuItem from '@mui/material/MenuItem';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Bars } from 'react-loader-spinner';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const ITEM_HEIGHT = 48;
@@ -33,34 +31,30 @@ const AssigningRole = () => {
   const [uniqueUsername, setUniqueUsername] = useState([])
   const [moduleList, setModuleList] = useState([]);
   const [selectedModules, setSelectedModules] = useState([]);
-  const [loader, setLoader] = useState(true)
+  const [loader, setLoader] = useState(true);
 
 
 
 
   useEffect(() => {
     const fetchProducts = async () => {
-      setLoader(false)
       try {
-        const response = await axios.get('http://103.38.50.113:8080/DairyApplication/userNames');
+        const response = await axios.get('http://103.14.99.198:8082/DairyApplication/userNames');
         setUniqueUsername(response.data);
-        setTimeout(() => {
-          setLoader(false)
-        }, 1000);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
     };
 
     const fetchModuleName = async () => {
-      setLoader(false)
+      setLoader(true)
       try {
-        const response = await axios.get('http://103.38.50.113:8080/DairyApplication/getAllModuleList');
+        const response = await axios.get('http://103.14.99.198:8082/DairyApplication/getAllModuleList');
         setModuleList(response.data);
         console.log(response.data)
         setTimeout(() => {
           setLoader(false)
-        }, 1000);
+        }, 2000);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
@@ -79,7 +73,7 @@ const AssigningRole = () => {
 
     if (userName) {
       try {
-        const response = await axios.get(`http://103.38.50.113:8080/DairyApplication/getAllUserToServiceMap`);
+        const response = await axios.get(`http://103.14.99.198:8082/DairyApplication/getAllUserToServiceMap`);
         const user = response.data.find(user => user.userName === userName);
         if (user) {
           setSelectedModules(user.service.split(','));
@@ -118,12 +112,12 @@ const AssigningRole = () => {
         service: selectedModules.join(',')
       }
 
-      await axios.post('http://103.38.50.113:8080/DairyApplication/userToServiceMap', data).then(res => {
+      await axios.post('http://103.14.99.198:8082/DairyApplication/userToServiceMap', data).then(res => {
         console.log(res)
       })
       toast.success("User Created by Admin Successfully", {
         position: "top-center",
-        autoClose: 4000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -131,6 +125,9 @@ const AssigningRole = () => {
         progress: undefined,
         theme: "light",
       })
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000);
     } catch (error) {
       console.log("error saving data", error)
     }

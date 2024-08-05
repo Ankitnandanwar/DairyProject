@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import "./Product.css"
+import TextField from '@mui/material/TextField';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import "./Product.css";
 // import { MdDeleteOutline } from "react-icons/md";
-import * as FileSaver from 'file-saver'
-import * as XLSX from "xlsx";
+import * as FileSaver from 'file-saver';
 import { Bars } from 'react-loader-spinner';
+import * as XLSX from "xlsx";
 
 
 
@@ -27,7 +25,7 @@ const ProductReport = () => {
     const getProductData = async () => {
         setLoader(true)
         try {
-            await axios.get("http://103.38.50.113:8080/DairyApplication/findAllProductDate").then((res) => {
+            await axios.get("http://103.14.99.198:8082/DairyApplication/findAllProductDate").then((res) => {
                 setProducts(res.data);
                 setTimeout(() => {
                     setLoader(false)
@@ -48,7 +46,7 @@ const ProductReport = () => {
                     tDate: dates.tdate
                 }
                 console.log(dateObj, 'change date')
-                axios.post('http://103.38.50.113:8080/DairyApplication/findProductDataByDateBetween', dateObj).then((data) => {
+                axios.post('http://103.14.99.198:8082/DairyApplication/findProductDataByDateBetween', dateObj).then((data) => {
                     if (data.data.data.length > 0) {
                         setProducts(data.data.data)
                         console.log(data.data.totals)
@@ -160,7 +158,7 @@ const ProductReport = () => {
                                 </Box>
                             </div>
 
-                            <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center mt-3'>
+                            {/* <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center mt-3'>
                                 <FormControlLabel control={<Checkbox />} label="Daily" />
                             </div>
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center mt-3'>
@@ -168,11 +166,11 @@ const ProductReport = () => {
                             </div>
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center mt-3'>
                                 <FormControlLabel control={<Checkbox />} label="Weekly" />
-                            </div>
+                            </div>*/}
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center mt-3' style={{ gap: "1rem" }}>
                                 <button disabled={dates.fdate === '' && dates.tdate === ''} className='btn btn-primary' onClick={() => searchData()}>Search</button>
                                 <button className='btn btn-success' onClick={()=>exportToExcel()}>Export</button>
-                            </div>
+                            </div> 
 
                             <div className='container tableMaster mt-5 mb-3 p-0'>
                                 <table className='table productTableMAster table-stripped'>
@@ -182,7 +180,9 @@ const ProductReport = () => {
                                             <th style={{ width: "250px" }}>Date</th>
                                             <th style={{ width: "250px" }}>Product</th>
                                             <th style={{ width: "150px" }}>Opening Balance</th>
-                                            <th style={{ width: "150px" }}>Rate</th>
+                                            <th style={{ width: "150px" }}>Base Rate</th>
+                                            <th style={{ width: "150px" }}>Rate With GST</th>
+                                            <th style={{ width: "150px" }}>GST Amount</th>
                                             <th style={{ width: "150px" }}>Cream Milk</th>
                                             <th style={{ width: "150px" }}>Add Qty</th>
                                             <th style={{ width: "150px" }}>Mix</th>
@@ -210,7 +210,9 @@ const ProductReport = () => {
                                                         <td className='text-center'>{item.date}</td>
                                                         <td className='text-center'>{item.product}</td>
                                                         <td className='text-center'>{item.openBalance}</td>
+                                                        <td className='text-center'>{item.baseRate}</td>
                                                         <td className='text-center'>{item.rate}</td>
+                                                        <td className='text-center'>{item.gstAmt}</td>
                                                         <td className='text-center'>{item.creammilk}</td>
                                                         <td className='text-center'>{item.addQty}</td>
                                                         <td className='text-center'>{item.mix}</td>
@@ -244,6 +246,10 @@ const ProductReport = () => {
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Opening Balance</div>
                                         <div className='totalnos'>{totalOpeningBal.totalOpenBalance}</div>
+                                    </div>
+                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
+                                        <div className='totalstitle'>Total GST Amount</div>
+                                        <div className='totalnos'>{totalOpeningBal.gstAmt}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Amount</div>

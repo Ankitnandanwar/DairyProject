@@ -53,8 +53,8 @@ const Hostel = () => {
     const saveData = async () => {
         try {
             if (editItem) {
-                await axios.put(`http://103.38.50.113:8080/DairyApplication/updateMilkCollections/${editItem.id}`, {
-                    currentdate, openingBalance, cowmilk, sahiwalMilk, buffaloMilk
+                await axios.put(`http://103.14.99.198:8082/DairyApplication/updateMilkCollections/${editItem.id}`, {
+                    currentdate, openingBalance, cowmilk, sahiwalMilk, buffaloMilk, closingBalance, totalMilk
                 })
                 toast.success("Hostel Name Updated Successfully", {
                     position: "top-center",
@@ -67,7 +67,7 @@ const Hostel = () => {
                     theme: "light",
                 })
             } else {
-                const res = await axios.post("http://103.38.50.113:8080/DairyApplication/saveMilkCollection", {
+                const res = await axios.post("http://103.14.99.198:8082/DairyApplication/saveMilkCollection", {
                     currentdate, openingBalance, cowmilk, sahiwalMilk, buffaloMilk, closingBalance, totalMilk
                 })
                 toast.success("Hostel Name saved Successfully", {
@@ -103,7 +103,7 @@ const Hostel = () => {
     const getCollectionEntry = async () => {
         setLoader(true)
         try {
-            await axios.get("http://103.38.50.113:8080/DairyApplication/findMilkCollections").then((res) => {
+            await axios.get("http://103.14.99.198:8082/DairyApplication/findMilkCollections").then((res) => {
                 setHostelTableData(res.data)
                 setTimeout(() => {
                     setLoader(false)
@@ -146,7 +146,7 @@ const Hostel = () => {
         }
 
         try {
-            await axios.post("http://103.38.50.113:8080/DairyApplication/deleteMilkCollections", delobj, {
+            await axios.post("http://103.14.99.198:8082/DairyApplication/deleteMilkCollections", delobj, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -170,7 +170,7 @@ const Hostel = () => {
 
         const fetchClosingBalance = async () => {
             try {
-                const response = await axios.get('http://103.38.50.113:8080/DairyApplication/closingBalance');
+                const response = await axios.get('http://103.14.99.198:8082/DairyApplication/closingBalance');
                 const lastClosingBalance = response.data;
 
                 setOpeningBalance(lastClosingBalance);

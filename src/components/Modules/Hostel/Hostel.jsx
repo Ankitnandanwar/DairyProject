@@ -39,7 +39,7 @@ const Hostel = () => {
     const saveData = async () => {
         try {
             if (editItem) {
-                await axios.put(`http://103.38.50.113:8080/DairyApplication/updateHostelMasters/${editItem.id}`, {
+                await axios.put(`http://103.14.99.198:8082/DairyApplication/updateHostelMasters/${editItem.id}`, {
                     hostelName
                 })
                 toast.success("Hostel Name Updated Successfully", {
@@ -53,7 +53,7 @@ const Hostel = () => {
                     theme: "light",
                 })
             } else {
-                const res = await axios.post("http://103.38.50.113:8080/DairyApplication/saveHostelMaster", {
+                const res = await axios.post("http://103.14.99.198:8082/DairyApplication/saveHostelMaster", {
                     hostelName
                 })
                 toast.success("Hostel Name saved Successfully", {
@@ -83,7 +83,7 @@ const Hostel = () => {
     const getHostelEntry = async () => {
         setLoader(true)
         try {
-            await axios.get("http://103.38.50.113:8080/DairyApplication/fetchHostelMasters").then((res) => {
+            await axios.get("http://103.14.99.198:8082/DairyApplication/fetchHostelMasters").then((res) => {
                 setHostelTableData(res.data)
                 setTimeout(() => {
                     setLoader(false)
@@ -121,7 +121,7 @@ const Hostel = () => {
         }
 
         try {
-            await axios.post("http://103.38.50.113:8080/DairyApplication/deleteHostelMasters", delobj, {
+            await axios.post("http://103.14.99.198:8082/DairyApplication/deleteHostelMasters", delobj, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

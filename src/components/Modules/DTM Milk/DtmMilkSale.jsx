@@ -9,7 +9,7 @@ import Select from "@mui/material/Select";
 import Slide from "@mui/material/Slide";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
-import * as FileSaver from 'file-saver';
+import * as FileSaver from "file-saver";
 import React, { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
@@ -35,13 +35,6 @@ const MenuProps = {
 };
 
 const DtmSave = () => {
-  const n = new Date();
-  const [Dates] = useState({
-    d: String(n.getDate()),
-    m: String(n.getMonth()),
-    y: String(n.getFullYear()),
-  });
-
   // to fetch current date
   const getCurrentDate = () => {
     const today = new Date();
@@ -68,13 +61,15 @@ const DtmSave = () => {
   const [opendailogdel, setopendailogdel] = useState(false);
   const [product, setProduct] = useState("");
 
-  const [hotelMilkRate, setHotelMilkRate] = useState(0);
 
   const [dtmMilkRate, setDtmMilkRate] = useState("");
   const [dtmSaleCash, setDtmSaleCash] = useState("");
-  const [standardMilkRate, setStandardMilkRate] = useState("");
+  const [stdMilkRate, setSTDMilkRate] = useState("");
   const [dtmsaleOnline, setDtmsaleOnline] = useState("");
   // const [totalQty, setTotalQty] = useState("");
+
+  const [dtmhotelMilkRate, setDTMHotelMilkRate] = useState(0);
+  const [stdhotelMilkRate, setSTDHotelMilkRate] = useState(0);
 
   // second table usestate
   const [stdproduct, setStdproduct] = useState("");
@@ -96,16 +91,13 @@ const DtmSave = () => {
 
   const [prodTableData, setProdTableData] = useState([]);
 
-
   const [currDate, setCurrDate] = useState("");
 
   const [dynamicRowsTotal, setDynamicRowsTotal] = useState(0);
   const [dynamicRowsTotal2, setDynamicRowsTotal2] = useState(0);
 
-  const [bulkMilkRate, setBulkMilkRate] = useState('')
-
-  
-
+  const [dtmBulkMilkRate, setDTMBulkMilkRate] = useState("");
+  const [stdBulkMilkRate, setSTDBulkMilkRate] = useState("")
 
   // Adding row of first table
   const addRow = () => {
@@ -134,24 +126,23 @@ const DtmSave = () => {
     setSecondTableAdd(list);
   };
 
-
   const handleFirstTableChange = (index, event) => {
     const { name, value } = event.target;
     const list = [...firstTableAdd];
     list[index][name] = value;
 
-    if(name === "hostelName"){
-      if(value === 'Bulk'){
-        list[index]['dtmrate'] = bulkMilkRate;
-      }else {
-        list[index]['dtmrate'] = hotelMilkRate;
+    if (name === "hostelName") {
+      if (value === "Bulk") {
+        list[index]["dtmrate"] = dtmBulkMilkRate;
+      } else {
+        list[index]["dtmrate"] = dtmhotelMilkRate;
       }
     }
 
     if (name === "qty" || name === "dtmrate") {
       const qty = parseFloat(list[index].qty);
       const rate = parseFloat(list[index].dtmrate);
-      list[index].dtmamount = list[index].qty * hotelMilkRate; 
+      list[index].dtmamount = list[index].qty * dtmBulkMilkRate;
     }
     setfirstTableAdd(list);
   };
@@ -161,18 +152,18 @@ const DtmSave = () => {
     const list = [...secondTableAdd];
     list[index][name] = value;
 
-    if(name === 'stdhostelName'){
-      if(value === 'Bulk'){
-        list[index]['stdrate'] = bulkMilkRate;
-      }else {
-        list[index]['stdrate'] = hotelMilkRate;
+    if (name === "stdhostelName") {
+      if (value === "Bulk") {
+        list[index]["stdrate"] = dtmBulkMilkRate;
+      } else {
+        list[index]["stdrate"] = stdhotelMilkRate;
       }
     }
 
     if (name === "stdQty" || name === "stdrate") {
       const stdQty = parseFloat(list[index].stdQty);
       const stdrate = parseFloat(list[index].stdrate);
-      list[index].stdamount = list[index].stdQty * hotelMilkRate; 
+      list[index].stdamount = list[index].stdQty * stdBulkMilkRate;
     }
     setSecondTableAdd(list);
   };
@@ -182,7 +173,7 @@ const DtmSave = () => {
     const fetchHostels = async () => {
       try {
         const response = await axios.get(
-          "http://103.38.50.113:8080/DairyApplication/getHostel"
+          "http://103.14.99.198:8082/DairyApplication/getHostel"
         );
         console.log(response.data);
         setHostelData(response.data);
@@ -196,12 +187,12 @@ const DtmSave = () => {
     const fetchOpeningBalance = async () => {
       try {
         const response = await axios.get(
-          "http://103.38.50.113:8080/DairyApplication/dtmClosingBalance"
+          "http://103.14.99.198:8082/DairyApplication/dtmClosingBalance"
         );
         const lastClosingBalance = response.data;
 
         setOpeningBalance(lastClosingBalance);
-        setTimeout(() => { }, 1000);
+        setTimeout(() => {}, 1000);
       } catch (error) {
         console.error("Error fetching closing balance:", error);
       }
@@ -210,29 +201,41 @@ const DtmSave = () => {
     const fetchStdOpeningBalance = async () => {
       try {
         const response = await axios.get(
-          "http://103.38.50.113:8080/DairyApplication/closingBalance"
+          "http://103.14.99.198:8082/DairyApplication/closingBalance"
         );
         const lastClosingBalance = response.data;
 
         setStdopeningBalance(lastClosingBalance);
-        setTimeout(() => { }, 1000);
+        setTimeout(() => {}, 1000);
       } catch (error) {
         console.error("Error fetching closing balance:", error);
       }
     };
 
-    const fetchMilkRate = async () => {
+    const fetchDTMMilkRate = async () => {
       try {
         const response = await axios.get(
-          "http://103.38.50.113:8080/DairyApplication/getAllDataOfMilkRateMaster"
+          "http://103.14.99.198:8082/DairyApplication/getAllDTMMilkRates"
         );
-        const MilkRate = response.data;
-        setHotelMilkRate(MilkRate[0].hotelMilkRate);
-        setStandardMilkRate(MilkRate[0].standardMilkRate);
-        setDtmMilkRate(MilkRate[0].dtmMilkRate);
-        setBulkMilkRate(MilkRate[0].salingMilkRate)
-        // console.log(MilkRate[0].salingMilkRate)
-        console.log(response.data)
+        setDtmMilkRate(response.data.data[0].dtmMilkRate);
+        setDTMHotelMilkRate(response.data.data[0].dtmhotelMilkRate)
+        setDTMBulkMilkRate(response.data.data[0].dtmBulkMilkRate)
+        console.log(response.data);
+        setTimeout(() => {}, 1000);
+      } catch (error) {
+        console.error("Error fetching closing balance:", error);
+      }
+    };
+
+    const fetchSTDMilkRate = async () => {
+      try {
+        const response = await axios.get(
+          "http://103.14.99.198:8082/DairyApplication/getAllSTDMilkRates"
+        );
+        setSTDMilkRate(response.data.data[0].stdMilkRate);
+        setSTDHotelMilkRate(response.data.data[0].stdhotelMilkRate)
+        setSTDBulkMilkRate(response.data.data[0].stdBulkMilkRate)
+        console.log(response.data);
         setTimeout(() => {}, 1000);
       } catch (error) {
         console.error("Error fetching closing balance:", error);
@@ -245,26 +248,34 @@ const DtmSave = () => {
     fetchHostels();
     fetchOpeningBalance();
     fetchStdOpeningBalance();
-    fetchMilkRate();
+    fetchDTMMilkRate();
+    fetchSTDMilkRate();
   }, []);
 
   // Calculation data
 
   const CalculateTotals = () => {
-    const totalQty = parseInt(product) + parseInt(dtmsaleOnline) + parseInt(dtmSaleCash) + dynamicRowsTotal
+    const totalQty =
+      parseInt(product) +
+      parseInt(dtmsaleOnline) +
+      parseInt(dtmSaleCash) +
+      dynamicRowsTotal;
     // console.log(totalQty)
     const dtmAmountCash = parseInt(dtmMilkRate) * parseInt(dtmSaleCash);
     const dtmAmountOnline = parseInt(dtmMilkRate) * parseInt(dtmsaleOnline);
     const finalTotal = parseInt(dtmAmountCash) + parseInt(dtmAmountOnline);
     const closingBalance = parseInt(openingBalance) - parseInt(totalQty);
-    const stdAmountCash = parseInt(standardMilkRate) * parseInt(stdSaleCash);
+    const stdAmountCash = parseInt(stdMilkRate) * parseInt(stdSaleCash);
     const stdAmountOnline =
-      parseInt(standardMilkRate) * parseInt(stdsaleOnline);
+      parseInt(stdMilkRate) * parseInt(stdsaleOnline);
     const stdfinalTotal = parseInt(stdAmountCash) + parseInt(stdAmountOnline);
-      const stdtotalQty = parseInt(stdproduct) + parseInt(stdSaleCash)+ parseInt(stdsaleOnline) + dynamicRowsTotal2
-      const stdclosingBalance =
-      parseInt(stdopeningBalance) 
-       - parseInt(stdtotalQty);
+    const stdtotalQty =
+      parseInt(stdproduct) +
+      parseInt(stdSaleCash) +
+      parseInt(stdsaleOnline) +
+      dynamicRowsTotal2;
+    const stdclosingBalance =
+      parseInt(stdopeningBalance) - parseInt(stdtotalQty);
 
     return {
       dtmAmountCash,
@@ -276,8 +287,7 @@ const DtmSave = () => {
       stdfinalTotal,
       stdclosingBalance,
       totalQty,
-      stdtotalQty
-
+      stdtotalQty,
     };
   };
 
@@ -291,15 +301,14 @@ const DtmSave = () => {
     stdfinalTotal,
     stdclosingBalance,
     totalQty,
-    stdtotalQty
+    stdtotalQty,
   } = CalculateTotals();
-
 
   const saveData = async () => {
     try {
       if (editItem) {
         await axios.put(
-          `http://103.38.50.113:8080/DairyApplication/updateDtmMilkSale/${editItem.id}`,
+          `http://103.14.99.198:8082/DairyApplication/updateDtmMilkSale/${editItem.id}`,
           {
             openingBalance,
             closingBalance,
@@ -319,7 +328,7 @@ const DtmSave = () => {
             stdsaleOnline,
             stdAmountCash,
             stdAmountOnline,
-            stdrate: standardMilkRate,
+            stdrate: stdMilkRate,
             stdfinalTotal,
             stdtotalQty,
             cream,
@@ -341,7 +350,7 @@ const DtmSave = () => {
         });
       } else {
         const resp = await axios.post(
-          "http://103.38.50.113:8080/DairyApplication/saveDtmMilkSales",
+          "http://103.14.99.198:8082/DairyApplication/saveDtmMilkSales",
           {
             openingBalance,
             closingBalance,
@@ -363,7 +372,7 @@ const DtmSave = () => {
             stdsaleOnline,
             stdAmountCash,
             stdAmountOnline,
-            stdrate: standardMilkRate,
+            stdrate: stdMilkRate,
             stdfinalTotal,
             stdtotalQty,
             cream,
@@ -422,7 +431,7 @@ const DtmSave = () => {
     setLoader(true);
     try {
       await axios
-        .get("http://103.38.50.113:8080/DairyApplication/fetchDtmMilkSale")
+        .get("http://103.14.99.198:8082/DairyApplication/fetchDtmMilkSale")
         .then((res) => {
           setProdTableData(res.data);
           setTimeout(() => {
@@ -456,7 +465,7 @@ const DtmSave = () => {
     try {
       await axios
         .post(
-          "http://103.38.50.113:8080/DairyApplication/deleteDtmMilkSale",
+          "http://103.14.99.198:8082/DairyApplication/deleteDtmMilkSale",
           delobj,
           {
             headers: {
@@ -519,16 +528,15 @@ const DtmSave = () => {
     setSahiwalCream(item.sahiwalCream);
     setResearch(item.research);
     setHloss(item.hloss);
-    setRemark(item.remark)
+    setRemark(item.remark);
     setEditItem(item);
   };
 
   const exportToExcel = async () => {
     const fileName = "DTM Milk Sale";
     const fileType =
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
     const fileExtension = ".xlsx";
-
 
     const ws = XLSX.utils.json_to_sheet(prodTableData);
     const wb = XLSX.utils.book_new();
@@ -536,21 +544,23 @@ const DtmSave = () => {
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: fileType });
     FileSaver.saveAs(data, fileName + fileExtension);
-};
-
+  };
 
   useEffect(() => {
-    const sum = firstTableAdd.reduce((acc, row)=> acc + parseFloat(row.qty)||0, 0)
+    const sum = firstTableAdd.reduce(
+      (acc, row) => acc + parseFloat(row.qty) || 0,
+      0
+    );
     setDynamicRowsTotal(sum);
-  }, [firstTableAdd])
+  }, [firstTableAdd]);
 
   useEffect(() => {
-    const sum2 = secondTableAdd.reduce((acc, row) => acc + parseFloat(row.stdQty)|| 0, 0)
-    // console.log(sum2)
-    setDynamicRowsTotal2(sum2)
-  }, [secondTableAdd])
-  
-  
+    const sum2 = secondTableAdd.reduce(
+      (acc, row) => acc + parseFloat(row.stdQty) || 0,
+      0
+    );
+    setDynamicRowsTotal2(sum2);
+  }, [secondTableAdd]);
 
   return (
     <>
@@ -817,9 +827,7 @@ const DtmSave = () => {
                 <tbody>
                   {firstTableAdd.map((row, index) => (
                     <tr key={index}>
-                      <td scope="row" className="text-center">
-                        {index + 1}
-                      </td>
+                      <td className="text-center">{index + 1}</td>
                       <td className="text-center">
                         <FormControl
                           variant="standard"
@@ -838,7 +846,9 @@ const DtmSave = () => {
                             MenuProps={MenuProps}
                             name="hostelName"
                             value={row.hostelName}
-                            onChange={(event) => handleFirstTableChange(index, event)}
+                            onChange={(event) =>
+                              handleFirstTableChange(index, event)
+                            }
                           >
                             {hostelData.map((hostel, index) => (
                               <MenuItem key={index} value={hostel}>
@@ -862,7 +872,9 @@ const DtmSave = () => {
                             variant="standard"
                             name="qty"
                             value={row.qty}
-                            onChange={(event) => handleFirstTableChange(index, event)}
+                            onChange={(event) =>
+                              handleFirstTableChange(index, event)
+                            }
                           />
                         </Box>
                       </td>
@@ -880,7 +892,9 @@ const DtmSave = () => {
                             variant="standard"
                             name="dtmrate"
                             value={row.dtmrate}
-                            onChange={(event) => handleFirstTableChange(index, event)}
+                            onChange={(event) =>
+                              handleFirstTableChange(index, event)
+                            }
                           />
                         </Box>
                       </td>
@@ -902,7 +916,10 @@ const DtmSave = () => {
                         </Box>
                       </td>
                       <td>
-                        <button className="btn"onClick={() => deleteRow(index)}>
+                        <button
+                          className="btn"
+                          onClick={() => deleteRow(index)}
+                        >
                           <MdDeleteOutline className="delicon" />
                         </button>
                       </td>
@@ -1058,7 +1075,7 @@ const DtmSave = () => {
                   <TextField
                     label="Standard Rate"
                     variant="standard"
-                    value={standardMilkRate}
+                    value={stdMilkRate}
                   />
                 </Box>
               </div>
@@ -1217,9 +1234,7 @@ const DtmSave = () => {
                 <tbody>
                   {secondTableAdd.map((row, index) => (
                     <tr key={index}>
-                      <td scope="row" className="text-center">
-                        {index + 1}
-                      </td>
+                      <td className="text-center">{index + 1}</td>
                       <td>
                         <FormControl
                           variant="standard"
@@ -1238,7 +1253,9 @@ const DtmSave = () => {
                             MenuProps={MenuProps}
                             name="stdhostelName"
                             value={row.stdhostelName}
-                            onChange={(event) => handleSecondTableChange(index, event)}
+                            onChange={(event) =>
+                              handleSecondTableChange(index, event)
+                            }
                           >
                             {hostelData.map((hostel, index) => (
                               <MenuItem key={index} value={hostel}>
@@ -1262,7 +1279,9 @@ const DtmSave = () => {
                             variant="standard"
                             name="stdQty"
                             value={row.stdQty}
-                            onChange={(event) => handleSecondTableChange(index, event)}
+                            onChange={(event) =>
+                              handleSecondTableChange(index, event)
+                            }
                           />
                         </Box>
                       </td>
@@ -1280,7 +1299,9 @@ const DtmSave = () => {
                             variant="standard"
                             name="stdrate"
                             value={row.stdrate}
-                            onChange={(event) => handleSecondTableChange(index, event)}
+                            onChange={(event) =>
+                              handleSecondTableChange(index, event)
+                            }
                           />
                         </Box>
                       </td>
@@ -1302,7 +1323,10 @@ const DtmSave = () => {
                         </Box>
                       </td>
                       <td>
-                        <button className="btn"onClick={() => deleteRow1(index)}>
+                        <button
+                          className="btn"
+                          onClick={() => deleteRow1(index)}
+                        >
                           <MdDeleteOutline className="delicon" />
                         </button>
                       </td>
@@ -1318,10 +1342,14 @@ const DtmSave = () => {
               <button className="savebtn" onClick={() => saveData()}>
                 Save
               </button>
-              <button className='btn btn-success' onClick={()=>exportToExcel()}>Export To Excel</button>
-
+              <button
+                className="btn btn-success"
+                onClick={() => exportToExcel()}
+              >
+                Export To Excel
+              </button>
             </div>
-             <div className="container tableMaster mt-5 mb-3 p-0">
+            <div className="container tableMaster mt-5 mb-3 p-0">
               <table className="table productTableMAster table-stripped">
                 <thead className="tableheading">
                   <tr>
