@@ -68,7 +68,7 @@ const Hostel = () => {
                 })
             } else {
                 const res = await axios.post("http://103.14.99.198:8082/DairyApplication/saveMilkCollection", {
-                    currentdate, openingBalance, cowmilk, sahiwalMilk, buffaloMilk, closingBalance, totalMilk
+                    date:currentdate, openingBalance, cowmilk, sahiwalMilk, buffaloMilk, closingBalance, totalMilk
                 })
                 toast.success("Hostel Name saved Successfully", {
                     position: "top-center",
@@ -105,6 +105,7 @@ const Hostel = () => {
         try {
             await axios.get("http://103.14.99.198:8082/DairyApplication/findMilkCollections").then((res) => {
                 setHostelTableData(res.data)
+                console.log(res.data)
                 setTimeout(() => {
                     setLoader(false)
                 }, 1000);

@@ -41,6 +41,8 @@ const GheeEntry = () => {
 
   const [editItem, setEditItem] = useState(null);
   const [delid, setdelid] = useState();
+  const [delid1, setdelid1] = useState();
+
 
   const [opendailogdel, setopendailogdel] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -61,7 +63,7 @@ const GheeEntry = () => {
         "http://103.14.99.198:8082/DairyApplication/lastClosingCream"
       );
       console.log(res.data);
-       setGetCream(res.data);
+      setGetCream(res.data);
       setTimeout(() => {
         setLoader(false);
       }, 1000);
@@ -78,7 +80,7 @@ const GheeEntry = () => {
         "http://103.14.99.198:8082/DairyApplication/lastClosingSahiwalCream"
       );
       console.log(res.data);
-       setGetSahiwalCream(res.data);
+      setGetSahiwalCream(res.data);
       setTimeout(() => {
         setLoader(false);
       }, 1000);
@@ -112,19 +114,19 @@ const GheeEntry = () => {
             cream: cream,
             creamUsed,
             ghee,
-            date: currentDate,
+            date,
           }
         );
         toast.success("Data Updated Successfully", {
-            position: "top-center",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
       } else {
         const res = await axios.post(
           "http://103.14.99.198:8082/DairyApplication/saveGheeCollection",
@@ -134,7 +136,7 @@ const GheeEntry = () => {
             cream: cream,
             creamUsed,
             ghee,
-            date: currentDate,
+            date
           }
         );
         toast.success("Ghee Collection saved Successfully", {
@@ -239,19 +241,19 @@ const GheeEntry = () => {
             creamSahiwal: creamSahiwal,
             creamUsedSahiwal,
             gheeSahiwal,
-            sahiwaldate: currentDate,
+            sahiwaldate,
           }
         );
         toast.success("Data Updated Successfully", {
-            position: "top-center",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
       } else {
         const res = await axios.post(
           "http://103.14.99.198:8082/DairyApplication/saveSahiwalGheeCollection",
@@ -261,7 +263,7 @@ const GheeEntry = () => {
             creamSahiwal: creamSahiwal,
             creamUsedSahiwal,
             gheeSahiwal,
-            sahiwaldate: currentDate,
+            sahiwaldate,
           }
         );
         toast.success("Ghee Collection saved Successfully", {
@@ -315,7 +317,7 @@ const GheeEntry = () => {
 
   // Delete items
   const sahiwaldele = (id) => {
-    setdelid(id);
+    setdelid1(id);
     setopendailogdel(true);
   };
 
@@ -326,7 +328,7 @@ const GheeEntry = () => {
 
   const sahiwalhandledel = async () => {
     let delobj = {
-      id: delid,
+      id: delid1,
     };
 
     try {
@@ -379,7 +381,7 @@ const GheeEntry = () => {
     fetchlastClosingGhee("")
     fetchlastSahiwalClosingGhee("")
   }, [])
-  
+
 
 
   const dailoge = () => {
@@ -405,6 +407,15 @@ const GheeEntry = () => {
             </DialogActions>
           </div>
         </Dialog>
+
+
+      </>
+    );
+  };
+
+  const sahwalDialog = () => {
+    return (
+      <>
         <Dialog
           open={opendailogdel}
           TransitionComponent={Transition}
@@ -426,8 +437,8 @@ const GheeEntry = () => {
           </div>
         </Dialog>
       </>
-    );
-  };
+    )
+  }
 
   useEffect(() => {
     setDate(getCurrentDate());
@@ -468,6 +479,7 @@ const GheeEntry = () => {
           ></ToastContainer>
           <div className="pt-5">
             {dailoge()}
+            {sahwalDialog()}
             <h3
               className="text-center mt-2"
               style={{ textDecoration: "underline" }}
@@ -477,17 +489,17 @@ const GheeEntry = () => {
           </div>
 
           <div className="row mt-4">
-            
+
           </div>
 
           <h3
-              className="mt-4"
-              style={{ textDecoration: "underline", fontSize: "20px" }}
-            >
-              Normal Ghee
-            </h3>
+            className="mt-4"
+            style={{ textDecoration: "underline", fontSize: "20px" }}
+          >
+            Normal Ghee
+          </h3>
           <div className="row mt-3">
-          <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
+            <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
               <Box
                 component="form"
                 sx={{
@@ -516,7 +528,7 @@ const GheeEntry = () => {
                   type="text"
                   variant="standard"
                   value={openingGhee}
-                  // onChange={(e) => setOpeningGhee(e.target.value)}
+                // onChange={(e) => setOpeningGhee(e.target.value)}
                 />
               </Box>
             </div>
@@ -547,7 +559,7 @@ const GheeEntry = () => {
                 type="text"
                 autoComplete="off"
               >
-                <TextField label="Cream" variant="standard" value={cream}onChange={(e) => setGetCream(e.target.value)}/>
+                <TextField label="Cream" variant="standard" value={cream} onChange={(e) => setGetCream(e.target.value)} />
               </Box>
             </div>
 
@@ -636,10 +648,10 @@ const GheeEntry = () => {
                             >
                               <FiEdit className="editicon" />
                             </button>
-                            <button className="btn">
+                            <button className="btn" onClick={() => dele(item.id)}>
                               <MdDeleteOutline
                                 className="delicon"
-                                onClick={() => dele(item.id)}
+
                               />
                             </button>
                           </td>
@@ -653,13 +665,14 @@ const GheeEntry = () => {
           </div>
 
           <h3
-              className="mt-5"
-              style={{ textDecoration: "underline", fontSize: "20px" }}
-            >
-              Sahiwal Ghee
-            </h3>
+            className="mt-5"
+            style={{ textDecoration: "underline", fontSize: "20px" }}
+          >
+            Sahiwal Ghee
+          </h3>
+
           <div className="row mt-3">
-          <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
+            <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
               <Box
                 component="form"
                 sx={{
@@ -688,7 +701,7 @@ const GheeEntry = () => {
                   type="text"
                   variant="standard"
                   value={openingSahiwalGhee}
-                  // onChange={(e) => setSahiwalOpeningGhee(e.target.value)}
+                // onChange={(e) => setSahiwalOpeningGhee(e.target.value)}
                 />
               </Box>
             </div>
@@ -815,10 +828,10 @@ const GheeEntry = () => {
                             >
                               <FiEdit className="editicon" />
                             </button>
-                            <button className="btn">
+                            <button className="btn" onClick={() => sahiwaldele(item.id)}>
                               <MdDeleteOutline
                                 className="delicon"
-                                onClick={() => sahiwaldele(item.id)}
+
                               />
                             </button>
                           </td>

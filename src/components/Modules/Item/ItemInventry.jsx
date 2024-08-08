@@ -363,9 +363,9 @@ const ProductSale = () => {
                                         <th style={{ width: "150px" }}>Present Stock</th>
                                         <th style={{ width: "150px" }}>Add Quantity to Stock</th>
                                         <th style={{ width: "150px" }}>Quantity Received From</th>
-                                        <th style={{ width: "150px" }}>Total Value of the Quantity</th>
-                                        <th style={{ width: "150px" }}>Name of the Person Who Issued Quantity</th>
-                                        <th style={{ width: "150px" }}>Quantity Used for Purpose</th>
+                                        <th style={{ width: "200px" }}>Total Value of the Quantity</th>
+                                        <th style={{ width: "350px" }}>Name of the Person Who Issued Quantity</th>
+                                        <th style={{ width: "200px" }}>Quantity Used for Purpose</th>
                                         <th style={{ width: "150px" }}>Closing Stock</th>
                                         <th style={{ width: "150px" }}>Remarks</th>
                                     </tr>

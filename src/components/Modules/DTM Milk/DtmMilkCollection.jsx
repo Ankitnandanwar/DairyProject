@@ -537,7 +537,7 @@ const DtmMilkCollection = () => {
                   autoComplete="off"
                 >
                   <TextField
-                    label="Closing Balance"
+                    label="DTM Closing Balance"
                     variant="standard"
                     value={closingBalance}
                   />

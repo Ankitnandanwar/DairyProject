@@ -142,7 +142,7 @@ const DtmSave = () => {
     if (name === "qty" || name === "dtmrate") {
       const qty = parseFloat(list[index].qty);
       const rate = parseFloat(list[index].dtmrate);
-      list[index].dtmamount = list[index].qty * dtmBulkMilkRate;
+      list[index].dtmamount = list[index].qty * dtmhotelMilkRate;
     }
     setfirstTableAdd(list);
   };
@@ -163,7 +163,7 @@ const DtmSave = () => {
     if (name === "stdQty" || name === "stdrate") {
       const stdQty = parseFloat(list[index].stdQty);
       const stdrate = parseFloat(list[index].stdrate);
-      list[index].stdamount = list[index].stdQty * stdBulkMilkRate;
+      list[index].stdamount = list[index].stdQty * stdhotelMilkRate;
     }
     setSecondTableAdd(list);
   };
@@ -175,7 +175,7 @@ const DtmSave = () => {
         const response = await axios.get(
           "http://103.14.99.198:8082/DairyApplication/getHostel"
         );
-        console.log(response.data);
+        console.log("Hostel Data:", response.data);
         setHostelData(response.data);
       } catch (error) {
         console.error("Error fetching hostels:", error);
@@ -219,6 +219,7 @@ const DtmSave = () => {
         );
         setDtmMilkRate(response.data.data[0].dtmMilkRate);
         setDTMHotelMilkRate(response.data.data[0].dtmhotelMilkRate)
+        console.log(response.data.data[0].dtmhotelMilkRate)
         setDTMBulkMilkRate(response.data.data[0].dtmBulkMilkRate)
         console.log(response.data);
         setTimeout(() => {}, 1000);
@@ -275,7 +276,7 @@ const DtmSave = () => {
       parseInt(stdsaleOnline) +
       dynamicRowsTotal2;
     const stdclosingBalance =
-      parseInt(stdopeningBalance) - parseInt(stdtotalQty);
+      parseInt(stdopeningBalance) - parseInt(stdtotalQty) - parseInt(hloss) - parseInt(research);
 
     return {
       dtmAmountCash,
@@ -1090,7 +1091,7 @@ const DtmSave = () => {
                   autoComplete="off"
                 >
                   <TextField
-                    label="Standard Final Total"
+                    label="Standard Final Total Amount"
                     variant="standard"
                     value={stdfinalTotal}
                   />
