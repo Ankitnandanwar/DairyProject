@@ -1398,10 +1398,10 @@ const DtmSave = () => {
                     </th>
                   </tr>
                   <tr>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Rate</th>
-                    <th>Amount</th>
+                    <th style={{position:"sticky", top:'50.1px'}}>Product</th>
+                    <th style={{position:"sticky", top:'50.1px'}}>Quantity</th>
+                    <th style={{position:"sticky", top:'50.1px'}}>Rate</th>
+                    <th style={{position:"sticky", top:'50.1px'}}>Amount</th>
                   </tr>
                 </thead>
                 <tbody className="border">
@@ -1516,10 +1516,10 @@ const DtmSave = () => {
                     </th>
                   </tr>
                   <tr>
-                    <th>STD Product</th>
-                    <th>STD Quantity</th>
-                    <th>STD Rate</th>
-                    <th>STD Amount</th>
+                    <th style={{position:"sticky", top:'50.1px'}}>STD Product</th>
+                    <th style={{position:"sticky", top:'50.1px'}}>STD Quantity</th>
+                    <th style={{position:"sticky", top:'50.1px'}}>STD Rate</th>
+                    <th style={{position:"sticky", top:'50.1px'}}>STD Amount</th>
                   </tr>
                 </thead>
                 <tbody className="border">

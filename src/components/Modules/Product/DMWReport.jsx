@@ -15,6 +15,8 @@ const MilkSale = () => {
         tdate: ''
     })
 
+    const [allTotals, setAllTotals] = useState([])
+
     const formatDate = (inputDate) => {
         const [year, month, day] = inputDate.split('-');
         return `${day}/${month}/${year}`;
@@ -25,6 +27,7 @@ const MilkSale = () => {
         try {
              await axios.get("http://103.14.99.198:8082/DairyApplication/getAllDailyData").then((res) => {
                 setProducts(res.data)
+                // console.log(res.data)
                 setTimeout(() => {
                     setLoader(false)
                 }, 1000);
@@ -64,8 +67,10 @@ const MilkSale = () => {
                 }
                 console.log(dateObj, 'sdshdhsd')
                 axios.post('http://103.14.99.198:8082/DairyApplication/calculateTotals', dateObj).then((data) => {
-                    if (data.data?.length > 0) {
-                        setProducts(data?.data)
+                    if (data.data.data.length > 0) {
+                        setProducts(data.data.data)
+                        // console.log("Cal Amt",data.data.totals)
+                        setAllTotals(data.data.totals)
                     } else {
                         console.log('no data found')
                     }
@@ -93,10 +98,23 @@ const MilkSale = () => {
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
         const fileExtension = ".xlsx";
 
+        const exportData = [
+            {
+                "Total GST Amount": allTotals.totalGSTAmount,
+                "Total Cash Sale" : allTotals.totalCashSale,
+                "Total Amount Cash": allTotals.totalAmountCash,
+                "Total Online Sale": allTotals.totalOnlineSale,
+                "Total Amount Online": allTotals.totalAmountOnline,
+                "Total Sale": allTotals.totalSale,
+                "Grand Total": allTotals.grandTotal
+            }
+        ]
 
         const ws = XLSX.utils.json_to_sheet(products);
+        const totalsws = XLSX.utils.json_to_sheet(exportData);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Table Data");
+        XLSX.utils.book_append_sheet(wb, totalsws, "Totals");
         const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
         const data = new Blob([excelBuffer], { type: fileType });
         FileSaver.saveAs(data, fileName + fileExtension);
@@ -298,31 +316,31 @@ const MilkSale = () => {
                                 <div className='row m-2'>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total GST Amount</div>
-                                        <div className='totalnos'>{}</div>
+                                        <div className='totalnos'>{allTotals.totalGSTAmount}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Cash Sale</div>
-                                        <div className='totalnos'>{}</div>
-                                    </div>
-                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
-                                        <div className='totalstitle'>Total Online Sale</div>
-                                        <div className='totalnos'>{}</div>
-                                    </div>
-                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
-                                        <div className='totalstitle'>Total Sale</div>
-                                        <div className='totalnos'>{}</div>
+                                        <div className='totalnos'>{allTotals.totalCashSale}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Amount Cash</div>
-                                        <div className='totalnos'>{}</div>
+                                        <div className='totalnos'>{allTotals.totalAmountCash}</div>
+                                    </div>
+                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
+                                        <div className='totalstitle'>Total Online Sale</div>
+                                        <div className='totalnos'>{allTotals.totalOnlineSale}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Total Amount Online</div>
-                                        <div className='totalnos'>{}</div>
+                                        <div className='totalnos'>{allTotals.totalAmountOnline}</div>
+                                    </div>
+                                    <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
+                                        <div className='totalstitle'>Total Sale</div>
+                                        <div className='totalnos'>{allTotals.totalSale}</div>
                                     </div>
                                     <div className='border border-dark col-12 col-lg-3 col-xl-3 col-md-4 d-flex p-2'>
                                         <div className='totalstitle'>Grand Total</div>
-                                        <div className='totalnos'>{}</div>
+                                        <div className='totalnos'>{allTotals.grandTotal}</div>
                                     </div>
                                 </div>
                             </div>

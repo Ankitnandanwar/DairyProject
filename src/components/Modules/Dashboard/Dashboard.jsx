@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import "./Dashboard.css"
-import { dummyData } from './DashDummyData';
 
-import { GiMilkCarton } from "react-icons/gi";
+import { GiMilkCarton, GiIceCreamScoop, GiMasonJar } from "react-icons/gi";
+import { LuIceCream2 } from "react-icons/lu";
+import { SiIconjar } from "react-icons/si";
+
+
 import axios from 'axios';
 
 
@@ -54,7 +57,7 @@ const Dashboard = () => {
                 <span>DTM Milk Closing Balance</span>
               </div>
               <div>
-                <GiMilkCarton className='icons' />,
+                <GiMilkCarton className='icons' />
               </div>
             </div>
           </div>
@@ -64,10 +67,10 @@ const Dashboard = () => {
             <div className='smallCard'>
               <div className='cardContent'>
                 <h2>{creamClosingBal}</h2>
-                <span>Cream</span>
+                <span>Cream Closing Balance</span>
               </div>
               <div>
-                <GiMilkCarton className='icons' />,
+                <GiIceCreamScoop className='icons' />
               </div>
             </div>
           </div>
@@ -77,10 +80,10 @@ const Dashboard = () => {
             <div className='smallCard'>
               <div className='cardContent'>
                 <h2>{sahiwalCreamClosingBal}</h2>
-                <span>Sahiwal Cream</span>
+                <span>Sahiwal Cream Closing Balance</span>
               </div>
               <div>
-                <GiMilkCarton className='icons' />,
+                <LuIceCream2 className='icons' />
               </div>
             </div>
           </div>
@@ -89,10 +92,10 @@ const Dashboard = () => {
             <div className='smallCard'>
               <div className='cardContent'>
                 <h2>{gheeClosingBal}</h2>
-                <span>Ghee</span>
+                <span>Ghee Closing Balance</span>
               </div>
               <div>
-                <GiMilkCarton className='icons' />,
+                <SiIconjar className='icons' />
               </div>
             </div>
           </div>
@@ -101,21 +104,21 @@ const Dashboard = () => {
             <div className='smallCard'>
               <div className='cardContent'>
                 <h2>{sahiwalGheeClosingBal}</h2>
-                <span>Sahiwal Ghee</span>
+                <span>Sahiwal Ghee Closing Balance</span>
               </div>
               <div>
-                <GiMilkCarton className='icons' />,
+                <GiMasonJar className='icons' />
               </div>
             </div>
           </div>
         </div>
 
         <div className='row mt-5 p-3 p-sm-0'>
-          <h3 style={{ textDecoration: 'underline' }}>Products</h3>
+          <h3 style={{ textDecoration: 'underline' }}>Products (Present Stock)</h3>
           {
             getProductData.map((item, index) => (
               <div key={index} className='col-12 col-lg-6 col-xl-3 col-md-6 mt-5 d-flex justify-content-center align-items-center'>
-                <div className='smallCard' style={{ justifyContent: 'center' }}>
+                <div className='smallCard' style={{ justifyContent: 'center',  }}>
                   <div className='cardContent'>
                     <h2>{item.openBalance}</h2>
                     <span>{item.productName}</span>
@@ -127,7 +130,7 @@ const Dashboard = () => {
         </div>
 
         <div className='row mt-5 p-3 p-sm-0'>
-          <h3 style={{ textDecoration: 'underline' }}>Inventory Items</h3>
+          <h3 style={{ textDecoration: 'underline' }}>Inventory Items (Present Stock)</h3>
           {
             getInventoryItem.map((item, index) => (
               <div key={index} className='col-12 col-lg-6 col-xl-3 col-md-6 mt-5 d-flex justify-content-center align-items-center'>

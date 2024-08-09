@@ -158,15 +158,7 @@ const ProductReport = () => {
                                 </Box>
                             </div>
 
-                            {/* <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center mt-3'>
-                                <FormControlLabel control={<Checkbox />} label="Daily" />
-                            </div>
-                            <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center mt-3'>
-                                <FormControlLabel control={<Checkbox />} label="Monthly" />
-                            </div>
-                            <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center mt-3'>
-                                <FormControlLabel control={<Checkbox />} label="Weekly" />
-                            </div>*/}
+                            
                             <div className='col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center mt-3' style={{ gap: "1rem" }}>
                                 <button disabled={dates.fdate === '' && dates.tdate === ''} className='btn btn-primary' onClick={() => searchData()}>Search</button>
                                 <button className='btn btn-success' onClick={()=>exportToExcel()}>Export</button>
@@ -198,7 +190,6 @@ const ProductReport = () => {
                                             <th style={{ width: "150px" }}>Closing Balance</th>
                                             <th style={{ width: "150px" }}>Pending</th>
                                             <th style={{ width: "150px" }}>Remark</th>
-                                            {/* <th style={{ width: "180px" }}>Action</th> */}
                                         </tr>
                                     </thead>
                                     <tbody>

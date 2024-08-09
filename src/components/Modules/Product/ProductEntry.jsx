@@ -25,9 +25,14 @@ const ProductEntry = () => {
 
   const [productName, setProductName] = useState("");
   const [openBalance, setOpenBalance] = useState("");
-  const [rate, setRate] = useState("");
   const [unit, setUnit] = useState("");
   const [gst, setGst] = useState("");
+  const [milkUsed, setMilkUsed] = useState("");
+  const [rateWithGST , setRateWithGST ] = useState("");
+
+
+
+  const [prodOpenBalAdd, setProdOpenBalAdd] = useState("")
   const [prodTableData, setProdTableData] = useState([]);
 
   const [opendailogdel, setopendailogdel] = useState(false);
@@ -46,11 +51,12 @@ const ProductEntry = () => {
           {
             productName,
             openBalance,
-            rate,
             unit,
+            milkUsed,
             gst,
             gstAmount,
-            rateWithGST
+            rateWithGST ,
+            rate
           }
         );
         toast.success("Data Updated Successfully", {
@@ -69,13 +75,14 @@ const ProductEntry = () => {
           {
             productName,
             openBalance,
-            rate,
             unit,
+            milkUsed,
             gst,
             gstAmount,
-            rateWithGST,
+            rateWithGST ,
+            rate
           }
-        );
+        ); 
         toast.success("Data Saved Successfully", {
           position: "top-center",
           autoClose: 4000,
@@ -94,9 +101,10 @@ const ProductEntry = () => {
 
       setProductName("");
       setOpenBalance("");
-      setRate("");
       setGst("");
       setUnit("");
+      setMilkUsed("")
+      setRateWithGST("")
       setEditItem(null);
 
       // Refresh the product data
@@ -201,10 +209,18 @@ const ProductEntry = () => {
   const editItemHandler = (item) => {
     setProductName(item.productName);
     setOpenBalance(item.openBalance);
-    setRate(item.rate);
     setUnit(item.unit);
     setGst(item.gst);
+    setMilkUsed(item.milkUsed)
+    setRateWithGST(item.rateWithGST)
     setEditItem(item);
+    setProdOpenBalAdd("")
+  };
+
+  const handleProdOpenBalAddChange = (e) => {
+    setProdOpenBalAdd(e.target.value);
+    const newOpeningBalance = parseInt(editItem?.openBalance || 0) + parseInt(e.target.value || 0);
+    setOpenBalance(newOpeningBalance);
   };
 
   // Export to excel code
@@ -223,13 +239,13 @@ const ProductEntry = () => {
   };
 
   const CalculateTotals = () => {
-    const gstAmount = parseInt(gst) / 100 * parseInt(rate);
-    const rateWithGST = parseInt(rate) + parseInt(gstAmount);
-    return { gstAmount, rateWithGST
-     };
+    const rate = Math.round(parseInt(rateWithGST ) - (parseInt(rateWithGST ) * ((parseInt(gst)/100))))
+    const gstAmount = parseInt(rateWithGST ) - parseInt(rate)
+    const openingBal = parseInt(editItem?.openBalance || 0) + parseInt(prodOpenBalAdd || 0);
+    return {openingBal, rate, gstAmount};
   };
 
-  const { gstAmount, rateWithGST } = CalculateTotals();
+  const {openingBal, rate, gstAmount } = CalculateTotals();
 
   return (
     <>
@@ -284,39 +300,6 @@ const ProductEntry = () => {
                   />
                 </Box>
               </div>
-              <div className="col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center">
-                <Box
-                  component="form"
-                  sx={{
-                    "& > :not(style)": { m: 1, width: "25ch" },
-                  }}
-                  autoComplete="off"
-                >
-                  <TextField
-                    label="Opening Balance"
-                    variant="standard"
-                    value={openBalance}
-                    onChange={(e) => setOpenBalance(e.target.value)}
-                  />
-                </Box>
-              </div>
-              <div className="col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center">
-                <Box
-                  component="form"
-                  sx={{
-                    "& > :not(style)": { m: 1, width: "25ch" },
-                  }}
-                  type="number"
-                  autoComplete="off"
-                >
-                  <TextField
-                    label="Base Rate"
-                    variant="standard"
-                    value={rate}
-                    onChange={(e) => setRate(e.target.value)}
-                  />
-                </Box>
-              </div>
 
               <div className="col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center">
                 <Box
@@ -335,6 +318,81 @@ const ProductEntry = () => {
                   />
                 </Box>
               </div>
+
+              <div className="col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center">
+                <Box
+                  component="form"
+                  sx={{
+                    "& > :not(style)": { m: 1, width: "25ch" },
+                  }}
+                  autoComplete="off"
+                >
+                  <TextField
+                    label="Product Opening Balance (Add More)"
+                    variant="standard"
+                    value={prodOpenBalAdd}
+                    onChange={handleProdOpenBalAddChange}
+                  />
+                </Box>
+              </div>
+
+              <div className="col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center">
+                <Box
+                  component="form"
+                  sx={{
+                    "& > :not(style)": { m: 1, width: "25ch" },
+                  }}
+                  autoComplete="off"
+                >
+                  <TextField
+                    label="Opening Balance"
+                    variant="standard"
+                    value={openingBal}
+                    aria-readonly
+                    
+                  />
+                </Box>
+              </div>
+
+              <div className="col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center">
+                <Box
+                  component="form"
+                  sx={{
+                    "& > :not(style)": { m: 1, width: "25ch" },
+                  }}
+                  type="number"
+                  autoComplete="off"
+                >
+                  <TextField
+                    label="Milk Used for this Product"
+                    variant="standard"
+                    value={milkUsed}
+                    onChange={(e) => setMilkUsed(e.target.value)}
+                  />
+                </Box>
+              </div>
+
+              <div className="col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center">
+                <Box
+                  component="form"
+                  sx={{
+                    "& > :not(style)": { m: 1, width: "25ch" },
+                  }}
+                  type="number"
+                  autoComplete="off"
+                >
+                  <TextField
+                    label="Product Rate with GST"
+                    variant="standard"
+                    value={rateWithGST }
+                    onChange={(e) => setRateWithGST (e.target.value)}
+                  />
+                </Box>
+              </div>
+
+              
+
+              
 
               <div className="col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center">
                 <Box
@@ -364,9 +422,9 @@ const ProductEntry = () => {
                   autoComplete="off"
                 >
                   <TextField
-                    label="GST Amount"
+                    label="Base Rate"
                     variant="standard"
-                    value={gstAmount}
+                    value={rate}
                   />
                 </Box>
               </div>
@@ -381,12 +439,17 @@ const ProductEntry = () => {
                   autoComplete="off"
                 >
                   <TextField
-                    label="Product Rate with GST"
+                    label="GST Amount"
                     variant="standard"
-                    value={rateWithGST}
+                    value={gstAmount}
                   />
                 </Box>
               </div>
+
+              
+
+
+              
 
               <div
                 className="col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center"
@@ -423,12 +486,13 @@ const ProductEntry = () => {
                       <tr>
                         <th>SrNo</th>
                         <th style={{ width: "180px" }}>Product</th>
-                        <th>Opening Balance</th>
+                        <th style={{width:"150px"}}>Opening Balance</th>
                         <th>Rate</th>
                         <th>Unit</th>
+                        <th>Milk Used</th>
                         <th>GSTIN</th>
                         <th>GST Amount</th>
-                        <th>Product Rate with GST</th>
+                        <th style={{width:"200px"}}>Product Rate with GST</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -445,6 +509,7 @@ const ProductEntry = () => {
                             <td>{item.openBalance}</td>
                             <td>{item.rate}</td>
                             <td>{item.unit}</td>
+                            <td>{item.milkUsed}</td>
                             <td>{item.gst}</td>
                             <td>{item.gstAmount}</td>
                             <td>{item.rateWithGST}</td>
