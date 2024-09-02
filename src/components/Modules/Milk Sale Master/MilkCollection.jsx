@@ -274,7 +274,7 @@ const Hostel = () => {
                         </ToastContainer>
                         <div className='pt-5'>
                             {dailoge()}
-                            <h3 className='text-center mt-2' style={{ textDecoration: 'underline' }}>Milk Collection</h3>
+                            <h3 className='text-center mt-2' style={{ textDecoration: 'underline' }}> Standard Milk Collection</h3>
                             <div className='row mt-4'>
                                 <div className='col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center'>
                                     <Box
@@ -295,7 +295,7 @@ const Hostel = () => {
                                         }}
                                         autoComplete="off"
                                     >
-                                        <TextField label="Opening Balance" variant="standard" value={openingBalance} onChange={(e) => setOpeningBalance(e.target.value)} />
+                                        <TextField label="Opening Balance" variant="standard" value={openingBalance} />
                                     </Box>
                                 </div>
                                 <div className='col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center'>
@@ -339,7 +339,7 @@ const Hostel = () => {
                                         }}
                                         autoComplete="off"
                                     >
-                                        <TextField label="Closing Balance" variant="standard" value={closingBalance} />
+                                        <TextField label="Total Milk" variant="standard" value={totalMilk} />
                                     </Box>
                                 </div>
                                 <div className='col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center'>
@@ -350,9 +350,10 @@ const Hostel = () => {
                                         }}
                                         autoComplete="off"
                                     >
-                                        <TextField label="Total Milk" variant="standard" value={totalMilk} />
+                                        <TextField label="Closing Balance" variant="standard" value={closingBalance} />
                                     </Box>
                                 </div>
+                                
                                 <div className='col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center' style={{ gap: "1rem" }}>
                                     <button className='savebtn' onClick={() => { saveData() }}>Save</button>
                                     <button className='tabelbtn' onClick={() => setshowtable(!showtable)}>Show table</button>

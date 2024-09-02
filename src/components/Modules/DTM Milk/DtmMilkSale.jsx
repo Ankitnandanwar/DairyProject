@@ -142,7 +142,7 @@ const DtmSave = () => {
     if (name === "qty" || name === "dtmrate") {
       const qty = parseFloat(list[index].qty);
       const rate = parseFloat(list[index].dtmrate);
-      list[index].dtmamount = list[index].qty * dtmhotelMilkRate;
+      list[index].dtmamount = qty * rate;
     }
     setfirstTableAdd(list);
   };
@@ -163,7 +163,7 @@ const DtmSave = () => {
     if (name === "stdQty" || name === "stdrate") {
       const stdQty = parseFloat(list[index].stdQty);
       const stdrate = parseFloat(list[index].stdrate);
-      list[index].stdamount = list[index].stdQty * stdhotelMilkRate;
+      list[index].stdamount = stdQty * stdrate;
     }
     setSecondTableAdd(list);
   };
@@ -686,6 +686,23 @@ const DtmSave = () => {
                   autoComplete="off"
                 >
                   <TextField
+                    label="Rate"
+                    variant="standard"
+                    value={dtmMilkRate}
+                  />
+                </Box>
+              </div>
+
+              <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
+                <Box
+                  component="form"
+                  sx={{
+                    "& > :not(style)": { m: 1, width: "25ch" },
+                  }}
+                  type="text"
+                  autoComplete="off"
+                >
+                  <TextField
                     label="DTM Sale Cash"
                     variant="standard"
                     value={dtmSaleCash}
@@ -708,6 +725,24 @@ const DtmSave = () => {
                     variant="standard"
                     value={dtmsaleOnline}
                     onChange={(e) => setDtmsaleOnline(e.target.value)}
+                  />
+                </Box>
+              </div>
+
+              <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
+                <Box
+                  component="form"
+                  sx={{
+                    "& > :not(style)": { m: 1, width: "25ch" },
+                  }}
+                  type="text"
+                  autoComplete="off"
+                >
+                  <TextField
+                    label="Total Quantity"
+                    variant="standard"
+                    value={totalQty}
+                    // onChange={(e) => setTotalQty(e.target.value)}
                   />
                 </Box>
               </div>
@@ -746,22 +781,7 @@ const DtmSave = () => {
                 </Box>
               </div>
 
-              <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
-                <Box
-                  component="form"
-                  sx={{
-                    "& > :not(style)": { m: 1, width: "25ch" },
-                  }}
-                  type="text"
-                  autoComplete="off"
-                >
-                  <TextField
-                    label="Rate"
-                    variant="standard"
-                    value={dtmMilkRate}
-                  />
-                </Box>
-              </div>
+              
 
               <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
                 <Box
@@ -780,23 +800,9 @@ const DtmSave = () => {
                 </Box>
               </div>
 
-              <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
-                <Box
-                  component="form"
-                  sx={{
-                    "& > :not(style)": { m: 1, width: "25ch" },
-                  }}
-                  type="text"
-                  autoComplete="off"
-                >
-                  <TextField
-                    label="Total Quantity"
-                    variant="standard"
-                    value={totalQty}
-                    // onChange={(e) => setTotalQty(e.target.value)}
-                  />
-                </Box>
-              </div>
+              
+
+              
             </div>
             <div style={{ display: "flex", justifyContent: "end" }}>
               <button
@@ -959,22 +965,7 @@ const DtmSave = () => {
                 </Box>
               </div>
 
-              <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
-                <Box
-                  component="form"
-                  sx={{
-                    "& > :not(style)": { m: 1, width: "25ch" },
-                  }}
-                  type="text"
-                  autoComplete="off"
-                >
-                  <TextField
-                    label="Standard Closing Balance"
-                    variant="standard"
-                    value={stdclosingBalance}
-                  />
-                </Box>
-              </div>
+              
 
               <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
                 <Box
@@ -1040,6 +1031,24 @@ const DtmSave = () => {
                   autoComplete="off"
                 >
                   <TextField
+                    label="Standard Total Quantity"
+                    variant="standard"
+                    value={stdtotalQty}
+                    // onChange={(e) => setStdtotalQty(e.target.value)}
+                  />
+                </Box>
+              </div>
+
+              <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
+                <Box
+                  component="form"
+                  sx={{
+                    "& > :not(style)": { m: 1, width: "25ch" },
+                  }}
+                  type="text"
+                  autoComplete="off"
+                >
+                  <TextField
                     label="Standard DTM Amount Cash"
                     variant="standard"
                     value={stdAmountCash}
@@ -1064,22 +1073,7 @@ const DtmSave = () => {
                 </Box>
               </div>
 
-              <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
-                <Box
-                  component="form"
-                  sx={{
-                    "& > :not(style)": { m: 1, width: "25ch" },
-                  }}
-                  type="text"
-                  autoComplete="off"
-                >
-                  <TextField
-                    label="Standard Rate"
-                    variant="standard"
-                    value={stdMilkRate}
-                  />
-                </Box>
-              </div>
+              
 
               <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
                 <Box
@@ -1108,10 +1102,9 @@ const DtmSave = () => {
                   autoComplete="off"
                 >
                   <TextField
-                    label="Standard Total Quantity"
+                    label="Standard Rate"
                     variant="standard"
-                    value={stdtotalQty}
-                    // onChange={(e) => setStdtotalQty(e.target.value)}
+                    value={stdMilkRate}
                   />
                 </Box>
               </div>
@@ -1187,6 +1180,24 @@ const DtmSave = () => {
                   />
                 </Box>
               </div>
+
+              <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
+                <Box
+                  component="form"
+                  sx={{
+                    "& > :not(style)": { m: 1, width: "25ch" },
+                  }}
+                  type="text"
+                  autoComplete="off"
+                >
+                  <TextField
+                    label="Standard Closing Balance"
+                    variant="standard"
+                    value={stdclosingBalance}
+                  />
+                </Box>
+              </div>
+
               <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
                 <Box
                   component="form"
@@ -1350,7 +1361,7 @@ const DtmSave = () => {
                 Export To Excel
               </button>
             </div>
-            <div className="container tableMaster mt-5 mb-3 p-0">
+            <div className="container tableMaster mt-5 mb-3 p-0" style={{height:"70vh"}}>
               <table className="table productTableMAster table-stripped">
                 <thead className="tableheading">
                   <tr>
@@ -1453,7 +1464,7 @@ const DtmSave = () => {
               </table>
             </div>
 
-            <div className="container tableMaster mt-5 mb-3 p-0">
+            <div className="container tableMaster mt-5 mb-3 p-0" style={{height:"70vh"}}>
               <table className="table productTableMAster table-stripped">
                 <thead className="tableheading">
                   <tr>

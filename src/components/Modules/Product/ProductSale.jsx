@@ -68,6 +68,7 @@ const ProductSale = () => {
         `http://103.14.99.198:8082/DairyApplication/getProductData?productName=${selectedProduct}`
       );
       const details = response.data[0];
+      console.log(details)
       setProductDetails({
         openingBalance: details.openBalance,
         baseRate: details.rate,
@@ -177,17 +178,28 @@ const ProductSale = () => {
     const cashTotal = productDetails.rate * saleCash;
     const onlineTotal = productDetails.rate * saleOnline;
     const paymentPending = productDetails.rate * pending;
-    const totalAmt = cashTotal + onlineTotal;
+    // const totalAmt = cashTotal + onlineTotal + parseInt(sahiwalGhee) ;
+    let totalAmt = cashTotal + onlineTotal + paymentPending;
+
+    if (sahiwalGhee) {
+      totalAmt -= parseFloat(sahiwalGhee);
+    }
+
     const closingBalance =
       productDetails.openingBalance -
       mix -
-      paymentPending -
+      parseInt(convertedProduct) -
+      
       waiveOff -
       saleCash -
       saleOnline -
-      pending;
+      pending + parseInt(addQty);
     return { cashTotal, onlineTotal, paymentPending, totalAmt, closingBalance };
   };
+
+  useEffect(() => {
+    CalculateTotals();
+  }, [sahiwalGhee]);
 
   const { cashTotal, onlineTotal, totalAmt, paymentPending, closingBalance } =
     CalculateTotals();
@@ -296,7 +308,22 @@ const ProductSale = () => {
                   value={productDetails.openingBalance}
                 />
                 <span></span>
-                <label class="inputlabels">Opening Balance</label>
+                <label class="inputlabels">Opening Product Balance</label>
+              </div>
+            </div>
+
+            
+
+            <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
+              <div class="textfield">
+                <input
+                  class="inputfield"
+                  type="text"
+                  required
+                  value={productDetails.rate}
+                />
+                <span></span>
+                <label class="inputlabels">Rate With GST</label>
               </div>
             </div>
 
@@ -310,19 +337,6 @@ const ProductSale = () => {
                 />
                 <span></span>
                 <label class="inputlabels">Base Rate</label>
-              </div>
-            </div>
-
-            <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
-              <div class="textfield">
-                <input
-                  class="inputfield"
-                  type="text"
-                  required
-                  value={productDetails.rate}
-                />
-                <span></span>
-                <label class="inputlabels">Rate With GST</label>
               </div>
             </div>
 
@@ -389,6 +403,25 @@ const ProductSale = () => {
                 />
               </Box>
             </div>
+
+            <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
+              <Box
+                component="form"
+                sx={{
+                  "& > :not(style)": { m: 1, width: "25ch" },
+                }}
+                type="text"
+                autoComplete="off"
+              >
+                <TextField
+                  label="Pending (Unit)"
+                  variant="standard"
+                  value={pending}
+                  onChange={(e) => setPending(e.target.value)}
+                />
+              </Box>
+            </div>
+
             <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
               <Box
                 component="form"
@@ -405,23 +438,10 @@ const ProductSale = () => {
                 />
               </Box>
             </div>
-            <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
-              <Box
-                component="form"
-                sx={{
-                  "& > :not(style)": { m: 1, width: "25ch" },
-                }}
-                type="text"
-                autoComplete="off"
-              >
-                <TextField
-                  label="Sahiwal Ghee"
-                  variant="standard"
-                  value={sahiwalGhee}
-                  onChange={(e) => setSahiwalGhee(e.target.value)}
-                />
-              </Box>
-            </div>
+            
+            
+
+
             <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
               <Box
                 component="form"
@@ -541,6 +561,7 @@ const ProductSale = () => {
                 />
               </Box>
             </div>
+
             <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
               <Box
                 component="form"
@@ -551,30 +572,33 @@ const ProductSale = () => {
                 autoComplete="off"
               >
                 <TextField
-                  label="Closing Balance"
+                  label="Advance Payment"
+                  variant="standard"
+                  value={sahiwalGhee}
+                  onChange={(e) => setSahiwalGhee(e.target.value)}
+                />
+              </Box>
+            </div>
+            <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
+              <Box
+                component="form"
+                sx={{
+                  "& > :not(style)": { m: 1, width: "25ch" },
+                }}
+                type="text"
+                autoComplete="off"
+              >
+                <TextField
+                  label="Closing Product Balance"
                   variant="standard"
                   aria-readonly
                   value={closingBalance}
                 />
               </Box>
             </div>
-            <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
-              <Box
-                component="form"
-                sx={{
-                  "& > :not(style)": { m: 1, width: "25ch" },
-                }}
-                type="text"
-                autoComplete="off"
-              >
-                <TextField
-                  label="Pending (Unit)"
-                  variant="standard"
-                  value={pending}
-                  onChange={(e) => setPending(e.target.value)}
-                />
-              </Box>
-            </div>
+            
+
+            
             <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
               <Box
                 component="form"
@@ -624,7 +648,7 @@ const ProductSale = () => {
                   <th style={{ width: "150px" }}>Add Qty</th>
                   <th style={{ width: "150px" }}>Mix</th>
                   <th style={{ width: "150px" }}>Payment Pending</th>
-                  <th style={{ width: "150px" }}>Sahiwal Ghee</th>
+                  <th style={{ width: "150px" }}>Advanced Payment</th>
                   <th style={{ width: "150px" }}>Waive Off</th>
                   <th style={{ width: "150px" }}>Converted Product</th>
                   <th style={{ width: "150px" }}>Sale Cash</th>

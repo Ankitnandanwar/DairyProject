@@ -46,6 +46,7 @@
     cursor: pointer;
     /* box-shadow: 15px 15px 20px rgba(0, 0, 0, 0.1),
       -15px -15px 20px #fffb; */
+      overflow: scroll;
 }
 
 .productTableMAster thead th {

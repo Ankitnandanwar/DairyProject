@@ -557,7 +557,7 @@ const DtmMilkCollection = () => {
                     label="Opening Cream"
                     variant="standard"
                     value={openingCream}
-                    onChange={(e) => setOpeningCream(e.target.value)}
+                    // onChange={(e) => setOpeningCream(e.target.value)}
                   />
                 </Box>
               </div>
@@ -581,7 +581,7 @@ const DtmMilkCollection = () => {
 
               <div></div>
 
-              <div className="col-12 col-lg-6 col-xl-3 col-md-6 mt-4 d-flex justify-content-center align-items-center">
+              <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
                 <Box
                   component="form"
                   sx={{
@@ -598,7 +598,7 @@ const DtmMilkCollection = () => {
                 </Box>
               </div>
 
-              <div className="col-12 col-lg-6 col-xl-3 col-md-6 mt-4 d-flex justify-content-center align-items-center">
+              <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
                 <Box
                   component="form"
                   sx={{
@@ -616,7 +616,7 @@ const DtmMilkCollection = () => {
                 </Box>
               </div>
 
-              <div className="col-12 col-lg-6 col-xl-3 col-md-6 mt-4 d-flex justify-content-center align-items-center">
+              <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
                 <Box
                   component="form"
                   sx={{
@@ -633,7 +633,7 @@ const DtmMilkCollection = () => {
                 </Box>
               </div>
 
-              <div className="col-12 col-lg-6 col-xl-3 col-md-6 mt-4 d-flex justify-content-center align-items-center">
+              <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
                 <Box
                   component="form"
                   sx={{
@@ -651,7 +651,7 @@ const DtmMilkCollection = () => {
                 </Box>
               </div>
 
-              <div className="col-12 col-lg-6 col-xl-3 col-md-6 mt-4 d-flex justify-content-center align-items-center">
+              <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
                 <Box
                   component="form"
                   sx={{
@@ -670,8 +670,7 @@ const DtmMilkCollection = () => {
 
               <div
                 className="col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center"
-                style={{ gap: "1rem" }}
-              >
+                style={{ gap: "1rem" }}>
                 <button
                   className="savebtn"
                   onClick={() => {
@@ -703,14 +702,14 @@ const DtmMilkCollection = () => {
                       <tr>
                         <th style={{ width: "80px" }}>SrNo</th>
                         <th style={{ width: "150px" }}>Date</th>
-                        <th style={{ width: "150px" }}>Opening Balance</th>
+                        <th style={{ width: "150px" }}>DTM Opening Balance</th>
                         <th style={{ width: "150px" }}>Cow Milk</th>
                         <th style={{ width: "150px" }}>Buffalo Milk</th>
                         <th style={{ width: "150px" }}>Mix Milk</th>
                         <th style={{ width: "150px" }}>Total Milk</th>
                         <th style={{ width: "150px" }}>DTM Milk</th>
                         <th style={{ width: "150px" }}>Cream</th>
-                        <th style={{ width: "150px" }}>Closing Balance</th>
+                        <th style={{ width: "150px" }}>DTM Closing Balance</th>
                         <th style={{ width: "150px" }}>Opening Cream</th>
                         <th style={{ width: "150px" }}>Closing Cream</th>
                         <th style={{ width: "150px" }}>Sahiwal Milk</th>

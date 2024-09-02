@@ -85,7 +85,7 @@ const MilkSale = () => {
         } else {
             getProductData()
         }
-        getTotalsData()
+        // getTotalsData()
     }
 
     useEffect(() => {

@@ -72,6 +72,14 @@ const GheeEntry = () => {
     }
   };
 
+  const calcream = () => {
+    const readycream = cream - parseInt(creamUsed)
+    const readsahwalcream = creamSahiwal - parseInt(creamUsedSahiwal)
+    return {readycream, readsahwalcream}
+  }
+
+  const {readycream,readsahwalcream} = calcream()
+
   const fetchGetSahiwalCream = async () => {
     setLoader(true);
 
@@ -550,6 +558,22 @@ const GheeEntry = () => {
               </Box>
             </div>
 
+            
+
+            <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
+              <Box
+                component="form"
+                sx={{
+                  "& > :not(style)": { m: 1, width: "25ch" },
+                }}
+                type="text"
+                autoComplete="off"
+                
+              >
+                <TextField label="Opening Cream" variant="standard" value={cream} disabled/>
+              </Box>
+            </div>
+
             <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
               <Box
                 component="form"
@@ -559,7 +583,7 @@ const GheeEntry = () => {
                 type="text"
                 autoComplete="off"
               >
-                <TextField label="Cream" variant="standard" value={cream} onChange={(e) => setGetCream(e.target.value)} />
+                <TextField label="Closing Cream" variant="standard" value={readycream} />
               </Box>
             </div>
 
@@ -733,10 +757,28 @@ const GheeEntry = () => {
                 autoComplete="off"
               >
                 <TextField
-                  label="Sahiwal Cream"
+                  label="Opening Sahiwal Cream"
                   variant="standard"
                   value={creamSahiwal}
-                  onChange={(e) => setGetSahiwalCream(e.target.value)}
+                  disabled
+                />
+              </Box>
+            </div>
+
+            <div className="col-12 col-lg-6 col-xl-3 col-md-6 d-flex justify-content-center align-items-center">
+              <Box
+                component="form"
+                sx={{
+                  "& > :not(style)": { m: 1, width: "25ch" },
+                }}
+                type="text"
+                autoComplete="off"
+              >
+                <TextField
+                  label="Closing Sahiwal Cream"
+                  variant="standard"
+                  value={readsahwalcream}
+                  
                 />
               </Box>
             </div>

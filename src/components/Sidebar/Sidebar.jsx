@@ -66,13 +66,7 @@ const Sidebar = ({ toggle, state, setState }) => {
               {/* <MenuItem onClick={() => { navigate('/milksale') }}>
                                 Milk Sale
                             </MenuItem> */}
-              <MenuItem
-                onClick={() => {
-                  navigate("/dtmmilksale");
-                }}
-              >
-                Milk Sale
-              </MenuItem>
+              
               {/* <MenuItem onClick={() => { navigate('/milkreport') }}>
                                 Milk Report
                             </MenuItem> */}
@@ -89,6 +83,13 @@ const Sidebar = ({ toggle, state, setState }) => {
                 }}
               >
                 Standard Milk Collection
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  navigate("/dtmmilksale");
+                }}
+              >
+                Milk Sale
               </MenuItem>
               <MenuItem
                 onClick={() => {

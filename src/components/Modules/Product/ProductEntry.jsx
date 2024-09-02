@@ -28,7 +28,7 @@ const ProductEntry = () => {
   const [unit, setUnit] = useState("");
   const [gst, setGst] = useState("");
   const [milkUsed, setMilkUsed] = useState("");
-  const [rateWithGST , setRateWithGST ] = useState("");
+  const [rateWithGST, setRateWithGST] = useState("");
 
 
 
@@ -45,6 +45,25 @@ const ProductEntry = () => {
   // Save data
   const saveData = async () => {
     try {
+
+      const productExist = prodTableData.some(prod => prod.productName.toLowerCase() === productName.toLowerCase())
+
+      if (productExist && !editItem) {
+
+        toast.error("Product already exists", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        return;
+      }
+
+
       if (editItem) {
         await axios.post(
           `http://103.14.99.198:8082/DairyApplication/updateProductEntry/${editItem.id}`,
@@ -55,11 +74,11 @@ const ProductEntry = () => {
             milkUsed,
             gst,
             gstAmount,
-            rateWithGST ,
+            rateWithGST,
             rate
           }
         );
-        toast.success("Data Updated Successfully", {
+        toast.success("Product Data Updated Successfully", {
           position: "top-center",
           autoClose: 4000,
           hideProgressBar: false,
@@ -79,11 +98,11 @@ const ProductEntry = () => {
             milkUsed,
             gst,
             gstAmount,
-            rateWithGST ,
+            rateWithGST,
             rate
           }
-        ); 
-        toast.success("Data Saved Successfully", {
+        );
+        toast.success("Product Details Saved Successfully", {
           position: "top-center",
           autoClose: 4000,
           hideProgressBar: false,
@@ -239,13 +258,13 @@ const ProductEntry = () => {
   };
 
   const CalculateTotals = () => {
-    const rate = Math.round(parseInt(rateWithGST ) - (parseInt(rateWithGST ) * ((parseInt(gst)/100))))
-    const gstAmount = parseInt(rateWithGST ) - parseInt(rate)
+    const rate = (parseFloat(rateWithGST) / (1 + (parseFloat(gst) / 100))).toFixed(2)
+    const gstAmount = ((parseFloat(rateWithGST) - parseFloat(rate))).toFixed(2)
     const openingBal = parseInt(editItem?.openBalance || 0) + parseInt(prodOpenBalAdd || 0);
-    return {openingBal, rate, gstAmount};
+    return { openingBal, rate, gstAmount };
   };
 
-  const {openingBal, rate, gstAmount } = CalculateTotals();
+  const { openingBal, rate, gstAmount } = CalculateTotals();
 
   return (
     <>
@@ -349,7 +368,7 @@ const ProductEntry = () => {
                     variant="standard"
                     value={openingBal}
                     aria-readonly
-                    
+
                   />
                 </Box>
               </div>
@@ -384,15 +403,15 @@ const ProductEntry = () => {
                   <TextField
                     label="Product Rate with GST"
                     variant="standard"
-                    value={rateWithGST }
-                    onChange={(e) => setRateWithGST (e.target.value)}
+                    value={rateWithGST}
+                    onChange={(e) => setRateWithGST(e.target.value)}
                   />
                 </Box>
               </div>
 
-              
 
-              
+
+
 
               <div className="col-12 col-lg-6 col-xl-4 col-md-6 d-flex justify-content-center align-items-center">
                 <Box
@@ -446,35 +465,10 @@ const ProductEntry = () => {
                 </Box>
               </div>
 
-              
-
-
-              
-
-              <div
-                className="col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center"
-                style={{ gap: "1rem" }}
-              >
-                <button
-                  className="savebtn"
-                  onClick={() => {
-                    saveData();
-                  }}
-                >
-                  Save
-                </button>
-                <button
-                  className="tabelbtn"
-                  onClick={() => setshowtable(!showtable)}
-                >
-                  Show table
-                </button>
-                <button
-                  className="btn btn-success"
-                  onClick={() => exportToExcel()}
-                >
-                  Export To Excel
-                </button>
+              <div className="col-12 col-lg-12 col-xl-12 col-md-12 mt-4 d-flex justify-content-center align-items-center" style={{ gap: "1rem" }}>
+                <button className="savebtn" onClick={() => { saveData(); }}>Save</button>
+                <button className="tabelbtn" onClick={() => setshowtable(!showtable)}>Show table</button>
+                <button className="btn btn-success" onClick={() => exportToExcel()}>Export To Excel</button>
               </div>
 
               {/*Table Code */}
@@ -485,14 +479,14 @@ const ProductEntry = () => {
                     <thead className="tableheading">
                       <tr>
                         <th>SrNo</th>
-                        <th style={{ width: "180px" }}>Product</th>
-                        <th style={{width:"150px"}}>Opening Balance</th>
-                        <th>Rate</th>
+                        <th style={{ width: "150px" }}>Product</th>
                         <th>Unit</th>
+                        <th style={{ width: "150px" }}>Opening Balance</th>
                         <th>Milk Used</th>
+                        <th style={{ width: "200px" }}>Product Rate with GST</th>
                         <th>GSTIN</th>
+                        <th>Base Rate</th>
                         <th>GST Amount</th>
-                        <th style={{width:"200px"}}>Product Rate with GST</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -504,15 +498,15 @@ const ProductEntry = () => {
                               {i + 1}
                             </th>
                             <td>
-                              <p className="sub">{item.productName}</p>
+                              <p className="sub" style={{ textTransform: "capitalize" }}>{item.productName}</p>
                             </td>
-                            <td>{item.openBalance}</td>
-                            <td>{item.rate}</td>
                             <td>{item.unit}</td>
+                            <td>{item.openBalance}</td>
                             <td>{item.milkUsed}</td>
-                            <td>{item.gst}</td>
-                            <td>{item.gstAmount}</td>
                             <td>{item.rateWithGST}</td>
+                            <td>{item.gst}</td>
+                            <td>{item.rate}</td>
+                            <td>{item.gstAmount}</td>
                             <td>
                               <button
                                 className="btn"

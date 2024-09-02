@@ -8,6 +8,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Bars } from "react-loader-spinner";
 import "./Product.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -26,8 +28,7 @@ const Table = () => {
   const [selectedProduct, setSelectedProduct] = useState("");
   const [productDetails, setProductDetails] = useState("");
 
-  const [setCgst] = useState("");
-  const [setSgst] = useState("");
+  
   const [plantCash, setPlantCash] = useState("");
   const [plantOnline, setPlantOnline] = useState("");
   const [parlourCash, setParlourCash] = useState("");
@@ -158,8 +159,19 @@ const Table = () => {
           grandTotal,
         }
       );
-      console.log(res.data);
-      // window.location.reload();
+      toast.success("Data Saved Successfully", {
+        position: "top-center",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.log(error);
     }
@@ -432,7 +444,7 @@ const Table = () => {
                 autoComplete="off"
               >
                 <TextField
-                  label="CGST"
+                  label="CGST Amount"
                   type="number"
                   variant="standard"
                   value={cgst}
@@ -449,7 +461,7 @@ const Table = () => {
                 autoComplete="off"
               >
                 <TextField
-                  label="SGST"
+                  label="SGST Amount"
                   type="number"
                   variant="standard"
                   value={sgst}
